@@ -1,0 +1,251 @@
+<script setup lang="ts">
+import { computed, watch, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { Close, Delete } from '@element-plus/icons-vue'
+import { useTabsStore } from '@/stores/tabs'
+import IconButton from '@/components/basic/IconButton.vue'
+
+const router = useRouter()
+const route = useRoute()
+const tabsStore = useTabsStore()
+
+// 使用 computed 获取响应式数据
+const tabs = computed(() => tabsStore.tabs)
+const activeTab = computed(() => tabsStore.activeTab)
+
+// 跟踪悬浮状态
+const hoveredTab = ref('')
+
+// 添加标签页
+const addTab = () => {
+  const { path, meta } = route
+  const title = meta.title as string
+  const icon = meta.icon as string
+  
+  if (title) {
+    tabsStore.addTab({
+      path,
+      title,
+      icon: icon
+    })
+  }
+}
+
+// 关闭标签页
+const closeTab = (targetPath: string) => {
+  const nextActivePath = tabsStore.removeTab(targetPath)
+  
+  // 如果需要跳转到其他标签
+  if (nextActivePath) {
+    router.push(nextActivePath)
+  }
+}
+
+// 处理鼠标按键事件（用于中键关闭标签）
+const handleMouseDown = (event: MouseEvent, tab: any) => {
+  // 鼠标中键（滚轮按钮）
+  if (event.button === 1 && tab.path !== '/home') {
+    event.preventDefault()
+    closeTab(tab.path)
+  }
+}
+
+// 点击标签切换路由
+const switchTab = (path: string) => {
+  tabsStore.setActiveTab(path)
+  router.push(path)
+}
+
+// 清除所有标签（保留首页）
+const clearAllTabs = () => {
+  tabsStore.clearTabs()
+  router.push('/home')
+}
+
+// 判断是否显示右边框
+const shouldShowRightBorder = (tab: any, index: number) => {
+  const nextTab = tabs.value[index + 1]
+  
+  return index < tabs.value.length - 1 && 
+         activeTab.value !== tab.path && 
+         (nextTab && activeTab.value !== nextTab.path) &&
+         hoveredTab.value !== tab.path &&
+         (nextTab && hoveredTab.value !== nextTab.path)
+}
+
+// 监听路由变化
+watch(() => route.path, () => {
+  if (route.meta.title) {
+    addTab()
+  } else if (route.path === '/home') {
+    // 如果是首页，确保设置为激活状态
+    tabsStore.setActiveTab('/home')
+  }
+}, { immediate: true })
+</script>
+
+<template>
+  <div class="tab-bar">
+    <div class="tabs-container">
+      <div
+        v-for="(tab, index) in tabs"
+        :key="tab.path"
+        :class="[
+          'tab-item', 
+          { active: activeTab === tab.path },
+          { 'home-tab': tab.path === '/home' },
+          { 'show-right-border': shouldShowRightBorder(tab, index) }
+        ]"
+        @click="switchTab(tab.path)"
+        @mousedown="handleMouseDown($event, tab)"
+        @mouseenter="hoveredTab = tab.path"
+        @mouseleave="hoveredTab = ''"
+      >
+        <el-icon class="tab-icon">
+          <component :is="tab.icon" />
+        </el-icon>
+        <span v-if="tab.path !== '/home'" class="tab-title">{{ tab.title }}</span>
+        <el-icon 
+          v-if="tab.path !== '/home'" 
+          class="tab-close"
+          @click.stop="closeTab(tab.path)"
+        >
+          <Close />
+        </el-icon>
+      </div>
+    </div>
+    
+    <!-- 清除所有标签按钮 -->
+    <IconButton 
+      @click="clearAllTabs"
+      class="clear-tabs-icon-btn"
+      title="清除所有标签"
+    >
+      <el-icon>
+        <Delete />
+      </el-icon>
+    </IconButton>
+  </div>
+</template>
+
+<style scoped>
+.tab-bar {
+  height: 100%;
+  background-color: transparent;
+  padding: 0 15px;
+  display: flex;
+  align-items: flex-end; /* Align tabs to bottom */
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.tabs-container {
+  display: flex;
+  height: 36px;
+  position: relative;
+}
+
+.tab-item {
+  padding: 0 15px;
+  height: 36px;
+  line-height: 36px;
+  background-color: var(--pp-bg-color);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  min-width: 100px;
+  max-width: 200px;
+  color: var(--el-text-color-secondary);
+  z-index: 1;
+}
+
+.tab-item:hover {
+  background-color: var(--el-fill-color);
+  z-index: 2;
+}
+
+.tab-item.active {
+  background-color: var(--el-bg-color-overlay);
+  color: var(--el-color-primary);
+  margin-bottom: calc(-1 * var(--margin-size-spacing-1));
+  border-bottom: none;
+  z-index: 3;
+  box-shadow: var(--el-box-shadow-light);
+  border-top: 2px solid var(--el-color-primary);
+}
+
+
+.tab-item.home-tab {
+  min-width: 40px;
+  max-width: 40px;
+  justify-content: center;
+  padding: var(--padding-size-none);
+}
+
+.tab-item.home-tab .tab-icon {
+  margin-right: var(--margin-size-none);
+}
+
+.tab-item.show-right-border::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 20px;
+  background-color: var(--pp-border-color-light);
+}
+
+.tab-icon {
+  font-size: 16px;
+  margin-right: var(--margin-size-spacing-1);
+}
+
+.tab-title {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: var(--margin-size-spacing-1);
+  flex: 1;
+}
+
+.tab-item.active .tab-title {
+  font-weight: bold;
+}
+
+.tab-item.active .tab-icon {
+  color: var(--el-color-primary);
+}
+
+.tab-close {
+  font-size: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  margin-left: var(--margin-size-spacing-1);
+}
+
+.tab-close:hover {
+  background-color: rgba(var(--el-color-danger-rgb), 0.1);
+  color: var(--el-color-danger);
+  opacity: 1;
+}
+
+.clear-tabs-icon-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 0;
+  z-index: 10;
+}
+
+</style>

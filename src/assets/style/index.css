@@ -1,0 +1,23 @@
+/* 全局样式统一导入文件 */
+
+/* 颜色相关 */
+@import 'color/light-theme-color.css';
+@import 'color/dark-theme-color.css';
+@import 'element/element-color.css';
+
+/* Element Plus 样式覆盖 */
+@import 'element/element-override.css';
+
+/* 字体和图标大小 */
+@import 'size/font/font-size.css';
+@import 'size/icon/icon-size.css';
+
+/* 间距 */
+@import 'size/spacing/margin-size.css';
+@import 'size/spacing/padding-size.css';
+@import 'size/global-size.css';
+
+/* 圆角 */
+@import 'radius/global-radius.css';
+
+@import 'global.css';

@@ -1,0 +1,44 @@
+/* 全局尺寸样式 */
+body {
+    font-size: var(--font-size-body);
+}
+
+/* 禁用文本选中效果 */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 全局图标尺寸 */
+.el-icon,
+svg[class*="icon"],
+i[class*="icon"] {
+    font-size: var(--icon-size-component);
+}
+
+/* 侧边栏特定样式 */
+.sidebar .el-icon,
+.sidebar svg[class*="icon"],
+.sidebar i[class*="icon"] {
+    font-size: var(--icon-size-sidebar);
+}
+
+/* 侧边栏字体大小 */
+.sidebar .el-menu-item,
+.sidebar .el-sub-menu__title,
+.el-menu--popup .el-menu-item {
+    font-size: var(--font-size-sidebar);
+}
+
+/* 下拉菜单字体和图标大小 */
+.el-dropdown-menu__item {
+    font-size: var(--font-size-dropdown);
+}
+
+.el-dropdown-menu__item .el-icon,
+.el-dropdown-menu__item svg[class*="icon"],
+.el-dropdown-menu__item i[class*="icon"] {
+    font-size: var(--icon-size-dropdown);
+}

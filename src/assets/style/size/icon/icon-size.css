@@ -1,0 +1,15 @@
+:root {
+    /* 基础图标大小 */
+    --icon-size-xs: 16px;
+    --icon-size-sm: 20px;
+    --icon-size-md: 24px;
+    --icon-size-lg: 28px;
+    --icon-size-xl: 32px;
+
+    /* 组件图标大小 */
+    --icon-size-component: var(--icon-size-xs);
+    /* 侧边栏图标大小 */
+    --icon-size-sidebar: var(--icon-size-xs);
+    /* 下拉菜单图标大小 */
+    --icon-size-dropdown: var(--icon-size-xs);
+}

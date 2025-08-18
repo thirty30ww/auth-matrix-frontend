@@ -1,0 +1,48 @@
+html,
+body {
+    margin: var(--margin-size-none);
+    background-color: var(--pp-bg-color);
+}
+
+html {
+    height: 100vh;
+}
+
+/* 去除浏览器自动填充的背景颜色 */
+input:-webkit-autofill {
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: transparent !important;
+}
+
+/* 自定义滚动条样式 */
+/* 整个滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    border-radius: var(--radius-scrollbar);
+    transition: all 0.2s ease;
+}
+
+/* 滚动条角落 */
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--pp-scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--pp-scrollbar-thumb-color-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: var(--pp-scrollbar-thumb-color-active);
+}

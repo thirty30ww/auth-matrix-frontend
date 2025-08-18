@@ -1,0 +1,13 @@
+:root {
+    --padding-size-none: 0;
+    --padding-size-xs: 4px;
+    --padding-size-sm: 8px;
+    --padding-size-md: 12px;
+    --padding-size-lg: 16px;
+    --padding-size-xl: 20px;
+    --padding-size-2xl: 25px;
+
+    --padding-size-item: var(--radius-xs);
+    --padding-size-popup: var(--radius-xs);
+    --padding-size-dialog: var(--radius-xl);
+}

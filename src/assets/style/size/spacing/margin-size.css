@@ -1,0 +1,13 @@
+:root {
+    --margin-size-none: 0;
+    --margin-size-xs: 4px;
+    --margin-size-sm: 8px;
+    --margin-size-md: 12px;
+    --margin-size-lg: 15px;
+    --margin-size-xl: 20px;
+    --margin-size-2xl: 25px;
+
+    --margin-size-item: var(--radius-xs);
+    --margin-size-spacing-1: var(--margin-size-xs);
+    --margin-size-spacing-2: var(--margin-size-sm);
+}

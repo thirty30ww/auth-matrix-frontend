@@ -1,0 +1,249 @@
+/* 设置el-tag为圆角样式 */
+.el-tag {
+    border-radius: var(--radius-input);
+}
+
+/* 表格默认居中对齐 */
+.el-table th.el-table__cell {
+    text-align: center;
+}
+
+.el-table .cell {
+    text-align: center;
+}
+
+/* 表格单元格背景色 */
+.el-table td.el-table__cell,
+.el-table th.el-table__cell {
+    background-color: var(--pp-bg-color-overlay);
+}
+
+/* 表格空状态背景色 */
+.el-table__empty-block {
+    background-color: var(--pp-bg-color-overlay);
+}
+
+/* 分页组件背景色 */
+.el-pagination .el-pager li {
+    background-color: var(--pp-bg-color-overlay);
+}
+
+/* 分页组件按钮背景色（包括禁用状态） */
+.el-pagination button {
+    background-color: var(--pp-bg-color-overlay);
+}
+
+.el-pagination button:disabled {
+    background-color: var(--pp-bg-color-overlay);
+}
+
+.el-input__wrapper {
+    border-radius: var(--radius-input);
+    background-color: var(--pp-input-bg-color);
+}
+
+.el-select__wrapper {
+    border-radius: var(--radius-input);
+    background-color: var(--pp-input-bg-color);
+}
+
+.el-select__popper {
+    border-radius: var(--radius-input);
+    background-color: var(--pp-input-bg-color);
+}
+
+/* el-select下拉项样式 */
+.el-select-dropdown__item {
+    border-radius: var(--radius-menu-item);
+    margin: var(--margin-size-item);
+    display: flex;
+    align-items: center;
+}
+
+/* 卡片组件样式 */
+.el-card {
+    border-radius: var(--radius-card);
+    border: none;
+    box-shadow: var(--el-box-shadow-light);
+    overflow: hidden;
+}
+
+/* 侧边栏样式 */
+.el-menu-vertical {
+    border-right: none;
+}
+
+/* 一级菜单样式 */
+.el-menu-vertical .el-menu-item {
+    border-radius: var(--radius-menu-item);
+    max-height: 40px;
+    margin: var(--margin-size-item);
+}
+
+/* 调整子菜单标题样式，与主菜单保持一致 */
+.el-menu-vertical .el-sub-menu .el-sub-menu__title {
+    border-radius: var(--radius-menu-item);
+    max-height: 40px;
+    margin: var(--margin-size-none) var(--margin-size-item);
+}
+
+/* 调整图标位置 */
+.el-menu-vertical .el-menu-item .el-icon,
+.el-menu-vertical .el-sub-menu .el-sub-menu__title .el-icon {
+    margin-left: calc(-1 * var(--margin-size-item));
+}
+
+/* 选中菜单项的字体加粗 */
+.el-menu-vertical .el-menu-item.is-active {
+    font-weight: bold;
+}
+
+/* 统一子菜单激活状态样式 */
+.el-menu-vertical .el-sub-menu.is-active>.el-sub-menu__title {
+    color: var(--el-menu-active-color);
+    font-weight: bold;
+}
+
+.el-menu-vertical .el-menu-item:hover,
+.el-menu-vertical .el-sub-menu__title:hover {
+    background-color: var(--el-menu-hover-bg-color);
+}
+
+/* 侧边栏子菜单弹出框样式 */
+.el-menu--popup {
+    border-radius: var(--radius-popup);
+    overflow: hidden;
+    padding: var(--padding-size-popup);
+    box-shadow: var(--el-box-shadow-light);
+}
+
+/* 子菜单弹出框中的菜单项样式 */
+.el-menu--popup .el-menu-item {
+    border-radius: var(--radius-menu-item);
+    margin: var(--margin-size-item) var(--margin-size-none);
+    height: 40px;
+}
+
+/* 子菜单弹出框中的活动菜单项样式 */
+.el-menu--popup .el-menu-item.is-active {
+    font-weight: bold;
+}
+
+/* 所有弹出菜单框通用样式 */
+.el-popper.is-pure {
+    border-radius: var(--radius-popup);
+    box-shadow: var(--el-box-shadow-light);
+}
+
+/* 下拉菜单样式 - 类似图片中的样式 */
+.el-dropdown-menu {
+    border-radius: var(--radius-popup);
+    padding: 4px;
+    min-width: 120px;
+    background-color: var(--el-bg-color-overlay);
+}
+
+.el-dropdown-menu__item {
+    height: 25px;
+    border-radius: var(--radius-menu-item);
+    margin: var(--margin-size-item) var(--margin-size-none);
+    display: flex;
+    align-items: center;
+}
+
+.el-dropdown-menu__item .el-icon {
+    margin-right: var(--margin-size-spacing-2);
+}
+
+/* 移除下拉菜单的箭头 */
+.el-popper__arrow {
+    display: none;
+}
+
+/* 覆盖 ElMessage 的圆角样式 */
+.el-message {
+    border-radius: var(--radius-message);
+    box-shadow: var(--el-box-shadow-light);
+}
+
+/* 头像无边框样式 */
+.el-avatar {
+    background-color: transparent;
+    border: none;
+    box-shadow: var(--el-box-shadow-light);
+}
+
+/* textarea样式 */
+.el-textarea__inner {
+    border-radius: var(--radius-input);
+    background-color: var(--pp-input-bg-color);
+    resize: none;
+    /* 禁止拖拽调整大小 */
+}
+
+/* 移除textarea右下角的调整大小控件 */
+.el-textarea__inner::-webkit-resizer {
+    display: none;
+}
+
+/* 标签页样式 */
+#tab-info.el-tabs__item.is-top {
+    padding-left: 40px;
+}
+
+.el-tabs__nav.is-top {
+    padding: 5px 0;
+}
+
+/* 对话框样式 */
+.el-dialog {
+    border-radius: var(--radius-dialog);
+    background-color: var(--pp-bg-color);
+    box-shadow: var(--el-box-shadow-light);
+    padding: var(--padding-size-none);
+}
+
+.el-dialog__header {
+    padding: var(--padding-size-none);
+}
+
+/* el-autocomplete 下拉容器样式 */
+.el-autocomplete-suggestion {
+    padding: var(--padding-size-popup);
+}
+
+/* 移除默认的上下边距 */
+.el-autocomplete-suggestion__wrap {
+    padding: var(--padding-size-none);
+}
+
+/* el-autocomplete 下拉项基础样式 */
+.el-autocomplete-suggestion li {
+    border-radius: var(--radius-menu-item);
+    height: 40px;
+    line-height: 40px;
+    margin: var(--margin-size-item) var(--margin-size-none);
+    transition: 0.2s;
+}
+
+/* el-autocomplete 悬停效果 */
+.el-autocomplete-suggestion li:hover {
+    background-color: var(--el-color-primary-light-9) !important;
+}
+
+/* el-autocomplete 键盘导航选中效果 */
+.el-autocomplete-suggestion li.highlighted {
+    background-color: var(--el-color-primary-light-9) !important;
+}
+
+/* ElMessageBox 样式 */
+.el-message-box {
+    border-radius: var(--radius-dialog);
+    box-shadow: var(--el-box-shadow-light);
+    overflow: hidden;
+}
+
+/* ElMessageBox 内部按钮样式 */
+.el-message-box .el-button {
+    border-radius: var(--radius-lg);
+}

@@ -1,0 +1,19 @@
+:root {
+    /* 基础字体大小 */
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+
+    /* 正文字体大小 */
+    --font-size-body: var(--font-size-sm);
+    /* 侧边栏字体大小 */
+    --font-size-sidebar: var(--font-size-xs);
+    /* 输入框字体大小 */
+    --font-size-input: var(--font-size-md);
+    /* 标题字体大小 */
+    --font-size-title: var(--font-size-xl);
+
+    --font-size-dropdown: var(--font-size-xs);
+}

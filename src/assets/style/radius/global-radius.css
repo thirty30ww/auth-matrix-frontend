@@ -1,0 +1,31 @@
+/* 全局圆角样式 */
+:root {
+    /* 基础圆角 */
+    --radius-none: 0;
+    --radius-xs: 3px;
+    --radius-sm: 5px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --radius-xl: 20px;
+    --radius-half: 50%;
+
+    /* 组件圆角 */
+    /* 卡片组件的圆角大小 */
+    --radius-card: var(--radius-lg);
+    /* 输入框组件的圆角大小 */
+    --radius-input: var(--radius-lg);
+    /* 菜单组件的圆角大小 */
+    --radius-menu: var(--radius-lg);
+    /* 菜单项组件的圆角大小 */
+    --radius-menu-item: var(--radius-md);
+    /* 弹出框组件的圆角大小 */
+    --radius-popup: var(--radius-md);
+    /* 表格组件的圆角大小 */
+    --radius-table: var(--radius-lg);
+    /* 消息提示组件的圆角大小 */
+    --radius-message: var(--radius-xl);
+    /* 对话框圆角大小 */
+    --radius-dialog: var(--radius-lg);
+    /* 滚动条组件的圆角大小 */
+    --radius-scrollbar: var(--radius-xs);
+}

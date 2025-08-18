@@ -1,0 +1,32 @@
+:root {
+    /* ProsePulse 自定义颜色变量 - 亮色主题 */
+    /* 紫色 */
+    --pp-purple: #7B2CBF;
+    --pp-purple-light-3: #a569bd;
+    --pp-purple-light-5: #bb8fce;
+    --pp-purple-light-7: #d2b4de;
+    --pp-purple-light-8: #dfcfe5;
+    --pp-purple-light-9: #e8daef;
+    --pp-purple-dark-2: #7d3c98;
+
+    /* 背景色 */
+    --pp-bg-color: #ededed;
+    --pp-bg-color-overlay: #ffffff;
+    --pp-bg-color-hover: var(--pp-bg-color-overlay);
+    --pp-bg-color-active: var(--pp-bg-color-overlay);
+    --pp-input-bg-color: var(--pp-bg-color-overlay);
+
+    /* 边框色 */
+    --pp-border-color: #777777;
+    --pp-border-color-light: #c4c4c4;
+    --pp-border-color-dark: #313131;
+
+    /* Logo色 */
+    --pp-logo-primary: #F4CB3E;
+    --pp-logo-secondary: #000000;
+
+    /* 滚动条色 */
+    --pp-scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+    --pp-scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.4);
+    --pp-scrollbar-thumb-color-active: rgba(0, 0, 0, 0.6);
+}
