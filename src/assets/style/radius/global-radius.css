@@ -17,7 +17,7 @@
     /* 菜单组件的圆角大小 */
     --radius-menu: var(--radius-lg);
     /* 菜单项组件的圆角大小 */
-    --radius-menu-item: var(--radius-md);
+    --radius-item: var(--radius-md);
     /* 弹出框组件的圆角大小 */
     --radius-popup: var(--radius-md);
     /* 表格组件的圆角大小 */

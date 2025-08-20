@@ -25,7 +25,8 @@
               <span class="info-label">角色</span>
               <el-tag
                   v-for="role in userInfo.roles"
-                  :type="getValueFromMapping(LevelTagType, role.level)"
+                  :key="role.id"
+                  :type="getValueFromMapping(LevelTagType, role.level) || 'primary'"
                   style="margin-right: var(--margin-size-spacing-1);"
               >
                 {{ role.name }}

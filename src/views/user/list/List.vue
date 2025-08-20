@@ -31,6 +31,8 @@ const searchForm = ref({
   sex: '',
   isValid: '', // 用户状态筛选
   roleId: null as number | null, // 单选角色ID
+  createTimeStart: '', // 创建时间开始
+  createTimeEnd: '', // 创建时间结束
   sort: {
     field: '',
     direction: SortDirection.NONE
@@ -66,6 +68,11 @@ const getUserList = async () => {
       sort: {
         field: searchForm.value.sort.field,
         direction: searchForm.value.sort.direction
+      },
+      filterTime: {
+        field: 'createTime',
+        startTime: searchForm.value.createTimeStart,
+        endTime: searchForm.value.createTimeEnd
       }
     }
   }
@@ -97,6 +104,8 @@ const handleFilterReset = () => {
     sex: '',
     isValid: '',
     roleId: null,
+    createTimeStart: '',
+    createTimeEnd: '',
     sort: {
       field: '',
       direction: SortDirection.NONE

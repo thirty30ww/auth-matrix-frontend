@@ -1,3 +1,5 @@
+import { DATE_TIME_FORMAT } from '@/constant/date'
+
 /**
  * 格式化日期为中文格式
  * @param dateString - 日期字符串
@@ -124,4 +126,36 @@ export function formatRelativeTime(dateString?: string | null): string {
         console.warn('相对时间格式化失败:', error);
         return '-';
     }
+}
+
+/**
+ * 将日期格式化为一天的开始时间 (yyyy-MM-dd 00:00:00)
+ * @param dateString - 日期字符串 (yyyy-MM-dd 格式)
+ * @returns 格式化后的日期时间字符串
+ * 
+ * @example
+ * ```typescript
+ * formatToStartOfDay('2024-01-15') // "2024-01-15 00:00:00"
+ * formatToStartOfDay('') // ""
+ * ```
+ */
+export function formatToStartOfDay(dateString: string): string {
+    if (!dateString) return ''
+    return `${dateString} ${DATE_TIME_FORMAT.START_OF_DAY}`
+}
+
+/**
+ * 将日期格式化为一天的结束时间 (yyyy-MM-dd 23:59:59)
+ * @param dateString - 日期字符串 (yyyy-MM-dd 格式)
+ * @returns 格式化后的日期时间字符串
+ * 
+ * @example
+ * ```typescript
+ * formatToEndOfDay('2024-01-15') // "2024-01-15 23:59:59"
+ * formatToEndOfDay('') // ""
+ * ```
+ */
+export function formatToEndOfDay(dateString: string): string {
+    if (!dateString) return ''
+    return `${dateString} ${DATE_TIME_FORMAT.END_OF_DAY}`
 }

@@ -3,12 +3,15 @@ import { ref, onMounted, watch } from 'vue'
 import { Search, Refresh } from '@element-plus/icons-vue'
 import api from '@/services'
 import type { Role } from '@/types'
+import DateRangeFilter from '@/components/basic/DateRangeFilter.vue'
 
 // 定义 props
 interface Props {
   searchForm: {
     keyword: string
     roleId: number | null
+    createTimeStart: string
+    createTimeEnd: string
   }
 }
 
@@ -38,7 +41,9 @@ const getRoleList = async () => {
 const handleReset = () => {
   localSearchForm.value = {
     keyword: '',
-    roleId: null
+    roleId: null,
+    createTimeStart: '',
+    createTimeEnd: ''
   }
   emit('update:searchForm', { ...localSearchForm.value })
   emit('reset')
@@ -48,6 +53,14 @@ const handleReset = () => {
 const handleRoleChange = () => {
   emit('update:searchForm', { ...localSearchForm.value })
   emit('role-change')
+}
+
+// 处理日期范围变化
+const handleDateRangeChange = (startDate: string, endDate: string) => {
+  localSearchForm.value.createTimeStart = startDate
+  localSearchForm.value.createTimeEnd = endDate
+  emit('update:searchForm', { ...localSearchForm.value })
+  debouncedSearch()
 }
 
 // 防抖搜索
@@ -85,7 +98,7 @@ onMounted(() => {
         v-model="localSearchForm.keyword"
         placeholder="请输入用户名或姓名"
         clearable
-        style="width: 250px"
+        style="width:200px"
       >
         <template #prefix>
           <el-icon><Search /></el-icon>
@@ -106,6 +119,12 @@ onMounted(() => {
           :value="role.id"
         />
       </el-select>
+
+      <DateRangeFilter
+        :start-date="localSearchForm.createTimeStart"
+        :end-date="localSearchForm.createTimeEnd"
+        @change="handleDateRangeChange"
+      />
 
       <div class="search-buttons">
         <el-button @click="handleReset">

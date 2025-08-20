@@ -54,7 +54,7 @@
 
 /* el-select下拉项样式 */
 .el-select-dropdown__item {
-    border-radius: var(--radius-menu-item);
+    border-radius: var(--radius-item);
     margin: var(--margin-size-item);
     display: flex;
     align-items: center;
@@ -75,14 +75,14 @@
 
 /* 一级菜单样式 */
 .el-menu-vertical .el-menu-item {
-    border-radius: var(--radius-menu-item);
+    border-radius: var(--radius-item);
     max-height: 40px;
     margin: var(--margin-size-item);
 }
 
 /* 调整子菜单标题样式，与主菜单保持一致 */
 .el-menu-vertical .el-sub-menu .el-sub-menu__title {
-    border-radius: var(--radius-menu-item);
+    border-radius: var(--radius-item);
     max-height: 40px;
     margin: var(--margin-size-none) var(--margin-size-item);
 }
@@ -119,7 +119,7 @@
 
 /* 子菜单弹出框中的菜单项样式 */
 .el-menu--popup .el-menu-item {
-    border-radius: var(--radius-menu-item);
+    border-radius: var(--radius-item);
     margin: var(--margin-size-item) var(--margin-size-none);
     height: 40px;
 }
@@ -145,7 +145,7 @@
 
 .el-dropdown-menu__item {
     height: 25px;
-    border-radius: var(--radius-menu-item);
+    border-radius: var(--radius-item);
     margin: var(--margin-size-item) var(--margin-size-none);
     display: flex;
     align-items: center;
@@ -219,7 +219,7 @@
 
 /* el-autocomplete 下拉项基础样式 */
 .el-autocomplete-suggestion li {
-    border-radius: var(--radius-menu-item);
+    border-radius: var(--radius-item);
     height: 40px;
     line-height: 40px;
     margin: var(--margin-size-item) var(--margin-size-none);
@@ -246,4 +246,33 @@
 /* ElMessageBox 内部按钮样式 */
 .el-message-box .el-button {
     border-radius: var(--radius-lg);
+}
+
+.el-date-editor {
+    flex: none;
+    width: 200px !important;
+}
+
+/* DatePicker 弹出日历样式 */
+.el-picker-panel {
+    border-radius: var(--radius-popup);
+}
+
+.el-date-range-picker__time-header {
+    border-radius: var(--radius-popup);
+}
+
+.el-picker-panel__footer {
+    border-radius: var(--radius-popup);
+}
+
+
+/* DatePicker 时间面板 */
+.el-time-panel {
+    border-radius: var(--radius-popup);
+    overflow: hidden;
+}
+
+.el-time-spinner__item {
+    border-radius: var(--radius-item);
 }

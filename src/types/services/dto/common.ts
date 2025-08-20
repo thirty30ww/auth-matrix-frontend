@@ -1,6 +1,14 @@
 // 基础列表查询接口
 export interface BaseListDTO {
     sort?: SortDTO
+    filterTime?: FilterTimeDTO;
+}
+
+// 时间范围筛选接口
+export interface FilterTimeDTO {
+    field?: string;
+    startTime?: string;
+    endTime?: string;
 }
 
 // 排序请求接口
