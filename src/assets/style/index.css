@@ -20,4 +20,8 @@
 /* 圆角 */
 @import 'radius/global-radius.css';
 
+/* 动画效果 */
+@import 'animations/theme-transition.css';
+@import 'animations/page-transition.css';
+
 @import 'global.css';

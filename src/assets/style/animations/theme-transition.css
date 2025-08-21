@@ -1,0 +1,26 @@
+/* 主题切换动画样式 - View Transitions API */
+
+/* 重置默认动画，为自定义动画做准备 */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+/* 控制新旧主题图像的层级 */
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 2147483646;
+}
+
+/* 暗色模式时反转层级顺序，确保动画方向正确 */
+html.dark::view-transition-old(root) {
+    z-index: 2147483646;
+}
+
+html.dark::view-transition-new(root) {
+    z-index: 1;
+}

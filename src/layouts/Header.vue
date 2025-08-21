@@ -74,9 +74,9 @@ const toggleSidebar = () => {
   emit('toggle-sidebar')
 }
 
-// 切换暗黑模式
-const toggleDarkMode = () => {
-  themeStore.toggleDarkMode()
+// 切换暗黑模式（带动画）
+const toggleDarkMode = (event: MouseEvent) => {
+  themeStore.toggleDarkMode(event)
 }
 
 // 计算图标

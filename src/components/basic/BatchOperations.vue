@@ -48,6 +48,7 @@ export interface BatchOperation<T = any> {
 interface Props {
   selectedItems: any[]
   operations: Record<string, BatchOperation>
+  itemName?: string // 项目类型名称，默认为"项目"
 }
 
 // Emits 定义
@@ -69,7 +70,7 @@ const executeBatchOperation = async (operation: BatchOperation) => {
   }
   
   await ElMessageBox.confirm(
-    `确定要${operation.actionText}选中的 ${targetItems.length} 个项目吗？`,
+    `确定要${operation.actionText}选中的 ${targetItems.length} 个${props.itemName || '项目'}吗？`,
     operation.confirmTitle,
     {
       confirmButtonText: '确定',

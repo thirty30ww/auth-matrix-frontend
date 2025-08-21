@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/node": "^24.0.14",
+    "@vueuse/core": "^13.7.0",
     "axios": "^1.10.0",
     "element-plus": "^2.10.4",
     "path": "^0.12.7",

@@ -61,7 +61,7 @@ const handleBatchSuccess = () => {
       <BatchOperations 
         :selected-items="selectedUsers"
         :operations="userBatchOperations"
-        entity-name="用户"
+        item-name="用户"
         @success="handleBatchSuccess"
       />
     </div>
