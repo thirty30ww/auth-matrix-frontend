@@ -15,5 +15,7 @@
     /* 标题字体大小 */
     --font-size-title: var(--font-size-xl);
 
+    --font-size-tab-bar: var(--font-size-xs);
+
     --font-size-dropdown: var(--font-size-xs);
 }

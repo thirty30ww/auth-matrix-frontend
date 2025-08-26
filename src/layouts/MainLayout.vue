@@ -20,9 +20,7 @@ const toggleSidebar = () => {
       </el-aside>
       
       <el-container class="main-container">
-        <el-header height="50px" class="header-container">
-          <Header :isSidebarCollapsed="isCollapse" @toggle-sidebar="toggleSidebar" />
-        </el-header>
+        <Header :isSidebarCollapsed="isCollapse" @toggle-sidebar="toggleSidebar" />
         
         <div class="tab-bar-container">
           <TabBar />
@@ -58,15 +56,6 @@ const toggleSidebar = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.header-container {
-  padding: 0;
-}
-
-.tab-bar-container {
-  height: 40px;
-  width: 100%;
 }
 
 .content-container {

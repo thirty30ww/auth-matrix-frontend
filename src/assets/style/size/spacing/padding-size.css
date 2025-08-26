@@ -6,8 +6,21 @@
     --padding-size-lg: 16px;
     --padding-size-xl: 20px;
     --padding-size-2xl: 25px;
+    --padding-size-3xl: 50px;
+
+    --padding-size-header: var(--padding-size-lg);
+
+    --padding-size-tab-bar: var(--padding-size-lg);
 
     --padding-size-item: var(--radius-xs);
+
     --padding-size-popup: var(--radius-xs);
+
     --padding-size-dialog: var(--radius-xl);
+
+    /* 主内容区域 */
+    --padding-size-main-top: var(--padding-size-xl);
+    --padding-size-main-bottom: var(--padding-size-3xl);
+    --padding-size-main-left: var(--padding-size-2xl);
+    --padding-size-main-right: var(--padding-size-2xl);
 }

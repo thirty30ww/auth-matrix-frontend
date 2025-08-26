@@ -153,7 +153,7 @@ const sexOptions = getMappingValues(Sex).map(value => ({
 
 // 获取角色列表
 const getRoleList = async () => {
-  roleList.value = await api.user.getRoleList(true) // 传入 isChild: true
+  roleList.value = await api.role.getRoleList(true) // 传入 isChild: true
 }
 
 // 重置表单

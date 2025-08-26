@@ -17,6 +17,10 @@
 @import 'size/spacing/padding-size.css';
 @import 'size/global-size.css';
 
+/* 尺寸 */
+@import 'size/dimensions/height-size.css';
+@import 'size/dimensions/width-size.css';
+
 /* 圆角 */
 @import 'radius/global-radius.css';
 

@@ -132,7 +132,7 @@ watch(() => route.path, () => {
 .tab-bar {
   height: 100%;
   background-color: transparent;
-  padding: 0 15px;
+  padding: var(--padding-size-none) var(--padding-size-tab-bar);
   display: flex;
   align-items: flex-end; /* Align tabs to bottom */
   overflow-x: auto;
@@ -142,14 +142,14 @@ watch(() => route.path, () => {
 
 .tabs-container {
   display: flex;
-  height: 36px;
+  height: var(--height-size-tab-bar);
   position: relative;
 }
 
 .tab-item {
   padding: 0 15px;
-  height: 36px;
-  line-height: 36px;
+  height: 100%;
+  line-height: 100%;
   background-color: var(--pp-bg-color);
   border-radius: 10px;
   display: flex;
@@ -202,12 +202,11 @@ watch(() => route.path, () => {
 }
 
 .tab-icon {
-  font-size: 16px;
   margin-right: var(--margin-size-spacing-1);
 }
 
 .tab-title {
-  font-size: 13px;
+  font-size: var(--font-size-tab-bar);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

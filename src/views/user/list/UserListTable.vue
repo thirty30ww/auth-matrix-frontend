@@ -128,8 +128,8 @@ const getActionLinks = (user: UserVO) => {
         align="center" 
         :selectable="isUserSelectable"
       />
-      <el-table-column prop="id" label="ID" min-width="60px" />
-      <el-table-column label="头像" min-width="60px" align="center">
+      <el-table-column prop="id" label="ID" min-width="40px" />
+      <el-table-column label="头像" min-width="80px" align="center">
         <template #default="{ row }">
           <div class="avatar-container">
             <UserAvatar :image-url="row.avatarUrl" :alt="row.name" />

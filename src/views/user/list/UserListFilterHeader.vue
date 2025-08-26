@@ -34,7 +34,7 @@ const localSearchForm = ref({ ...props.searchForm })
 
 // 获取角色列表
 const getRoleList = async () => {
-  roleList.value = await api.user.getRoleList()
+  roleList.value = await api.role.getRoleList()
 }
 
 // 处理重置
@@ -128,7 +128,7 @@ onMounted(() => {
 
       <div class="search-buttons">
         <el-button @click="handleReset">
-          <el-icon><Refresh /></el-icon>
+          <el-icon class="el-icon--left"><Refresh /></el-icon>
           重置
         </el-button>
       </div>
@@ -144,7 +144,7 @@ onMounted(() => {
 .search-form {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 

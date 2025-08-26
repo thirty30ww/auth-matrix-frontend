@@ -11,6 +11,13 @@ export interface Role {
     updateTime: string;
 }
 
+// 角色树节点接口
+export interface RoleVO {
+    node: Role;
+    hasPermission: boolean;
+    children: RoleVO[];
+}
+
 // 用户接口
 export interface UserVO {
     id: number;
@@ -49,5 +56,6 @@ export interface View {
 // 页面树节点接口
 export interface ViewVO {
     node: View;
+    hasPermission?: boolean;
     children: ViewVO[];
 }

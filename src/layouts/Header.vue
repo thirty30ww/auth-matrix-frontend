@@ -95,11 +95,11 @@ const sidebarIcon = computed(() => {
 
 <style scoped>
 .header {
-  height: 50px;
+  height: var(--height-size-header);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 15px;
+  padding: var(--padding-size-none) var(--padding-size-header);
 }
 
 .header-left {
@@ -108,7 +108,7 @@ const sidebarIcon = computed(() => {
 }
 
 .breadcrumb-container {
-  margin-left: 15px;
+  margin-left: var(--margin-size-spacing-3);
 }
 
 .header-actions {

@@ -1,12 +1,14 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import api from '@/services'
 import router from '@/router'
-import {useUserStore} from "@/stores/user.ts";
-import {useTabsStore} from "@/stores/tabs.ts";
+import { useUserStore } from "@/stores/user.ts";
+import { useTabsStore } from "@/stores/tabs.ts";
+import { useViewStore } from "@/stores/view.ts";
 
 // 使用函数形式延迟获取store
 const getUserStore = () => useUserStore();
 const getTabsStore = () => useTabsStore();
+const getViewStore = () => useViewStore();
 
 // 全局刷新状态管理
 let isRefreshing = false;
@@ -87,7 +89,7 @@ export const useAuthStore = defineStore('auth', {
         // 退出登录
         async logout(showSuccess?: boolean) {
             try {
-                await api.auth.logout(this.refreshToken, showSuccess)
+                await api.user.logout(this.refreshToken, showSuccess)
             } finally {
                 // 无论API调用成功与否，都清除本地认证信息
                 this.clearAuth()
@@ -95,6 +97,8 @@ export const useAuthStore = defineStore('auth', {
                 getUserStore().clearUserInfo()
                 // 清空所有标签页
                 getTabsStore().clearAllTabs()
+                // 清除视图数据（路由和菜单）
+                getViewStore().clearViewData()
                 // 跳转到登录页
                 await router.push('/login')
             }

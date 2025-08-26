@@ -1,7 +1,13 @@
 :root {
     --height-size-xm: 10px;
-    --height-size-sm: 20px;
-    --height-size-md: 30px;
-    --height-size-lg: 40px;
-    --height-size-xl: 50px;
+    --height-size-sm: 30px;
+    --height-size-md: 50px;
+    --height-size-lg: 100px;
+    --height-size-xl: 200px;
+
+    --height-size-tab-bar: 36px;
+
+    --height-size-header: var(--height-size-md);
+
+    height: var(--height-size-tab-bar);
 }

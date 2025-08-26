@@ -18,7 +18,7 @@
         <template v-for="menu in menuTree" :key="menu.node.id">
           <!-- 一级菜单项 -->
           <el-menu-item 
-            v-if="(!menu.children || menu.children.length === 0) && menu.node.type !== '页面'"
+            v-if="(!menu.children || menu.children.length === 0)"
             :index="menu.node.path"
           >
             <el-icon><component :is="menu.node.icon" /></el-icon>
@@ -26,8 +26,8 @@
           </el-menu-item>
           
           <!-- 二级菜单 -->
-          <el-sub-menu 
-            v-else-if="menu.node.type !== '页面'"
+          <el-sub-menu
+            v-else
             :index="String(menu.node.id)"
           >
             <template #title>
@@ -38,7 +38,6 @@
             <!-- 子菜单项 -->
             <template v-for="subMenu in menu.children" :key="subMenu.node.id">
               <el-menu-item 
-                v-if="menu.node.type !== '页面'"
                 :index="subMenu.node.path"
               >
                 <el-icon><component :is="subMenu.node.icon" /></el-icon>
@@ -86,7 +85,7 @@
 <script setup lang="ts">
 import {useRouter} from 'vue-router'
 import {useAuthStore, useUserStore, useViewStore} from '@/stores'
-import {computed} from 'vue'
+import {computed, onMounted} from 'vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import LogoIcon from '@/components/business/LogoIcon.vue'
@@ -103,10 +102,16 @@ const userStore = useUserStore()
 const viewStore = useViewStore()
 const userInfo = computed(() => userStore.userInfo)
 
+// 组件挂载时加载菜单数据
+onMounted(async () => {
+  if (authStore.userLoggedIn) {
+    await viewStore.getMenuTree()
+  }
+})
 
 const activePath = computed(() => router.currentRoute.value.path)
-// 菜单树数据 - 从store中获取
-const menuTree = computed(() => viewStore.viewTree)
+// 菜单树数据 - 从store中获取专门的菜单树
+const menuTree = computed(() => viewStore.menuTree)
 
 const handleCommand = (command: string) => {
   if (command === 'logout') {

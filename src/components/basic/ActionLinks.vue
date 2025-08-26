@@ -43,6 +43,7 @@ const handleClick = (action: ActionLink) => {
 .action-links {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .action-link {
@@ -51,6 +52,8 @@ const handleClick = (action: ActionLink) => {
   font-size: 14px;
   padding: 0 8px;
   border-right: 1px solid var(--el-border-color-light);
+  flex: 1;
+  text-align: center;
 }
 
 .action-link:last-child {

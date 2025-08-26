@@ -53,8 +53,8 @@ const handleBatchSuccess = () => {
   <div class="table-actions">
     <div class="left-actions">
       <el-button type="primary" @click="openAddUserDialog">
-        <el-icon><Plus /></el-icon>
-        添加
+        <el-icon class="el-icon--left"><Plus /></el-icon>
+        添加用户
       </el-button>
       
       <!-- 批量操作组件 -->

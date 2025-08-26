@@ -109,7 +109,6 @@ const canExecuteOperation = (command: string): boolean => {
 }
 
 .selected-info {
-  font-size: 14px;
   color: var(--el-color-info);
 }
 </style>
