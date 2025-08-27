@@ -14,6 +14,10 @@
     --radius-card: var(--radius-lg);
     /* 输入框组件的圆角大小 */
     --radius-input: var(--radius-lg);
+    /* 侧边栏组件的圆角大小 */
+    --radius-sidebar: var(--radius-lg);
+    /* 头部组件的圆角大小 */
+    --radius-header: var(--radius-lg);
     /* 菜单组件的圆角大小 */
     --radius-menu: var(--radius-lg);
     /* 菜单项组件的圆角大小 */

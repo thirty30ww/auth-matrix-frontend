@@ -5,9 +5,9 @@ import api from '@/services'
 import type { PageQueryDTO, PageResponse, SortDTO, UserVO, GetUserListDTO } from '@/types'
 import { SortDirection } from '@/constant'
 import UserDialog from '@/components/business/UserDialog.vue'
-import UserListFilterHeader from './UserListFilterHeader.vue'
-import UserListActionBar from './UserListActionBar.vue'
-import UserListTable from './UserListTable.vue'
+import UserListFilterHeader from './FilterHeader.vue'
+import UserListActionBar from './ActionBar.vue'
+import UserListTable from './Table.vue'
 
 // 响应式数据
 const userList = ref<UserVO[]>([])

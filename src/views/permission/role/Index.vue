@@ -2,8 +2,8 @@
 import { onMounted, ref } from 'vue'
 import type { RoleVO, ViewVO } from '@/types'
 import api from '@/services'
-import RoleTableSection from './RoleTableSection.vue'
-import MenuPermissionSection from './MenuPermissionSection.vue'
+import RoleTableSection from './RoleTable.vue'
+import MenuPermissionSection from './MenuTable.vue'
 
 // 响应式数据
 const roleTableData = ref<RoleVO[]>([])
@@ -85,7 +85,7 @@ const handleReset = () => {
 // 初始化
 onMounted(async () => {
   await getRoleTree()
-  await getMenuTree() // 默认加载全部菜单
+  // 初始化时不加载菜单，等待用户选择角色
 })
 </script>
 
@@ -121,7 +121,7 @@ onMounted(async () => {
 <style scoped>
 .role-content {
   display: flex;
-  height: calc(100vh - 200px);
+  height: calc(100vh - var(--height-size-tab-bar) - var(--height-size-header) - var(--padding-size-main-bottom) - var(--padding-size-main-top) - 2 * var(--padding-size-card));
   gap: 12px;
 }
 </style>

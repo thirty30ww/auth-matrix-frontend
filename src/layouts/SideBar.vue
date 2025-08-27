@@ -143,7 +143,7 @@ const handleSelect = (key: string) => {
 }
 
 .logo {
-  height: 50px;
+  height: var(--height-size-header);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,6 +154,7 @@ const handleSelect = (key: string) => {
   white-space: nowrap;
   overflow: hidden;
   gap: 8px;
+  box-sizing: border-box; /* 确保边框包含在高度内 */
 }
 
 

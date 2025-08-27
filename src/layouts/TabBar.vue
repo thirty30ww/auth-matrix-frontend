@@ -131,7 +131,7 @@ watch(() => route.path, () => {
 <style scoped>
 .tab-bar {
   height: 100%;
-  background-color: transparent;
+  background-color: var(--pp-bg-color-overlay);
   padding: var(--padding-size-none) var(--padding-size-tab-bar);
   display: flex;
   align-items: flex-end; /* Align tabs to bottom */
@@ -142,16 +142,17 @@ watch(() => route.path, () => {
 
 .tabs-container {
   display: flex;
-  height: var(--height-size-tab-bar);
+  height: 100%;
   position: relative;
+  overflow: visible; /* 允许外圆角伪元素显示 */
 }
 
 .tab-item {
   padding: 0 15px;
   height: 100%;
   line-height: 100%;
-  background-color: var(--pp-bg-color);
-  border-radius: 10px;
+  background-color: var(--pp-bg-color-overlay);
+  border-radius: var(--radius-item) var(--radius-item) 0 0; /* 只在上方圆角 */
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -159,29 +160,61 @@ watch(() => route.path, () => {
   position: relative;
   min-width: 100px;
   max-width: 200px;
-  color: var(--el-text-color-secondary);
   z-index: 1;
 }
 
 .tab-item:hover {
-  background-color: var(--el-fill-color);
+  background-color: var(--pp-bg-color-medium);
   z-index: 2;
 }
 
 .tab-item.active {
-  background-color: var(--el-bg-color-overlay);
+  background-color: var(--pp-bg-color);
   color: var(--el-color-primary);
   margin-bottom: calc(-1 * var(--margin-size-spacing-1));
   border-bottom: none;
   z-index: 3;
-  box-shadow: var(--el-box-shadow-light);
   border-top: 2px solid var(--el-color-primary);
+}
+
+/* Edge风格外圆角效果 */
+.tab-item.active::before,
+.tab-item.active::after,
+.tab-item:hover::before,
+.tab-item:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: var(--radius-item);
+  height: var(--radius-item);
+  z-index: -1;
+}
+
+.tab-item.active::before,
+.tab-item:hover::before {
+  left: calc(-1 * var(--radius-item));
+  background: radial-gradient(circle at 0 0, transparent var(--radius-item), var(--pp-bg-color) var(--radius-item));
+}
+
+.tab-item.active::after,
+.tab-item:hover::after {
+  right: calc(-1 * var(--radius-item));
+  background: radial-gradient(circle at var(--radius-item) 0, transparent var(--radius-item), var(--pp-bg-color) var(--radius-item));
+}
+
+/* 悬浮时的外圆角使用悬浮背景色 */
+.tab-item:hover:not(.active)::before {
+  background: radial-gradient(circle at 0 0, transparent var(--radius-item), var(--pp-bg-color-medium) var(--radius-item));
+}
+
+.tab-item:hover:not(.active)::after {
+  background: radial-gradient(circle at var(--radius-item) 0, transparent var(--radius-item), var(--pp-bg-color-medium) var(--radius-item));
 }
 
 
 .tab-item.home-tab {
-  min-width: 40px;
-  max-width: 40px;
+  min-width: 36px;
+  max-width: 36px;
   justify-content: center;
   padding: var(--padding-size-none);
 }

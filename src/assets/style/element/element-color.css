@@ -11,6 +11,8 @@
 
     /* 背景色 */
     --el-fill-color-blank: var(--pp-bg-color-overlay);
+
+    --el-box-shadow-light: 0 0px 12px var(--pp-shadow-medium);
 }
 
 html.dark {
@@ -25,8 +27,8 @@ html.dark {
 
     /* 背景色 */
     --el-bg-color-overlay: var(--pp-bg-color-overlay);
-    --el-fill-color-blank: var(--pp-bg-color);
+    --el-fill-color-blank: var(--pp-bg-color-overlay);
     --el-menu-bg-color: var(--pp-bg-color-overlay);
 
-    --el-box-shadow-light: 0 0px 12px rgba(29, 29, 29, 0.3);
+    --el-box-shadow-light: 0 0px 12px var(--pp-shadow-medium);
 }

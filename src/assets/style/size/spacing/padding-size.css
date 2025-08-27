@@ -23,4 +23,6 @@
     --padding-size-main-bottom: var(--padding-size-3xl);
     --padding-size-main-left: var(--padding-size-2xl);
     --padding-size-main-right: var(--padding-size-2xl);
+
+    --padding-size-card: var(--padding-size-xl);
 }

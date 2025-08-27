@@ -115,6 +115,9 @@ defineExpose({
           <span v-else>-</span>
         </template>
       </el-table-column>
+      <template #empty>
+        <el-empty :description="selectedRole ? '您没有权限查看该角色菜单权限' : '请选择角色查看菜单权限'" />
+      </template>
     </el-table>
   </div>
 </template>

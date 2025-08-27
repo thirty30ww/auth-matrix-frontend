@@ -95,11 +95,13 @@ const sidebarIcon = computed(() => {
 
 <style scoped>
 .header {
-  height: var(--height-size-header);
+  background-color: var(--pp-bg-color-overlay);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--padding-size-none) var(--padding-size-header);
+  box-sizing: border-box; /* 确保盒模型一致 */
 }
 
 .header-left {

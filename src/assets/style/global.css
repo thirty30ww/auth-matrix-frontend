@@ -1,7 +1,7 @@
 html,
 body {
     margin: var(--margin-size-none);
-    background-color: var(--pp-bg-color);
+    background-color: var(--pp-bg-color-overlay);
 }
 
 html {

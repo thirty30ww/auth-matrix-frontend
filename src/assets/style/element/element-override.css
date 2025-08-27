@@ -4,15 +4,20 @@
     transition: none !important;
 }
 
+/* 恢复所有单元格的flex布局 */
 .el-table .el-table__row .el-table__cell .cell {
     display: flex;
     align-items: center;
 }
 
-/* 只针对菜单名称列的折叠箭头和菜单图标区域不换行 */
+/* 对选择框列特殊处理，使用块级布局 */
+.el-table .el-table__row .el-table__cell.el-table-column--selection .cell {
+    display: block;
+    text-align: center;
+}
+
+/* 只针对折叠箭头不换行 */
 .el-table .el-table__row .el-table__cell:first-child .cell {
-    display: flex;
-    align-items: center;
     white-space: nowrap;
 }
 
@@ -78,6 +83,10 @@
     border: none;
     box-shadow: var(--el-box-shadow-light);
     overflow: hidden;
+}
+
+.el-card__body {
+    padding: var(--padding-size-card);
 }
 
 /* 侧边栏样式 */

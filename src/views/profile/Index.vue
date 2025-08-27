@@ -90,7 +90,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Edit, User, Avatar, Calendar, Medal } from '@element-plus/icons-vue';
 import UserAvatar from '@/components/basic/UserAvatar.vue';
-import ProfileInfoForm from '@/views/profile/ProfileInfoForm.vue';
+import ProfileInfoForm from '@/views/profile/InfoForm.vue';
 import PasswordChange from '@/views/profile/PasswordChange.vue';
 import AvatarCropDialog from '@/components/business/AvatarCropDialog.vue';
 import { useUserStore } from '@/stores';

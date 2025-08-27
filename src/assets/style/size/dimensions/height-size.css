@@ -8,6 +8,4 @@
     --height-size-tab-bar: 36px;
 
     --height-size-header: var(--height-size-md);
-
-    height: var(--height-size-tab-bar);
 }

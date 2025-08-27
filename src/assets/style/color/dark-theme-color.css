@@ -10,10 +10,11 @@ html.dark {
     --pp-purple-dark-2: #7d3c98;
 
     /* 背景色 */
-    --pp-bg-color: #111111;
-    --pp-bg-color-overlay: #040404;
-    --pp-bg-color-hover: var(--pp-bg-color-overlay);
-    --pp-bg-color-active: var(--pp-bg-color-overlay);
+    --pp-bg-color: #040404;
+    --pp-bg-color-medium: #0b0b0b;
+    --pp-bg-color-overlay: #111111;
+    --pp-bg-color-hover: var(--pp-bg-color-medium);
+    --pp-bg-color-active: var(--pp-bg-color);
     --pp-input-bg-color: var(--pp-bg-color-overlay);
 
     /* 边框色 */
@@ -29,4 +30,9 @@ html.dark {
     --pp-scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
     --pp-scrollbar-thumb-color-hover: rgba(255, 255, 255, 0.4);
     --pp-scrollbar-thumb-color-active: rgba(255, 255, 255, 0.6);
+
+    /* 分隔阴影色 */
+    --pp-shadow-light: rgba(0, 0, 0, 0.4);
+    --pp-shadow-medium: rgba(0, 0, 0, 0.6);
+    --pp-shadow-strong: rgba(0, 0, 0, 0.8);
 }
