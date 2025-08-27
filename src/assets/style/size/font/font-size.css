@@ -18,4 +18,6 @@
     --font-size-tab-bar: var(--font-size-xs);
 
     --font-size-dropdown: var(--font-size-xs);
+
+    --font-size-breadcrumb: var(--font-size-xs);
 }

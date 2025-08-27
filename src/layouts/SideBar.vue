@@ -133,7 +133,7 @@ const handleSelect = (key: string) => {
   position: relative;
   transition: width 0.3s;
   overflow: hidden;
-  width: 200px;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }

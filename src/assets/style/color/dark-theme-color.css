@@ -1,13 +1,4 @@
 html.dark {
-    /* ProsePulse 自定义颜色变量 - 暗色主题 */
-    /* 紫色 */
-    --pp-purple: #9D4EDD;
-    --pp-purple-light-3: #ab47bc;
-    --pp-purple-light-5: #9c27b0;
-    --pp-purple-light-7: #7b1fa2;
-    --pp-purple-light-8: #350e35;
-    --pp-purple-light-9: #23002e;
-    --pp-purple-dark-2: #7d3c98;
 
     /* 背景色 */
     --pp-bg-color: #040404;
@@ -35,4 +26,13 @@ html.dark {
     --pp-shadow-light: rgba(0, 0, 0, 0.4);
     --pp-shadow-medium: rgba(0, 0, 0, 0.6);
     --pp-shadow-strong: rgba(0, 0, 0, 0.8);
+
+    /* 主题色系列 - 暗色模式默认值（会被JavaScript动态覆盖） */
+    --pp-primary: #7B2CBF;
+    --pp-primary-light-3: #8C3FD6;
+    --pp-primary-light-5: #7A3BC4;
+    --pp-primary-light-7: #5E2E96;
+    --pp-primary-light-8: #3D1E61;
+    --pp-primary-light-9: #1F0F31;
+    --pp-primary-dark-2: #6B25A8;
 }

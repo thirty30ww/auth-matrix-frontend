@@ -8,9 +8,9 @@
     --padding-size-2xl: 25px;
     --padding-size-3xl: 50px;
 
-    --padding-size-header: var(--padding-size-lg);
+    --padding-size-header: var(--padding-size-xl);
 
-    --padding-size-tab-bar: var(--padding-size-lg);
+    --padding-size-tab-bar: var(--padding-size-xl);
 
     --padding-size-item: var(--radius-xs);
 
@@ -25,4 +25,6 @@
     --padding-size-main-right: var(--padding-size-2xl);
 
     --padding-size-card: var(--padding-size-xl);
+
+    --padding-size-drawer: var(--padding-size-md);
 }

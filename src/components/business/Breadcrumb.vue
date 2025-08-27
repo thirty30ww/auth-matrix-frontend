@@ -82,6 +82,7 @@ const breadcrumbItems = computed(() => {
 .breadcrumb-item-content {
   display: flex;
   align-items: center;
+  font-size: var(--font-size-breadcrumb);
 }
 
 .breadcrumb-icon {

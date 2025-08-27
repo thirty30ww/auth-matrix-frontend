@@ -119,9 +119,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+
 .role-content {
   display: flex;
-  height: calc(100vh - var(--height-size-tab-bar) - var(--height-size-header) - var(--padding-size-main-bottom) - var(--padding-size-main-top) - 2 * var(--padding-size-card));
+  height: calc(var(--height-size-page) - 2 * var(--padding-size-card));
   gap: 12px;
 }
 </style>

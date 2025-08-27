@@ -1,14 +1,4 @@
 :root {
-    /* ProsePulse 自定义颜色变量 - 亮色主题 */
-    /* 紫色 */
-    --pp-purple: #7B2CBF;
-    --pp-purple-light-3: #a569bd;
-    --pp-purple-light-5: #bb8fce;
-    --pp-purple-light-7: #d2b4de;
-    --pp-purple-light-8: #dfcfe5;
-    --pp-purple-light-9: #e8daef;
-    --pp-purple-dark-2: #7d3c98;
-
     /* 背景色 */
     --pp-bg-color: #ededed;
     --pp-bg-color-medium: #f5f5f5;
@@ -35,4 +25,13 @@
     --pp-shadow-light: rgba(0, 0, 0, 0.06);
     --pp-shadow-medium: rgba(0, 0, 0, 0.1);
     --pp-shadow-strong: rgba(0, 0, 0, 0.15);
+
+    /* 主题色系列 - 默认值（会被JavaScript动态覆盖） */
+    --pp-primary: #7B2CBF;
+    --pp-primary-light-3: #9B4AD6;
+    --pp-primary-light-5: #B968E3;
+    --pp-primary-light-7: #D586F0;
+    --pp-primary-light-8: #E8A4F7;
+    --pp-primary-light-9: #F4D2FB;
+    --pp-primary-dark-2: #6B25A8;
 }

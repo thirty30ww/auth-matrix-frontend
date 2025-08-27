@@ -115,16 +115,18 @@ watch(() => route.path, () => {
       </div>
     </div>
     
-    <!-- 清除所有标签按钮 -->
-    <IconButton 
-      @click="clearAllTabs"
-      class="clear-tabs-icon-btn"
-      title="清除所有标签"
-    >
-      <el-icon>
-        <Delete />
-      </el-icon>
-    </IconButton>
+    <!-- 右侧操作区域 -->
+    <div class="tab-actions">
+      <IconButton 
+        @click="clearAllTabs"
+        class="clear-tabs-btn"
+        title="清除所有标签"
+      >
+        <el-icon>
+          <Delete />
+        </el-icon>
+      </IconButton>
+    </div>
   </div>
 </template>
 
@@ -134,14 +136,15 @@ watch(() => route.path, () => {
   background-color: var(--pp-bg-color-overlay);
   padding: var(--padding-size-none) var(--padding-size-tab-bar);
   display: flex;
-  align-items: flex-end; /* Align tabs to bottom */
-  overflow-x: auto;
-  overflow-y: hidden;
+  align-items: flex-end; /* 恢复底部对齐，保持 tab 外圆角效果 */
+  justify-content: space-between; /* 两端对齐 */
+  overflow: hidden;
   position: relative;
 }
 
 .tabs-container {
   display: flex;
+  flex: 1; /* 占用剩余空间 */
   height: 100%;
   position: relative;
   overflow: visible; /* 允许外圆角伪元素显示 */
@@ -160,6 +163,7 @@ watch(() => route.path, () => {
   position: relative;
   min-width: 100px;
   max-width: 200px;
+  color: var(--el-text-color-secondary);
   z-index: 1;
 }
 
@@ -273,11 +277,13 @@ watch(() => route.path, () => {
   opacity: 1;
 }
 
-.clear-tabs-icon-btn {
-  position: absolute;
-  right: 16px;
-  bottom: 0;
-  z-index: 10;
+/* 右侧操作区域 */
+.tab-actions {
+  display: flex;
+  align-items: flex-end; /* 与 tab 对齐到底部 */
+  gap: 8px;
+  flex-shrink: 0; /* 防止被压缩 */
+  height: 100%; /* 确保高度一致 */
 }
 
 </style>

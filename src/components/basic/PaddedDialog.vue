@@ -98,7 +98,6 @@ const handleConfirm = () => {
   margin: 0 0 var(--margin-size-lg) 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
-  color: var(--pp-text-color-primary);
 }
 
 .dialog-footer {

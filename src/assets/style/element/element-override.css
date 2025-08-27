@@ -219,7 +219,7 @@
 /* 对话框样式 */
 .el-dialog {
     border-radius: var(--radius-dialog);
-    background-color: var(--pp-bg-color);
+    background-color: var(--pp-bg-color-overlay);
     box-shadow: var(--el-box-shadow-light);
     padding: var(--padding-size-none);
 }
@@ -296,4 +296,15 @@
 
 .el-time-spinner__item {
     border-radius: var(--radius-item);
+}
+
+.el-drawer__header {
+    padding: var(--padding-size-drawer);
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--el-border-color-light);
+}
+
+.el-drawer__body {
+    padding: var(--padding-size-drawer);
+    scrollbar-gutter: stable;
 }

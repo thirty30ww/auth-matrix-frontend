@@ -25,8 +25,17 @@
           <component :is="themeIcon" />
         </el-icon>
       </IconButton>
+      
+      <IconButton @click="openSettings">
+        <el-icon>
+          <Setting />
+        </el-icon>
+      </IconButton>
     </div>
   </div>
+
+  <!-- 设置侧弹框 -->
+  <SettingsDrawer v-model="settingsVisible" />
 </template>
 
 <script setup lang="ts">
@@ -38,11 +47,13 @@ import {
   Moon, 
   Sunny, 
   Fold, 
-  Expand
+  Expand,
+  Setting
 } from '@element-plus/icons-vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import Breadcrumb from '@/components/business/Breadcrumb.vue'
 import SearchBox from '@/components/basic/SearchBox.vue'
+import SettingsDrawer from '@/components/business/SettingsDrawer.vue'
 
 const props = defineProps({
   isSidebarCollapsed: {
@@ -55,6 +66,7 @@ const emit = defineEmits(['toggle-sidebar'])
 
 const themeStore = useThemeStore()
 const isFullscreen = ref(false)
+const settingsVisible = ref(false)
 
 // 切换全屏
 const toggleFullscreen = () => {
@@ -77,6 +89,11 @@ const toggleSidebar = () => {
 // 切换暗黑模式（带动画）
 const toggleDarkMode = (event: MouseEvent) => {
   themeStore.toggleDarkMode(event)
+}
+
+// 打开设置面板
+const openSettings = () => {
+  settingsVisible.value = true
 }
 
 // 计算图标

@@ -32,4 +32,6 @@
     --radius-dialog: var(--radius-lg);
     /* 滚动条组件的圆角大小 */
     --radius-scrollbar: var(--radius-xs);
+
+    --radius-color-picker-item: var(--radius-md);
 }

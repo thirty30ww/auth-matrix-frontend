@@ -8,4 +8,8 @@
     --height-size-tab-bar: 36px;
 
     --height-size-header: var(--height-size-md);
+
+    --height-size-page: calc(100vh - var(--height-size-tab-bar) - var(--height-size-header) - var(--padding-size-main-bottom) - var(--padding-size-main-top) - 2 * var(--margin-size-spacing-1));
+
+    --height-size-color-picker-item: var(--height-size-sm);
 }

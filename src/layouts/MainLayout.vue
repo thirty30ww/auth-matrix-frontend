@@ -15,7 +15,7 @@ const toggleSidebar = () => {
 <template>
   <div class="layout-container">
     <el-container>
-      <el-aside :width="isCollapse ? '64px' : '200px'" class="aside-container">
+      <el-aside :width="isCollapse ? 'var(--width-size-sidebar-fold)' : 'var(--width-size-sidebar)'" class="aside-container">
         <Sidebar :isCollapsed="isCollapse" />
       </el-aside>
       
@@ -60,7 +60,7 @@ const toggleSidebar = () => {
   border-radius: var(--radius-none) var(--radius-sidebar) var(--radius-sidebar) var(--radius-none);
   box-shadow: 2px 0 8px var(--pp-shadow-medium); /* 统一的阴影分隔 */
   position: relative;
-  z-index: 20;
+  z-index: 1;
 }
 
 .main-container {
@@ -70,12 +70,12 @@ const toggleSidebar = () => {
 }
 
 .content-container {
+  margin: 0 var(--margin-size-spacing-1) var(--margin-size-spacing-1) var(--margin-size-spacing-1);
   background-color: var(--pp-bg-color);
   border-radius: var(--radius-card);
   padding: 0;
   overflow: hidden;
   position: relative;
-  z-index: 1;
 }
 
 .tab-bar-container {
@@ -85,6 +85,5 @@ const toggleSidebar = () => {
   width: 100%;
   flex-shrink: 0;
   position: relative;
-  z-index: 5;
 }
 </style>

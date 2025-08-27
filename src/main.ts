@@ -13,7 +13,7 @@ import './assets/style/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 导入 stores
-import { useTabsStore } from '@/stores'
+import { useTabsStore, useThemeStore } from '@/stores'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -29,9 +29,13 @@ app.use(pinia)
 
 // 初始化各种 store 状态
 const tabsStore = useTabsStore()
+const themeStore = useThemeStore()
 
 // 确保首页标签存在
 tabsStore.initializeTabs()
+
+// 初始化主题色
+themeStore.initThemeColors()
 
 // 再初始化路由
 app.use(router)
