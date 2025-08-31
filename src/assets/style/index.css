@@ -27,5 +27,6 @@
 /* 动画效果 */
 @import 'animations/theme-transition.css';
 @import 'animations/page-transition.css';
+@import 'animations/error-page.css';
 
 @import 'global.css';

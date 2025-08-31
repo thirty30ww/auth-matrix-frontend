@@ -4,6 +4,7 @@ import router from '@/router'
 import { useUserStore } from "@/stores/user.ts";
 import { useTabsStore } from "@/stores/tabs.ts";
 import { useViewStore } from "@/stores/view.ts";
+import {reloadRoutes, resetRoutesLoadedState} from "@/router/dynamicRoutes.ts";
 
 // 使用函数形式延迟获取store
 const getUserStore = () => useUserStore();
@@ -42,6 +43,10 @@ export const useAuthStore = defineStore('auth', {
                 })
                 // 登录成功后获取用户信息
                 await getUserStore().getUserInfo();
+
+                await reloadRoutes(router);
+
+                await getTabsStore().initializeTabs();
                 return true
             } catch (error) {
                 return false
@@ -99,6 +104,8 @@ export const useAuthStore = defineStore('auth', {
                 getTabsStore().clearAllTabs()
                 // 清除视图数据（路由和菜单）
                 getViewStore().clearViewData()
+                // 重置路由加载状态
+                resetRoutesLoadedState()
                 // 跳转到登录页
                 await router.push('/login')
             }

@@ -37,7 +37,7 @@ const isCurrentTheme = (colorId: string) => {
 <template>
   <el-drawer
     v-model="drawerVisible"
-    title="用户偏好设置"
+    title="偏好设置"
     direction="rtl"
     size="var(--width-size-drawer)"
   >

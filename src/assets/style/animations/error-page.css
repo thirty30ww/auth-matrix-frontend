@@ -1,0 +1,116 @@
+/* 错误页面公共样式 */
+
+/* 错误页面基础样式 */
+.error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--height-size-page);
+}
+
+.error-content {
+    text-align: center;
+}
+
+/* 错误数字基础样式 */
+.error-number {
+    font-size: var(--font-size-error-number);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: var(--margin-size-spacing-3);
+
+    /* 字母间距增加厚重感 */
+    letter-spacing: 4px;
+
+    /* 添加微妙的变换效果 */
+    transform: perspective(300px) rotateX(15deg);
+    transform-style: preserve-3d;
+}
+
+/* 403页面专用样式 - danger色系 */
+.error-number--danger {
+    color: var(--el-color-danger);
+
+    /* 多层文字阴影创建立体感 */
+    text-shadow:
+        /* 主要立体层 */
+        2px 2px 0 var(--el-color-danger-light-3),
+        4px 4px 0 var(--el-color-danger-light-5),
+        6px 6px 0 var(--el-color-danger-light-7),
+        8px 8px 0 var(--el-color-danger-light-9),
+        /* 深度阴影 */
+        10px 10px 20px var(--pp-shadow-strong),
+        15px 15px 30px var(--pp-shadow-medium);
+
+    /* 轻微的脉冲动画效果 */
+    animation: depth-pulse 3s ease-in-out infinite;
+}
+
+/* 404页面专用样式 - primary色系 */
+.error-number--primary {
+    color: var(--pp-primary);
+
+    /* 多层文字阴影创建立体感 */
+    text-shadow:
+        /* 主要立体层 */
+        2px 2px 0 var(--pp-primary-light-3),
+        4px 4px 0 var(--pp-primary-light-5),
+        6px 6px 0 var(--pp-primary-light-7),
+        8px 8px 0 var(--pp-primary-light-9),
+        /* 深度阴影 */
+        10px 10px 20px var(--pp-shadow-strong),
+        15px 15px 30px var(--pp-shadow-medium);
+
+    /* 轻微的浮动动画效果 */
+    animation: depth-float 4s ease-in-out infinite;
+}
+
+/* 错误信息样式 */
+.error-message {
+    font-size: var(--font-size-error-message);
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+    margin-bottom: var(--margin-size-spacing-2);
+}
+
+.error-description {
+    color: var(--el-text-color-regular);
+    margin-bottom: var(--margin-size-spacing-4);
+    line-height: 1.5;
+}
+
+.error-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* 动画定义 */
+@keyframes depth-pulse {
+
+    0%,
+    100% {
+        transform: perspective(300px) rotateX(15deg) translateZ(0px);
+    }
+
+    50% {
+        transform: perspective(300px) rotateX(15deg) translateZ(10px);
+    }
+}
+
+@keyframes depth-float {
+
+    0%,
+    100% {
+        transform: perspective(300px) rotateX(15deg) translateY(0px) translateZ(0px);
+    }
+
+    25% {
+        transform: perspective(300px) rotateX(15deg) translateY(-3px) translateZ(5px);
+    }
+
+    75% {
+        transform: perspective(300px) rotateX(15deg) translateY(3px) translateZ(8px);
+    }
+}

@@ -13,7 +13,8 @@ import './assets/style/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 导入 stores
-import { useTabsStore, useThemeStore } from '@/stores'
+import {useAuthStore, useThemeStore} from '@/stores'
+import {ensureRoutesLoaded} from "@/router/dynamicRoutes.ts";
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -28,16 +29,18 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(pinia)
 
 // 初始化各种 store 状态
-const tabsStore = useTabsStore()
 const themeStore = useThemeStore()
-
-// 确保首页标签存在
-tabsStore.initializeTabs()
+const authStore = useAuthStore()
 
 // 初始化主题色
 themeStore.initThemeColors()
 
-// 再初始化路由
+// 加载动态路由
+if (authStore.userLoggedIn) {
+    await ensureRoutesLoaded(router)
+}
+
+// 初始化路由
 app.use(router)
 
 app.use(ElementPlus, {

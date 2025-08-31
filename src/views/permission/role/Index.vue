@@ -143,31 +143,29 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-card>
-    <div class="role-content">
-      <!-- 左侧角色表格 -->
-      <RoleTableSection
-        ref="roleTableRef"
-        :role-table-data="roleTableData"
-        :selected-role="selectedRole"
-        @role-row-click="handleRoleRowClick"
-        @add-role="handleAddRole"
-        @edit-role="handleEditRole"
-        @delete-role="handleDeleteRole"
-        @add-child-role="handleAddChildRole"
-        @expand-all="handleExpandAll"
-        @collapse-all="handleCollapseAll"
-      />
+  <el-card class="role-content">
+    <!-- 左侧角色表格 -->
+    <RoleTableSection
+      ref="roleTableRef"
+      :role-table-data="roleTableData"
+      :selected-role="selectedRole"
+      @role-row-click="handleRoleRowClick"
+      @add-role="handleAddRole"
+      @edit-role="handleEditRole"
+      @delete-role="handleDeleteRole"
+      @add-child-role="handleAddChildRole"
+      @expand-all="handleExpandAll"
+      @collapse-all="handleCollapseAll"
+    />
 
-      <!-- 右侧菜单权限表格 -->
-      <MenuPermissionSection
-        ref="menuPermissionRef"
-        :menu-table-data="menuTableData"
-        :selected-role="selectedRole"
-        @confirm="handleConfirm"
-        @reset="handleReset"
-      />
-    </div>
+    <!-- 右侧菜单权限表格 -->
+    <MenuPermissionSection
+      ref="menuPermissionRef"
+      :menu-table-data="menuTableData"
+      :selected-role="selectedRole"
+      @confirm="handleConfirm"
+      @reset="handleReset"
+    />
 
     <!-- 角色对话框 -->
     <RoleDialog
@@ -181,11 +179,13 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 .role-content {
+  height: var(--height-size-page);
+}
 
+.role-content :deep(.el-card__body) {
   display: flex;
-  height: calc(var(--height-size-page) - 2 * var(--padding-size-card));
+  height: calc(100% - 2 * var(--padding-size-card));
   gap: 12px;
 }
 </style>

@@ -5,6 +5,7 @@
     --font-size-md: 16px;
     --font-size-lg: 18px;
     --font-size-xl: 20px;
+    --font-size-2xl: 24px;
 
     /* 正文字体大小 */
     --font-size-body: var(--font-size-sm);
@@ -20,4 +21,8 @@
     --font-size-dropdown: var(--font-size-xs);
 
     --font-size-breadcrumb: var(--font-size-xs);
+
+    --font-size-error-number: 100px;
+
+    --font-size-error-message: var(--font-size-2xl);
 }
