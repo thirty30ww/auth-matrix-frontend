@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { Search, Refresh } from '@element-plus/icons-vue'
 import api from '@/services'
-import type { Role } from '@/types'
+import {type Role, RoleListType} from '@/types'
 import DateRangeFilter from '@/components/basic/DateRangeFilter.vue'
 
 // 定义 props
@@ -34,7 +34,7 @@ const localSearchForm = ref({ ...props.searchForm })
 
 // 获取角色列表
 const getRoleList = async () => {
-  roleList.value = await api.role.getRoleList()
+  roleList.value = await api.role.getRoleList(RoleListType.ALL)
 }
 
 // 处理重置

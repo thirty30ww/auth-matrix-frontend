@@ -26,7 +26,7 @@
               <el-tag
                   v-for="role in userInfo.roles"
                   :key="role.id"
-                  :type="getValueFromMapping(LevelTagType, role.level) || 'primary'"
+                  :type="getValue(LevelTagType, role.level, 'primary')"
                   style="margin-right: var(--margin-size-spacing-1);"
               >
                 {{ role.name }}
@@ -95,7 +95,7 @@ import PasswordChange from '@/views/profile/PasswordChange.vue';
 import AvatarCropDialog from '@/components/business/AvatarCropDialog.vue';
 import { useUserStore } from '@/stores';
 import api from '@/services';
-import {formatDate, getValueFromMapping} from '@/utils';
+import {formatDate, getValue} from '@/utils';
 import {LevelTagType} from "@/constant";
 
 // 路由

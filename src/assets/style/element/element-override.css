@@ -298,6 +298,7 @@
     border-radius: var(--radius-item);
 }
 
+/* 抽屉样式 */
 .el-drawer__header {
     padding: var(--padding-size-drawer);
     margin-bottom: 0;
@@ -307,4 +308,9 @@
 .el-drawer__body {
     padding: var(--padding-size-drawer);
     scrollbar-gutter: stable;
+}
+
+/* 内容容器样式 */
+.el-container {
+    height: 100%;
 }

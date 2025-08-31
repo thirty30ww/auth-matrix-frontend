@@ -26,7 +26,7 @@ export const themeColors: ThemeColor[] = [
     {
         id: 'stellar-purple',
         name: '星紫幻境',
-        color: '#7B2CBF',
+        color: '#a64cf4',
         description: '神秘而优雅的紫色基调'
     },
     {

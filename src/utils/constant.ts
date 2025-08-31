@@ -9,7 +9,7 @@
  * @param defaultValue 默认值
  * @returns 对应的值或默认值
  */
-export function getValueFromMapping<T extends Record<string | number, any>, K extends keyof T>(
+export function getValue<T extends Record<string | number, any>, K extends keyof T>(
     mapping: T,
     key: string | number,
     defaultValue: T[K] = '' as T[K]
@@ -22,7 +22,7 @@ export function getValueFromMapping<T extends Record<string | number, any>, K ex
  * @param mapping 映射对象
  * @returns 键数组
  */
-export function getMappingKeys<T extends Record<string | number, any>>(
+export function getKeys<T extends Record<string | number, any>>(
     mapping: T
 ): (keyof T)[] {
     return Object.keys(mapping)
@@ -33,7 +33,7 @@ export function getMappingKeys<T extends Record<string | number, any>>(
  * @param mapping 映射对象
  * @returns 值数组
  */
-export function getMappingValues<T extends Record<string | number, any>>(
+export function getValues<T extends Record<string | number, any>>(
     mapping: T
 ): T[keyof T][] {
     return Object.values(mapping)
@@ -44,7 +44,7 @@ export function getMappingValues<T extends Record<string | number, any>>(
  * @param mapping 映射对象
  * @returns 键值对数组 [{key, value}, ...]
  */
-export function getMappingEntries<T extends Record<string | number, any>>(
+export function getMappings<T extends Record<string | number, any>>(
     mapping: T
 ): Array<{ key: keyof T; value: T[keyof T] }> {
     return Object.entries(mapping).map(([key, value]) => ({ key, value }))

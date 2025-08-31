@@ -52,7 +52,7 @@ import {
 } from '@element-plus/icons-vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import Breadcrumb from '@/components/business/Breadcrumb.vue'
-import SearchBox from '@/components/basic/SearchBox.vue'
+import SearchBox from '@/components/business/SearchBox.vue'
 import SettingsDrawer from '@/components/business/SettingsDrawer.vue'
 
 const props = defineProps({

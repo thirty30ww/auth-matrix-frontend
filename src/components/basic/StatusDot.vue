@@ -117,7 +117,7 @@ const displayText = computed(() => {
 
 .status-text {
   font-size: 14px;
-  color: var(--el-text-color-primary);
+  color: var(--el-text-color-regular);
 }
 
 @keyframes pulse {

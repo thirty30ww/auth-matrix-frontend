@@ -1,11 +1,12 @@
 // 密码修改请求接口
 import type {BaseListDTO} from "@/types";
+import {UserSex} from "@/types";
 
 export interface AddUserDTO {
     username: string;
     password: string;
     name: string;
-    sex: string;
+    sex: UserSex;
     roleIds: number[];
 }
 
@@ -19,7 +20,7 @@ export interface ChangePassWordDTO {
 export interface GetUserListDTO extends BaseListDTO{
     username?: string;
     name?: string;
-    sex?: string;
+    sex?: UserSex;
     roleIds?: number[];
     isValid?: boolean;
 }
@@ -29,7 +30,7 @@ export interface UpdateUserDTO {
     id: number;
     name?: string;
     avatarUrl?: string;
-    sex?: string;
+    sex?: UserSex;
     signature?: string;
 }
 
@@ -37,6 +38,14 @@ export interface UpdateUserDTO {
 export interface ModifyUserDTO {
     id: number;
     name: string;
-    sex: string;
+    sex: UserSex;
     roleIds: number[];
+}
+
+// 角色DTO
+export interface RoleDTO {
+    id?: number;
+    name: string;
+    description: string;
+    parentNodeId: number;
 }

@@ -4,6 +4,7 @@ import type { RoleVO } from '@/types'
 import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
+import {PermissionStatus} from "../../../constant";
 
 // Props
 interface Props {
@@ -166,8 +167,8 @@ defineExpose({
         <template #default="{ row }">
           <StatusDot 
             :status="row.hasPermission" 
-            valid-text="有权限" 
-            invalid-text="无权限"
+            :valid-text="PermissionStatus.YES"
+            :invalid-text="PermissionStatus.NO"
             size="small"
           />
         </template>

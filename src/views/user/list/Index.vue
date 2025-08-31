@@ -2,8 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import api from '@/services'
-import type { PageQueryDTO, PageResponse, SortDTO, UserVO, GetUserListDTO } from '@/types'
-import { SortDirection } from '@/constant'
+import {type PageQueryDTO, type PageResponse, type SortDTO, type UserVO, type GetUserListDTO, UserSex} from '@/types'
+import { SortDirection } from '@/types'
 import UserDialog from '@/components/business/UserDialog.vue'
 import UserListFilterHeader from './FilterHeader.vue'
 import UserListActionBar from './ActionBar.vue'
@@ -62,7 +62,7 @@ const getUserList = async () => {
     params: {
       username: searchForm.value.keyword, // 同时作为用户名搜索
       name: searchForm.value.keyword,     // 同时作为姓名搜索
-      sex: searchForm.value.sex,
+      sex: searchForm.value.sex as UserSex | undefined,
       isValid: searchForm.value.isValid ? searchForm.value.isValid === 'true' : undefined,
       roleIds: roleIds,
       sort: {
@@ -192,7 +192,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="user-list">
+  <div>
     <!-- 筛选头部组件 -->
     <UserListFilterHeader
       v-model:search-form="searchForm"
@@ -202,35 +202,35 @@ onMounted(() => {
     />
 
     <!-- 表格区域 -->
-    <el-card shadow="never">
+    <el-card>
       <!-- 操作栏组件 -->
       <UserListActionBar
-        :selected-users="selectedUsers"
-        @add-user="handleAddUser"
-        @batch-success="handleBatchSuccess"
+          :selected-users="selectedUsers"
+          @add-user="handleAddUser"
+          @batch-success="handleBatchSuccess"
       />
 
       <!-- 表格组件 -->
       <UserListTable
-        :user-list="userList"
-        :selected-users="selectedUsers"
-        :page-info="pageInfo"
-        :search-form="searchForm"
-        @selection-change="handleSelectionChange"
-        @edit="handleEdit"
-        @ban-toggle="handleBanToggle"
-        @sort-change="handleSortChange"
-        @filter="handleFilter"
-        @page-change="handlePageChange"
-        @size-change="handleSizeChange"
+          :user-list="userList"
+          :selected-users="selectedUsers"
+          :page-info="pageInfo"
+          :search-form="searchForm"
+          @selection-change="handleSelectionChange"
+          @edit="handleEdit"
+          @ban-toggle="handleBanToggle"
+          @sort-change="handleSortChange"
+          @filter="handleFilter"
+          @page-change="handlePageChange"
+          @size-change="handleSizeChange"
       />
     </el-card>
 
     <!-- 用户对话框 -->
     <UserDialog
-      v-model:visible="userDialogVisible"
-      :user-data="currentEditUser"
-      @success="handleUserDialogSuccess"
+        v-model:visible="userDialogVisible"
+        :user-data="currentEditUser"
+        @success="handleUserDialogSuccess"
     />
   </div>
 </template>

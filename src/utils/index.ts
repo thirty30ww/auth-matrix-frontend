@@ -6,4 +6,4 @@
 export * from './date';
 
 // 映射工具
-export * from './mapping';
+export * from './constant.ts';

@@ -50,8 +50,8 @@ import { reactive, watch } from 'vue';
 import type { UserVO } from '@/types/index.ts';
 import { useUserStore } from '@/stores';
 import RequiredLabel from '@/components/basic/RequiredLabel.vue';
-import {getMappingValues} from "@/utils";
-import {Sex} from "@/constant";
+import {getValues} from "@/utils";
+import { UserSex } from '@/types';
 
 // 获取 user store
 const userStore = useUserStore();
@@ -63,7 +63,7 @@ const props = defineProps<{
 const form = reactive({
   username: '',
   name: '',
-  sex: '',
+  sex: '' as UserSex,
   signature: '',
 });
 
@@ -78,7 +78,7 @@ const fillFormData = () => {
 };
 
 // 性别选项
-const sexOptions = getMappingValues(Sex).map(value => ({
+const sexOptions = getValues(UserSex).map(value => ({
   label: value,
   value: value
 }))

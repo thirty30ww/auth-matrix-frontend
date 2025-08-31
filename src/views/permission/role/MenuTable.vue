@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 import type { ViewVO } from '@/types'
 import { Check, Refresh } from '@element-plus/icons-vue'
+import { PermissionStatus } from "@/constant";
 
 // Props
 interface Props {
@@ -13,7 +14,7 @@ const props = defineProps<Props>()
 
 // Emits
 interface Emits {
-  (e: 'confirm'): void
+  (e: 'confirm', viewIds: number[]): void
   (e: 'reset'): void
 }
 
@@ -22,13 +23,98 @@ const emit = defineEmits<Emits>()
 // Refs
 const menuTableRef = ref()
 
+// 本地菜单数据副本，用于权限修改
+const localMenuData = ref<ViewVO[]>([])
+
+// 初始菜单数据，用于重置
+const originalMenuData = ref<ViewVO[]>([])
+
+// 监听菜单数据变化，更新本地副本
+watch(() => props.menuTableData, (newData) => {
+  // 深拷贝菜单数据
+  localMenuData.value = JSON.parse(JSON.stringify(newData))
+  originalMenuData.value = JSON.parse(JSON.stringify(newData))
+}, { immediate: true, deep: true })
+
+// 切换菜单权限
+const togglePermission = (row: ViewVO) => {
+  // 切换权限状态
+  row.hasPermission = !row.hasPermission
+  
+  if (row.hasPermission) {
+    // 如果打开子页面权限，打开所有父级和祖先页面权限
+    enableParentPermissions(row)
+  } else {
+    // 如果取消父页面权限，则取消所有子页面权限
+    if (row.children && row.children.length > 0) {
+      setChildrenPermission(row.children, false)
+    }
+  }
+}
+
+// 递归设置子菜单权限
+const setChildrenPermission = (children: ViewVO[], hasPermission: boolean) => {
+  children.forEach(child => {
+    child.hasPermission = hasPermission
+    if (child.children && child.children.length > 0) {
+      setChildrenPermission(child.children, hasPermission)
+    }
+  })
+}
+
+// 启用所有父级和祖先页面权限
+const enableParentPermissions = (currentRow: ViewVO) => {
+  const findAndEnableParent = (data: ViewVO[], targetRow: ViewVO): boolean => {
+    for (const item of data) {
+      if (item.children && item.children.includes(targetRow)) {
+        // 启用父页面权限
+        item.hasPermission = true
+        // 继续向上查找祖先页面
+        enableParentPermissions(item)
+        return true
+      }
+      
+      if (item.children && item.children.length > 0) {
+        if (findAndEnableParent(item.children, targetRow)) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+  
+  findAndEnableParent(localMenuData.value, currentRow)
+}
+
+// 收集有权限的菜单ID
+const getPermissionViewIds = (data: ViewVO[]): number[] => {
+  const viewIds: number[] = []
+  
+  const collectIds = (items: ViewVO[]) => {
+    items.forEach(item => {
+      if (item.hasPermission === true) {
+        viewIds.push(item.node.id)
+      }
+      if (item.children && item.children.length > 0) {
+        collectIds(item.children)
+      }
+    })
+  }
+  
+  collectIds(data)
+  return viewIds
+}
+
 // 确认按钮
 const handleConfirm = () => {
-  emit('confirm')
+  const viewIds = getPermissionViewIds(localMenuData.value)
+  emit('confirm', viewIds)
 }
 
 // 重置按钮
 const handleReset = () => {
+  // 恢复到原始状态
+  localMenuData.value = JSON.parse(JSON.stringify(originalMenuData.value))
   emit('reset')
 }
 
@@ -45,8 +131,8 @@ const expandAllMenus = async () => {
     })
   }
   
-  if (menuTableRef.value && props.menuTableData.length > 0) {
-    expandAllRows(props.menuTableData, menuTableRef.value)
+  if (menuTableRef.value && localMenuData.value.length > 0) {
+    expandAllRows(localMenuData.value, menuTableRef.value)
   }
 }
 
@@ -63,8 +149,8 @@ const collapseAllMenus = async () => {
     })
   }
   
-  if (menuTableRef.value && props.menuTableData.length > 0) {
-    collapseAllRows(props.menuTableData, menuTableRef.value)
+  if (menuTableRef.value && localMenuData.value.length > 0) {
+    collapseAllRows(localMenuData.value, menuTableRef.value)
   }
 }
 
@@ -93,7 +179,7 @@ defineExpose({
     
     <el-table
       ref="menuTableRef"
-      :data="menuTableData"
+      :data="localMenuData"
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       default-expand-all
@@ -110,8 +196,22 @@ defineExpose({
       </el-table-column>
       <el-table-column label="访问权限" min-width="100">
         <template #default="{ row }">
-          <el-tag v-if="row.hasPermission === true" type="success">有权限</el-tag>
-          <el-tag v-else-if="row.hasPermission === false" type="danger">无权限</el-tag>
+          <el-tag 
+            v-if="row.hasPermission === true" 
+            type="success" 
+            class="permission-tag clickable"
+            @click="togglePermission(row)"
+          >
+            {{ PermissionStatus.YES }}
+          </el-tag>
+          <el-tag 
+            v-else-if="row.hasPermission === false" 
+            type="danger" 
+            class="permission-tag clickable"
+            @click="togglePermission(row)"
+          >
+            {{ PermissionStatus.NO }}
+          </el-tag>
           <span v-else>-</span>
         </template>
       </el-table-column>
@@ -160,5 +260,17 @@ defineExpose({
 /* 操作栏固定在顶部 */
 .menu-action-bar {
   flex-shrink: 0;
+}
+
+/* 权限标签样式 */
+.permission-tag.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.permission-tag.clickable:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
 }
 </style>

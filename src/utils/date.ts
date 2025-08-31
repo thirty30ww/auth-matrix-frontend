@@ -1,4 +1,4 @@
-import { DATE_TIME_FORMAT } from '@/constant/date'
+import { DATE_TIME_FORMAT } from '@/constant'
 
 /**
  * 格式化日期为中文格式

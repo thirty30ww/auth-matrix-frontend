@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { UserVO, SortDTO } from '@/types'
-import { Sex, LevelTagType, UserStatus } from '@/constant'
-import { getValueFromMapping, getMappingValues } from '@/utils'
+import { LevelTagType, UserStatus } from '@/constant'
+import { UserSex } from '@/types'
+import { getValue, getValues } from '@/utils'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
@@ -43,7 +44,7 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // 性别筛选选项 - 使用工具函数动态生成
-const sexFilterOptions = getMappingValues(Sex).map(value => ({
+const sexFilterOptions = getValues(UserSex).map(value => ({
   label: value,  // 显示的文本，如 '男', '女', '未知'
   value: value   // 实际的值，如 '男', '女', '未知'
 }))
@@ -154,7 +155,7 @@ const getActionLinks = (user: UserVO) => {
           <el-tag
              v-for="role in row.roles"
              :key="role.id"
-             :type="getValueFromMapping(LevelTagType, role.level) || 'primary'"
+             :type="getValue(LevelTagType, role.level, 'primary')"
              style="margin-right: 4px;"
            >
             {{ role.name }}

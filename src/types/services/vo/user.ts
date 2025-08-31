@@ -1,6 +1,8 @@
 // 用户基础信息接口
 
 // 角色接口
+import {UserSex} from "@/types";
+
 export interface Role {
     id: number;
     name: string;
@@ -24,7 +26,7 @@ export interface UserVO {
     username: string;
     name: string;
     avatarUrl: string;
-    sex: string;
+    sex: UserSex;
     signature?: string;
     hasPermission: boolean;
     roles: Role[];

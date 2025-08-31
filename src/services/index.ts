@@ -1,5 +1,5 @@
 import {authApi, roleApi, userApi, viewApi} from './api/user.ts';
-import {fileApi} from "@/services/api/common.ts";
+import {fileApi} from "@/services/api/system.ts";
 
 // 统一导出所有API
 const api = {

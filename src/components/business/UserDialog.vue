@@ -100,9 +100,9 @@ import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import api from '@/services'
-import type { UserVO, Role, AddUserDTO, ModifyUserDTO } from '@/types'
-import { Sex } from '@/constant'
-import { getMappingValues } from '@/utils'
+import {type UserVO, type Role, type AddUserDTO, type ModifyUserDTO, RoleListType} from '@/types'
+import { UserSex } from '@/types'
+import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
 
 // Props
@@ -141,19 +141,19 @@ const formData = reactive({
   username: '',
   name: '',
   password: '',
-  sex: '',
+  sex: '' as UserSex,
   roleIds: [] as number[]
 })
 
 // 性别选项
-const sexOptions = getMappingValues(Sex).map(value => ({
+const sexOptions = getValues(UserSex).map(value => ({
   label: value,
   value: value
 }))
 
 // 获取角色列表
 const getRoleList = async () => {
-  roleList.value = await api.role.getRoleList(true) // 传入 isChild: true
+  roleList.value = await api.role.getRoleList(RoleListType.CHILD_AND_GLOBAL)
 }
 
 // 重置表单
@@ -161,7 +161,7 @@ const resetForm = () => {
   formData.username = ''
   formData.name = ''
   formData.password = ''
-  formData.sex = ''
+  formData.sex = '' as UserSex
   formData.roleIds = []
 }
 

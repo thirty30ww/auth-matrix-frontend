@@ -1,4 +1,7 @@
 // 基础列表查询接口
+import {SortDirection} from "@/types";
+
+// 基础列表查询接口
 export interface BaseListDTO {
     sort?: SortDTO
     filterTime?: FilterTimeDTO;
@@ -14,7 +17,7 @@ export interface FilterTimeDTO {
 // 排序请求接口
 export interface SortDTO {
     field: string;
-    direction: string;
+    direction: SortDirection;
 }
 
 // 分页查询接口

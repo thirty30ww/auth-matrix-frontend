@@ -8,8 +8,9 @@ import type {
     View,
     PageQueryDTO,
     PageResponse,
-    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO
+    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO
 } from '@/types';
+import { RoleListType } from '@/types';
 
 // 权限校验API
 export const authApi = {
@@ -112,19 +113,11 @@ export const userApi = {
 export const roleApi = {
     /**
      * 获取角色列表
-     * @param isChild 是否仅查询子角色，可选参数
+     * @param type 列表类型
      * @returns 角色列表
      */
-    getRoleList(isChild?: boolean) {
-        return http.get<Role[]>('/role/list', { params: { isChild } });
-    },
-
-    /**
-     * 获取全局角色列表
-     * @returns 全局角色列表
-     */
-    getGlobalList() {
-        return http.get<Role[]>('/role/global/list');
+    getRoleList(type?: RoleListType) {
+        return http.get<Role[]>('/role/list', { params: { type } });
     },
 
     /**
@@ -133,6 +126,39 @@ export const roleApi = {
      */
     getRoleTree() {
         return http.get<RoleVO[]>('/role/tree');
+    },
+
+    /**
+     * 添加角色
+     * @param role 角色添加请求参数
+     */
+    addRole(role: RoleDTO) {
+        return http.post<void>('/role/add', { data: role, showSuccess: true });
+    },
+
+    /**
+     * 修改角色
+     * @param role 角色修改请求参数
+     */
+    updateRole(role: RoleDTO) {
+        return http.post<void>('/role/update', { data: role, showSuccess: true });
+    },
+
+    /**
+     * 删除角色
+     * @param roleId 角色ID列表
+     */
+    deleteRole(roleId: number) {
+        return http.get<void>('/role/delete', { params: { roleId }, showSuccess: true });
+    },
+
+    /**
+     * 分配角色视图
+     * @param roleId 角色ID
+     * @param viewIds 视图ID列表
+     */
+    assignView(roleId: number, viewIds: number[]) {
+        return http.post<void>('/role/assign/view', { data: { roleId, viewIds }, showSuccess: true });
     }
 }
 
@@ -149,7 +175,7 @@ export const viewApi = {
      * 获取菜单树
      * @param targetRoleId 目标角色ID，可选参数
      */
-    getMenuTree(targetRoleId?: number){
+    getMenuTree(targetRoleId?: number) {
         return http.get<ViewVO[]>('/view/menu/tree', { params: { targetRoleId } });
     },
 

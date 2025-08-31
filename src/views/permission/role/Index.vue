@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import type { RoleVO, ViewVO } from '@/types'
+import { ElMessageBox } from 'element-plus'
+import type { RoleVO, ViewVO, Role } from '@/types'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
+import RoleDialog from '@/components/business/RoleDialog.vue'
 
 // 响应式数据
 const roleTableData = ref<RoleVO[]>([])
@@ -11,6 +13,12 @@ const menuTableData = ref<ViewVO[]>([])
 const selectedRole = ref<RoleVO | null>(null)
 const roleTableRef = ref()
 const menuPermissionRef = ref()
+
+// 角色对话框相关状态
+const roleDialogVisible = ref(false)
+const currentRoleData = ref<Role | null>(null)
+const currentParentNodeId = ref<number | undefined>(undefined)
+const showParentSelect = ref(true)
 
 // 获取角色列表数据
 const getRoleTree = async () => {
@@ -28,26 +36,62 @@ const handleRoleRowClick = async (row: RoleVO) => {
   await getMenuTree(row.node.id)
 }
 
-// 添加角色按钮点击事件
+// 添加角色按钮点击事件（顶部添加）
 const handleAddRole = () => {
-  // TODO: 实现添加角色功能
-  console.log('添加角色功能待实现')
+  currentRoleData.value = null
+  currentParentNodeId.value = undefined
+  showParentSelect.value = true
+  roleDialogVisible.value = true
 }
 
 // 角色行操作方法
 const handleAddChildRole = (row: RoleVO) => {
-  // TODO: 实现添加子角色功能
-  console.log('添加子角色', row)
+  // 行内添加子角色，ParentNodeId固定为当前点击行的角色ID
+  currentRoleData.value = null
+  currentParentNodeId.value = row.node.id
+  showParentSelect.value = false
+  roleDialogVisible.value = true
 }
 
 const handleEditRole = (row: RoleVO) => {
-  // TODO: 实现编辑角色功能
-  console.log('编辑角色', row)
+  // 编辑角色
+  currentRoleData.value = row.node
+  currentParentNodeId.value = undefined
+  showParentSelect.value = true
+  roleDialogVisible.value = true
 }
 
-const handleDeleteRole = (row: RoleVO) => {
-  // TODO: 实现删除角色功能
-  console.log('删除角色', row)
+const handleDeleteRole = async (row: RoleVO) => {
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除角色 "${row.node.name}" 吗？此操作不可撤销。`,
+      '删除确认',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    )
+    
+    await api.role.deleteRole(row.node.id)
+    await getRoleTree() // 重新加载角色树
+    
+    // 如果删除的是当前选中的角色，清空选中状态
+    if (selectedRole.value?.node.id === row.node.id) {
+      selectedRole.value = null
+      menuTableData.value = []
+    }
+  } catch (error) {
+    // 用户取消删除或删除失败
+    if (error !== 'cancel') {
+      console.error('删除角色失败:', error)
+    }
+  }
+}
+
+// 角色对话框成功回调
+const handleRoleDialogSuccess = async () => {
+  await getRoleTree() // 重新加载角色树
 }
 
 // 展开折叠控制方法
@@ -72,14 +116,23 @@ const handleCollapseAll = () => {
 }
 
 // 菜单权限操作方法
-const handleConfirm = () => {
-  // TODO: 实现确认功能
-  console.log('确认权限设置')
+const handleConfirm = async (viewIds: number[]) => {
+  if (!selectedRole.value) {
+    return
+  }
+  
+  await api.role.assignView(selectedRole.value.node.id, viewIds)
+  // 重新加载菜单数据以反映最新的权限状态
+  await getMenuTree(selectedRole.value.node.id)
 }
 
-const handleReset = () => {
-  // TODO: 实现重置功能
-  console.log('重置权限设置')
+const handleReset = async () => {
+  if (!selectedRole.value) {
+    return
+  }
+  
+  // 重新加载原始菜单数据
+  await getMenuTree(selectedRole.value.node.id)
 }
 
 // 初始化
@@ -115,12 +168,22 @@ onMounted(async () => {
         @reset="handleReset"
       />
     </div>
+
+    <!-- 角色对话框 -->
+    <RoleDialog
+      v-model:visible="roleDialogVisible"
+      :role-data="currentRoleData"
+      :parent-node-id="currentParentNodeId"
+      :show-parent-select="showParentSelect"
+      @success="handleRoleDialogSuccess"
+    />
   </el-card>
 </template>
 
 <style scoped>
 
 .role-content {
+
   display: flex;
   height: calc(var(--height-size-page) - 2 * var(--padding-size-card));
   gap: 12px;

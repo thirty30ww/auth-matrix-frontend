@@ -49,10 +49,6 @@ const toggleSidebar = () => {
   box-sizing: border-box; /* 确保边框包含在高度内 */
 }
 
-.el-container {
-  height: 100%;
-}
-
 .aside-container {
   height: 100%;
   transition: width 0.3s;
