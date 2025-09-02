@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { TabItem } from "@/types";
+import { HOME } from '@/constant';
 
 export const useTabsStore = defineStore('tabs', {
     state: () => ({
@@ -25,9 +26,9 @@ export const useTabsStore = defineStore('tabs', {
         // 确保首页标签存在
         ensureHomeTab() {
             const homeTab: TabItem = {
-                path: '/home',
-                title: '首页',
-                icon: 'HomeFilled'
+                path: HOME.PATH,
+                title: HOME.TITLE,
+                icon: HOME.ICON
             }
 
             if (!this.hasTab('/home')) {

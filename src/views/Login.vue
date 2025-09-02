@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores'
 import FloatingLabelInput from '@/components/basic/FloatingLabelInput.vue'
+import { HOME } from '@/constant'
 
 const username = ref('')
 const password = ref('')
@@ -19,7 +20,7 @@ const login = async () => {
   
   if (success) {
     // 登录成功后跳转到首页
-    await router.push('/home')
+    await router.push(HOME.PATH)
   }
 }
 </script>

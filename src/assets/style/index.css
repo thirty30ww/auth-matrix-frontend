@@ -8,6 +8,12 @@
 /* Element Plus 样式覆盖 */
 @import 'element/element-override.css';
 
+/* 动画效果 */
+@import 'animations/theme-transition.css';
+@import 'animations/page-transition.css';
+@import 'animations/error-page.css';
+@import 'animations/loading.css';
+
 /* 字体和图标大小 */
 @import 'size/font/font-size.css';
 @import 'size/icon/icon-size.css';
@@ -23,10 +29,5 @@
 
 /* 圆角 */
 @import 'radius/global-radius.css';
-
-/* 动画效果 */
-@import 'animations/theme-transition.css';
-@import 'animations/page-transition.css';
-@import 'animations/error-page.css';
 
 @import 'global.css';

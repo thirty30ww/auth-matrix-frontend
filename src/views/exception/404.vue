@@ -22,6 +22,7 @@
 import { useRouter } from 'vue-router'
 import { useTabsStore } from '@/stores/tabs'
 import { HomeFilled, ArrowLeft } from '@element-plus/icons-vue'
+import { HOME } from '@/constant'
 
 const router = useRouter()
 const tabsStore = useTabsStore()
@@ -29,7 +30,7 @@ const tabsStore = useTabsStore()
 const goHome = () => {
   // 关闭当前404页面的标签
   tabsStore.removeTab('/404')
-  router.push('/home')
+  router.push(HOME.PATH)
 }
 
 const goBack = () => {

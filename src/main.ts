@@ -13,8 +13,9 @@ import './assets/style/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 导入 stores
-import {useAuthStore, useThemeStore} from '@/stores'
-import {ensureRoutesLoaded} from "@/router/dynamicRoutes.ts";
+import { useAuthStore, useThemeStore } from '@/stores'
+import { ensureRoutesLoaded } from "@/router/dynamicRoutes.ts"
+import { setupDirectives } from '@/directives'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -50,5 +51,8 @@ app.use(ElementPlus, {
         round: true
     }
 })
+
+// 注册全局指令
+setupDirectives(app)
 
 app.mount('#app')

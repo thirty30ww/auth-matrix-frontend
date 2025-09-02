@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { Close, Delete } from '@element-plus/icons-vue'
 import { useTabsStore } from '@/stores/tabs'
 import IconButton from '@/components/basic/IconButton.vue'
+import { HOME } from '@/constant'
 
 const router = useRouter()
 const route = useRoute()
@@ -44,7 +45,7 @@ const closeTab = (targetPath: string) => {
 // 处理鼠标按键事件（用于中键关闭标签）
 const handleMouseDown = (event: MouseEvent, tab: any) => {
   // 鼠标中键（滚轮按钮）
-  if (event.button === 1 && tab.path !== '/home') {
+  if (event.button === 1 && tab.path !== HOME.PATH) {
     event.preventDefault()
     closeTab(tab.path)
   }
@@ -59,7 +60,7 @@ const switchTab = (path: string) => {
 // 清除所有标签（保留首页）
 const clearAllTabs = () => {
   tabsStore.clearTabs()
-  router.push('/home')
+  router.push(HOME.PATH)
 }
 
 // 判断是否显示右边框
@@ -77,9 +78,9 @@ const shouldShowRightBorder = (tab: any, index: number) => {
 watch(() => route.path, () => {
   if (route.meta.title) {
     addTab()
-  } else if (route.path === '/home') {
+  } else if (route.path === HOME.PATH) {
     // 如果是首页，确保设置为激活状态
-    tabsStore.setActiveTab('/home')
+    tabsStore.setActiveTab(HOME.PATH)
   }
 }, { immediate: true })
 </script>
@@ -93,7 +94,7 @@ watch(() => route.path, () => {
         :class="[
           'tab-item', 
           { active: activeTab === tab.path },
-          { 'home-tab': tab.path === '/home' },
+          { 'home-tab': tab.path === HOME.PATH },
           { 'show-right-border': shouldShowRightBorder(tab, index) }
         ]"
         @click="switchTab(tab.path)"
@@ -104,9 +105,9 @@ watch(() => route.path, () => {
         <el-icon class="tab-icon">
           <component :is="tab.icon" />
         </el-icon>
-        <span v-if="tab.path !== '/home'" class="tab-title">{{ tab.title }}</span>
+        <span v-if="tab.path !== HOME.PATH" class="tab-title">{{ tab.title }}</span>
         <el-icon 
-          v-if="tab.path !== '/home'" 
+          v-if="tab.path !== HOME.PATH" 
           class="tab-close"
           @click.stop="closeTab(tab.path)"
         >

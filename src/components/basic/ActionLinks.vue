@@ -12,7 +12,10 @@ interface Props {
 
 defineProps<Props>()
 
-const handleClick = (action: ActionLink) => {
+const handleClick = (action: ActionLink, event: Event) => {
+  // 阻止事件冒泡，避免触发父元素的点击事件
+  event.stopPropagation()
+  
   if (!action.disabled) {
     action.onClick()
   }
@@ -32,7 +35,7 @@ const handleClick = (action: ActionLink) => {
           'action-link-disabled': action.disabled
         }
       ]"
-      @click="handleClick(action)"
+      @click="handleClick(action, $event)"
     >
       {{ action.label }}
     </span>

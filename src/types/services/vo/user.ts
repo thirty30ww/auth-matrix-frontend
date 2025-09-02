@@ -1,7 +1,7 @@
 // 用户基础信息接口
 
 // 角色接口
-import {UserSex} from "@/types";
+import {UserSex, ViewType} from "@/types";
 
 export interface Role {
     id: number;
@@ -48,11 +48,12 @@ export interface View {
     name: string;
     path: string;
     component: string;
-    type: string;
+    type: ViewType;
     parentNodeId: number;
     frontNodeId: number;
     behindNodeId: number;
     icon: string;
+    isValid: boolean;
 }
 
 // 页面树节点接口

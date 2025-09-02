@@ -14,20 +14,36 @@ const selectedRole = ref<RoleVO | null>(null)
 const roleTableRef = ref()
 const menuPermissionRef = ref()
 
+// 加载状态
+const isLoadingRoles = ref(false)
+const isLoadingMenus = ref(false)
+
 // 角色对话框相关状态
 const roleDialogVisible = ref(false)
 const currentRoleData = ref<Role | null>(null)
 const currentParentNodeId = ref<number | undefined>(undefined)
 const showParentSelect = ref(true)
 
-// 获取角色列表数据
+// 获取角色列表数据（带加载动画）
 const getRoleTree = async () => {
-  roleTableData.value = await api.role.getRoleTree()
+  isLoadingRoles.value = true
+  try {
+    const response = await api.role.getRoleTree()
+    roleTableData.value = response
+  } finally {
+    isLoadingRoles.value = false
+  }
 }
 
-// 获取菜单列表数据
+// 获取菜单列表数据（带加载动画）
 const getMenuTree = async (roleId?: number) => {
-  menuTableData.value = await api.view.getMenuTree(roleId)
+  isLoadingMenus.value = true
+  try {
+    const response = await api.view.getMenuTree(roleId)
+    menuTableData.value = response
+  } finally {
+    isLoadingMenus.value = false
+  }
 }
 
 // 角色表格行点击事件
@@ -121,9 +137,14 @@ const handleConfirm = async (viewIds: number[]) => {
     return
   }
   
-  await api.role.assignView(selectedRole.value.node.id, viewIds)
-  // 重新加载菜单数据以反映最新的权限状态
-  await getMenuTree(selectedRole.value.node.id)
+  isLoadingMenus.value = true
+  try {
+    await api.role.assignView(selectedRole.value.node.id, viewIds)
+    // 重新加载菜单数据以反映最新的权限状态
+    await getMenuTree(selectedRole.value.node.id)
+  } finally {
+    isLoadingMenus.value = false
+  }
 }
 
 const handleReset = async () => {
@@ -149,6 +170,7 @@ onMounted(async () => {
       ref="roleTableRef"
       :role-table-data="roleTableData"
       :selected-role="selectedRole"
+      :loading="isLoadingRoles"
       @role-row-click="handleRoleRowClick"
       @add-role="handleAddRole"
       @edit-role="handleEditRole"
@@ -163,6 +185,7 @@ onMounted(async () => {
       ref="menuPermissionRef"
       :menu-table-data="menuTableData"
       :selected-role="selectedRole"
+      :loading="isLoadingMenus"
       @confirm="handleConfirm"
       @reset="handleReset"
     />

@@ -1,0 +1,132 @@
+/* 简单的表格加载动画效果 */
+
+/* 加载容器 */
+.loading-container {
+    position: relative;
+    min-height: 400px;
+    transition: min-height 0.2s ease;
+}
+
+/* 加载遮罩层 */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--el-bg-color-overlay);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 跳跃的方块动画 */
+.bounce-box-loading {
+    width: 40px;
+    height: 40px;
+    position: relative;
+}
+
+.bounce-box-loading:before {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: var(--el-color-primary-light-7);
+    opacity: 0.8;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    border-radius: 50%;
+    animation: shadow-bounce 0.6s linear infinite;
+}
+
+.bounce-box-loading:after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    background: var(--el-color-primary);
+    animation: box-bounce 0.6s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--el-border-radius-small);
+}
+
+@keyframes box-bounce {
+    17% {
+        border-bottom-right-radius: var(--el-border-radius-small);
+    }
+
+    25% {
+        transform: translateY(8px) rotate(22.5deg);
+    }
+
+    50% {
+        transform: translateY(16px) scale(1, 0.9) rotate(45deg);
+        border-bottom-right-radius: 20px;
+    }
+
+    75% {
+        transform: translateY(8px) rotate(67.5deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(90deg);
+    }
+}
+
+@keyframes shadow-bounce {
+
+    0%,
+    100% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.1, 1);
+    }
+}
+
+/* 加载文本 */
+.table-loading-text {
+    margin-top: var(--margin-size-spacing-6);
+    color: var(--el-color-primary);
+    font-weight: 500;
+    text-align: center;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .bounce-box-loading {
+        width: 32px;
+        height: 32px;
+    }
+
+    .bounce-box-loading:before {
+        width: 32px;
+        top: 40px;
+    }
+
+    .bounce-box-loading:after {
+        width: 32px;
+        height: 32px;
+    }
+
+    .table-loading-text {
+        margin-top: 48px;
+    }
+}
+
+/* 减少动画偏好设置 */
+@media (prefers-reduced-motion: reduce) {
+
+    .bounce-box-loading:after,
+    .bounce-box-loading:before {
+        animation: none !important;
+    }
+
+    .bounce-box-loading:after {
+        background: var(--el-color-primary-light-3);
+    }
+}

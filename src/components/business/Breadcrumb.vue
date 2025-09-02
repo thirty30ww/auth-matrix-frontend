@@ -20,6 +20,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useViewStore } from '@/stores'
 import type {TabItem, ViewVO} from "@/types";
+import { HOME } from '@/constant';
 
 const route = useRoute()
 const viewStore = useViewStore()
@@ -29,9 +30,9 @@ const breadcrumbItems = computed(() => {
   const result: TabItem[] = []
   // 添加首页
   result.push({
-    path: '/home',
-    title: '首页',
-    icon: 'HomeFilled'
+    path: HOME.PATH,
+    title: HOME.TITLE,
+    icon: HOME.ICON
   })
 
   // 获取当前路由路径

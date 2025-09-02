@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch, computed } from 'vue'
 import type { ViewVO } from '@/types'
 import { Check, Refresh } from '@element-plus/icons-vue'
-import { PermissionStatus } from "@/constant";
+import { PermissionStatus } from "@/constant"
+import ClickableTag from '@/components/basic/ClickableTag.vue'
 
 // Props
 interface Props {
   menuTableData: ViewVO[]
   selectedRole: any
+  loading?: boolean
 }
 
 const props = defineProps<Props>()
@@ -36,8 +38,23 @@ watch(() => props.menuTableData, (newData) => {
   originalMenuData.value = JSON.parse(JSON.stringify(newData))
 }, { immediate: true, deep: true })
 
+// 检查数据是否有变化
+const hasDataChanged = computed(() => {
+  return JSON.stringify(localMenuData.value) !== JSON.stringify(originalMenuData.value)
+})
+
+// 检查当前角色是否有修改权限
+const canModifyRole = computed(() => {
+  return props.selectedRole?.hasPermission ?? false
+})
+
 // 切换菜单权限
 const togglePermission = (row: ViewVO) => {
+  // 检查是否有修改权限
+  if (!canModifyRole.value) {
+    return
+  }
+  
   // 切换权限状态
   row.hasPermission = !row.hasPermission
   
@@ -166,11 +183,18 @@ defineExpose({
     <!-- 菜单操作按钮 -->
     <div class="menu-action-bar">
       <div class="right-actions">
-        <el-button type="primary" @click="handleConfirm">
+        <el-button 
+          type="primary" 
+          :disabled="!hasDataChanged || !canModifyRole"
+          @click="handleConfirm"
+        >
           <el-icon class="el-icon--left"><Check /></el-icon>
           确认
         </el-button>
-        <el-button @click="handleReset">
+        <el-button 
+          :disabled="!canModifyRole"
+          @click="handleReset"
+        >
           <el-icon class="el-icon--left"><Refresh/></el-icon>
           重置
         </el-button>
@@ -183,6 +207,7 @@ defineExpose({
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       default-expand-all
+      v-table-loading="{ loading: $props.loading || false, text: '加载菜单权限中...' }"
     >
       <el-table-column label="菜单名称" min-width="200">
         <template #default="{ row }">
@@ -196,22 +221,20 @@ defineExpose({
       </el-table-column>
       <el-table-column label="访问权限" min-width="100">
         <template #default="{ row }">
-          <el-tag 
+          <ClickableTag 
             v-if="row.hasPermission === true" 
             type="success" 
-            class="permission-tag clickable"
-            @click="togglePermission(row)"
-          >
-            {{ PermissionStatus.YES }}
-          </el-tag>
-          <el-tag 
+            :disabled="!canModifyRole"
+            :text="PermissionStatus.YES"
+            @click="() => togglePermission(row)"
+          />
+          <ClickableTag 
             v-else-if="row.hasPermission === false" 
             type="danger" 
-            class="permission-tag clickable"
-            @click="togglePermission(row)"
-          >
-            {{ PermissionStatus.NO }}
-          </el-tag>
+            :disabled="!canModifyRole"
+            :text="PermissionStatus.NO"
+            @click="() => togglePermission(row)"
+          />
           <span v-else>-</span>
         </template>
       </el-table-column>
@@ -260,17 +283,5 @@ defineExpose({
 /* 操作栏固定在顶部 */
 .menu-action-bar {
   flex-shrink: 0;
-}
-
-/* 权限标签样式 */
-.permission-tag.clickable {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  user-select: none;
-}
-
-.permission-tag.clickable:hover {
-  opacity: 0.8;
-  transform: scale(1.05);
 }
 </style>

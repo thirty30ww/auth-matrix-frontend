@@ -7,3 +7,6 @@ export * from './date';
 
 // 映射工具
 export * from './constant.ts';
+
+// 表格工具
+export * from './table';

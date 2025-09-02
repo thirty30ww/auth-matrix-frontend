@@ -108,7 +108,8 @@ function generateAndAddRoutes(viewNodes: ViewVO[], router: Router) {
             meta: {
                 icon: item.node.icon,
                 title: item.node.name, // 使用name作为标签页标题
-                hasPermission: item.hasPermission // 保存权限信息
+                hasPermission: item.hasPermission, // 保存权限信息
+                isValid: item.node.isValid
             }
         };
 

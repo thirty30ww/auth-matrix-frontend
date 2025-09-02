@@ -13,5 +13,7 @@
     --margin-size-spacing-2: var(--margin-size-sm);
     --margin-size-spacing-3: var(--margin-size-md);
     --margin-size-spacing-4: var(--margin-size-lg);
+    --margin-size-spacing-5: var(--margin-size-xl);
+    --margin-size-spacing-6: var(--margin-size-2xl);
 
 }

@@ -17,3 +17,12 @@ export enum RoleListType {
     GLOBAL = 3,
     CHILD_AND_SELF = 4,
 }
+
+/**
+ * 视图类型枚举
+ */
+export enum ViewType {
+    DIRECTORY = "目录",
+    MENU = "菜单",
+    PAGE = "页面"
+}

@@ -26,19 +26,19 @@ export const themeColors: ThemeColor[] = [
     {
         id: 'stellar-purple',
         name: '星紫幻境',
-        color: '#a64cf4',
+        color: '#9266f9',
         description: '神秘而优雅的紫色基调'
     },
     {
         id: 'ocean-blue',
         name: '海蓝秘境',
-        color: '#2E86C1',
+        color: '#32a2d4',
         description: '深邃如海的蓝色世界'
     },
     {
         id: 'golden-dawn',
         name: '金黄晨光',
-        color: '#F39C12',
+        color: '#faad14',
         description: '温暖如阳光的金色调'
     },
     {
@@ -105,10 +105,10 @@ export const useThemeStore = defineStore('theme', {
                 // 暗色模式：light9 应该接近黑色但保留原色
                 return {
                     primary: baseColor.toHexString(),
-                    light3: baseColor.lighten(8).toHexString(), // 稍微变亮
-                    light5: baseColor.lighten(5).toHexString(), // 轻微变亮
-                    light7: tinycolor.mix(baseColor, black, 15).toHexString(), // 混合15%黑色
-                    light8: tinycolor.mix(baseColor, black, 50).toHexString(), // 混合50%黑色
+                    light3: tinycolor.mix(baseColor, black, 15).toHexString(), // 稍微变亮
+                    light5: tinycolor.mix(baseColor, black, 30).toHexString(), // 轻微变亮
+                    light7: tinycolor.mix(baseColor, black, 50).toHexString(), // 混合15%黑色
+                    light8: tinycolor.mix(baseColor, black, 70).toHexString(), // 混合50%黑色
                     light9: tinycolor.mix(baseColor, black, 85).toHexString(), // 混合85%黑色，接近黑色但保留原色
                     dark2: baseColor.darken(5).toHexString()
                 }

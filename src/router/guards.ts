@@ -1,5 +1,6 @@
 import type { Router } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import { HOME } from '@/constant';
 
 // 设置全局前置守卫
 export function setupRouterGuards(router: Router) {
@@ -10,18 +11,22 @@ export function setupRouterGuards(router: Router) {
         const isLoggedIn = authStore.userLoggedIn;
 
         // 检查路由是否需要认证, 默认为true
-        const requiresAuth = to.meta.requiresAuth;
+        const requiresAuth = to.meta.requiresAuth !== false;
+
+        console.log(to.meta);
 
         if (requiresAuth && !isLoggedIn) {
             next({ path: '/login' });
         } else if (to.path === '/login' && isLoggedIn) {
-            next({ path: '/home' });
+            next({ path: HOME.PATH });
         } else if (to.path === '/' && isLoggedIn) {
-            next({ path: '/home' });
+            next({ path: HOME.PATH });
         } else if (to.meta.hasPermission === false && isLoggedIn) {
             next({ path: '/403' });
         } else if (to.matched.length === 0 && isLoggedIn) {
             next({ path: '/404' });
+        } else if (to.meta.isValid === false && isLoggedIn) {
+            next({ path: '/503' });
         } else {
             next();
         }

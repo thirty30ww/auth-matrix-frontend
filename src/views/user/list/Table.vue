@@ -13,6 +13,7 @@ import FilterableTableHeader from '@/components/business/FilterableTableHeader.v
 interface Props {
   userList: UserVO[]
   selectedUsers: UserVO[]
+  loading?: boolean
   pageInfo: {
     pageNum: number
     pageSize: number
@@ -22,10 +23,7 @@ interface Props {
   searchForm: {
     sex: string
     isValid: string
-    sort: {
-      field: string
-      direction: string
-    }
+    sort: SortDTO
   }
 }
 
@@ -116,11 +114,14 @@ const getActionLinks = (user: UserVO) => {
 </script>
 
 <template>
-  <div class="table-container">
+  <div 
+    class="table-container"
+  >
     <el-table
       :data="userList"
       style="width: 100%"
       @selection-change="handleSelectChange"
+      v-table-loading="{ loading: $props.loading || false, text: '加载用户数据中...'}"
     >
       <!-- 选择列 -->
       <el-table-column 
@@ -156,7 +157,7 @@ const getActionLinks = (user: UserVO) => {
              v-for="role in row.roles"
              :key="role.id"
              :type="getValue(LevelTagType, role.level, 'primary')"
-             style="margin-right: 4px;"
+             style="margin-right: var(--margin-size-spacing-1);"
            >
             {{ role.name }}
           </el-tag>

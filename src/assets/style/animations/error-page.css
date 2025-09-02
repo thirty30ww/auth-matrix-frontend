@@ -65,6 +65,25 @@
     animation: depth-float 4s ease-in-out infinite;
 }
 
+/* 503页面专用样式 - warning色系 */
+.error-number--warning {
+    color: var(--el-color-warning);
+
+    /* 多层文字阴影创建立体感 */
+    text-shadow:
+        /* 主要立体层 */
+        2px 2px 0 var(--el-color-warning-light-3),
+        4px 4px 0 var(--el-color-warning-light-5),
+        6px 6px 0 var(--el-color-warning-light-7),
+        8px 8px 0 var(--el-color-warning-light-9),
+        /* 深度阴影 */
+        10px 10px 20px var(--pp-shadow-strong),
+        15px 15px 30px var(--pp-shadow-medium);
+
+    /* 轻微的摇摆动画效果 */
+    animation: depth-sway 3.5s ease-in-out infinite;
+}
+
 /* 错误信息样式 */
 .error-message {
     font-size: var(--font-size-error-message);
@@ -112,5 +131,21 @@
 
     75% {
         transform: perspective(300px) rotateX(15deg) translateY(3px) translateZ(8px);
+    }
+}
+
+@keyframes depth-sway {
+
+    0%,
+    100% {
+        transform: perspective(300px) rotateX(15deg) rotateZ(0deg) translateZ(0px);
+    }
+
+    25% {
+        transform: perspective(300px) rotateX(15deg) rotateZ(-2deg) translateZ(3px);
+    }
+
+    75% {
+        transform: perspective(300px) rotateX(15deg) rotateZ(2deg) translateZ(6px);
     }
 }

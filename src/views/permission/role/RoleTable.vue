@@ -10,6 +10,7 @@ import {PermissionStatus} from "../../../constant";
 interface Props {
   roleTableData: RoleVO[]
   selectedRole: RoleVO | null
+  loading?: boolean
 }
 
 const props = defineProps<Props>()
@@ -139,7 +140,7 @@ defineExpose({
       <div class="left-actions">
         <el-button type="primary" @click="handleAddRole">
           <el-icon class="el-icon--left"><Plus /></el-icon>
-          添加角色
+          添加
         </el-button>
         <el-button @click="handleExpandAll">
           <el-icon class="el-icon--left"><Expand /></el-icon>
@@ -160,6 +161,7 @@ defineExpose({
       highlight-current-row
       @row-click="handleRoleRowClick"
       default-expand-all
+      v-table-loading="{ loading: $props.loading || false, text: '加载角色数据中...' }"
     >
       <el-table-column prop="node.name" label="角色名称" min-width="120px"/>
       <el-table-column prop="node.description" label="描述" min-width="300px"/>

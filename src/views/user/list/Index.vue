@@ -18,6 +18,9 @@ const pageInfo = ref({
   pages: 0
 })
 
+// 加载状态
+const isLoading = ref(false)
+
 // 表格选择相关
 const selectedUsers = ref<UserVO[]>([])
 
@@ -50,46 +53,52 @@ const handleAddUser = () => {
   userDialogVisible.value = true
 }
 
-// 获取用户列表
+// 获取用户列表（带加载动画）
 const getUserList = async () => {
-  // 将单选的角色ID转换为数组格式
-  const roleIds = searchForm.value.roleId ? [searchForm.value.roleId] : []
+  isLoading.value = true
+  
+  try {
+    // 将单选的角色ID转换为数组格式
+    const roleIds = searchForm.value.roleId ? [searchForm.value.roleId] : []
 
-  // 构建 PageQuery 对象
-  const request: PageQueryDTO<GetUserListDTO> = {
-    pageNum: pageInfo.value.pageNum,
-    pageSize: pageInfo.value.pageSize,
-    params: {
-      username: searchForm.value.keyword, // 同时作为用户名搜索
-      name: searchForm.value.keyword,     // 同时作为姓名搜索
-      sex: searchForm.value.sex as UserSex | undefined,
-      isValid: searchForm.value.isValid ? searchForm.value.isValid === 'true' : undefined,
-      roleIds: roleIds,
-      sort: {
-        field: searchForm.value.sort.field,
-        direction: searchForm.value.sort.direction
-      },
-      filterTime: {
-        field: 'createTime',
-        startTime: searchForm.value.createTimeStart,
-        endTime: searchForm.value.createTimeEnd
+    // 构建 PageQuery 对象
+    const request: PageQueryDTO<GetUserListDTO> = {
+      pageNum: pageInfo.value.pageNum,
+      pageSize: pageInfo.value.pageSize,
+      params: {
+        username: searchForm.value.keyword, // 同时作为用户名搜索
+        name: searchForm.value.keyword,     // 同时作为姓名搜索
+        sex: searchForm.value.sex as UserSex | undefined,
+        isValid: searchForm.value.isValid ? searchForm.value.isValid === 'true' : undefined,
+        roleIds: roleIds,
+        sort: {
+          field: searchForm.value.sort.field,
+          direction: searchForm.value.sort.direction
+        },
+        filterTime: {
+          field: 'createTime',
+          startTime: searchForm.value.createTimeStart,
+          endTime: searchForm.value.createTimeEnd
+        }
       }
     }
-  }
 
-  const response: PageResponse<UserVO> = await api.user.getUserList(request)
+    const response: PageResponse<UserVO> = await api.user.getUserList(request)
 
-  // 更新数据
-  userList.value = response.records
-  pageInfo.value = {
-    pageNum: response.current,
-    pageSize: response.size,
-    total: response.total,
-    pages: response.pages
+    // 更新数据
+    userList.value = response.records
+    pageInfo.value = {
+      pageNum: response.current,
+      pageSize: response.size,
+      total: response.total,
+      pages: response.pages
+    }
+    
+    // 清空选择状态
+    selectedUsers.value = []
+  } finally {
+    isLoading.value = false
   }
-  
-  // 清空选择状态
-  selectedUsers.value = []
 }
 
 // 筛选头部事件处理
@@ -216,6 +225,7 @@ onMounted(() => {
           :selected-users="selectedUsers"
           :page-info="pageInfo"
           :search-form="searchForm"
+          :loading="isLoading"
           @selection-change="handleSelectionChange"
           @edit="handleEdit"
           @ban-toggle="handleBanToggle"
