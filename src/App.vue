@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useAuthStore, useUserStore, useTabsStore } from '@/stores'
+import { useAuthStore, useUserStore, useTabsStore, useViewStore } from '@/stores'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const tabsStore = useTabsStore()
+const viewStore = useViewStore()
 
 onMounted(async () => {
   // 如果已登录则获取用户信息（认证状态已通过持久化插件自动恢复）
   if (authStore.userLoggedIn) {
     await userStore.getUserInfo()
+    // 获取权限码
+    await viewStore.getPermissionCodes()
     await tabsStore.initializeTabs()
   }
 })

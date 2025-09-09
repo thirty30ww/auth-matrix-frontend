@@ -70,19 +70,21 @@
         <template #label>
           <RequiredLabel required>角色</RequiredLabel>
         </template>
-        <el-select
+        <el-tree-select
           v-model="formData.roleIds"
+          :data="roleTreeData"
+          :props="{ 
+            value: 'id', 
+            label: 'name', 
+            children: 'children' 
+          }"
           placeholder="请选择角色"
           multiple
+          check-strictly
+          :render-after-expand="false"
+          default-expand-all
           style="width: 100%"
-        >
-          <el-option
-            v-for="role in roleList"
-            :key="role.id"
-            :label="role.name"
-            :value="role.id"
-          />
-        </el-select>
+        />
       </el-form-item>
     </el-form>
     
@@ -100,7 +102,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import api from '@/services'
-import {type UserVO, type Role, type AddUserDTO, type ModifyUserDTO, RoleListType} from '@/types'
+import {type UserVO, type RoleVO, type AddUserDTO, type ModifyUserDTO, RolesType} from '@/types'
 import { UserSex } from '@/types'
 import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
@@ -125,7 +127,7 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 // 响应式数据
-const roleList = ref<Role[]>([])
+const roleTreeData = ref<any[]>([])
 
 // 对话框显示状态
 const dialogVisible = computed({
@@ -151,9 +153,22 @@ const sexOptions = getValues(UserSex).map(value => ({
   value: value
 }))
 
-// 获取角色列表
-const getRoleList = async () => {
-  roleList.value = await api.role.getRoleList(RoleListType.CHILD_AND_GLOBAL)
+// 获取角色树数据
+const getRoleTreeData = async () => {
+  const data = await api.role.getRoleTree(RolesType.CHILD_AND_GLOBAL)
+  if (data) {
+    // 转换数据格式以适配tree-select
+    const convertToTreeData = (roles: RoleVO[]): any[] => {
+      return roles.map(role => ({
+        id: role.node.id,
+        name: role.node.name,
+        description: role.node.description,
+        children: convertToTreeData(role.children || [])
+      }))
+    }
+    
+    roleTreeData.value = convertToTreeData(data)
+  }
 }
 
 // 重置表单
@@ -185,8 +200,8 @@ watch(() => props.userData, (newData) => {
 // 监听对话框显示状态
 watch(() => props.visible, (visible) => {
   if (visible) {
-    // 获取角色列表
-    getRoleList()
+    // 获取角色树数据
+    getRoleTreeData()
     
     if (props.userData && isEdit.value) {
       fillFormData(props.userData)

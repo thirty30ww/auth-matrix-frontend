@@ -12,7 +12,7 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item 
-            v-for="(operation, key) in operations"
+            v-for="(operation, key) in visibleOperations"
             :key="key"
             :command="key"
             :disabled="!canExecuteOperation(key)"
@@ -31,8 +31,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useViewStore } from '@/stores/view'
 
 // 批量操作配置接口
 export interface BatchOperation<T = any> {
@@ -42,6 +44,7 @@ export interface BatchOperation<T = any> {
   warningMessage: string
   filterCondition: (item: T) => boolean
   apiMethod: (ids: number[]) => Promise<any>
+  permission?: string // 权限码
 }
 
 // Props 定义
@@ -58,6 +61,27 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const viewStore = useViewStore()
+
+// 过滤有权限的操作
+const visibleOperations = computed(() => {
+  const filtered: Record<string, BatchOperation> = {}
+  
+  for (const [key, operation] of Object.entries(props.operations)) {
+    // 如果操作有权限要求，检查权限
+    if (operation.permission) {
+      if (viewStore.hasPermission(operation.permission)) {
+        filtered[key] = operation
+      }
+    } else {
+      // 没有权限要求的操作直接显示
+      filtered[key] = operation
+    }
+  }
+  
+  return filtered
+})
 
 // 通用批量操作处理函数
 const executeBatchOperation = async (operation: BatchOperation) => {
@@ -88,7 +112,7 @@ const executeBatchOperation = async (operation: BatchOperation) => {
 
 // 批量操作入口函数
 const handleBatchAction = async (command: string) => {
-  const operation = props.operations[command]
+  const operation = visibleOperations.value[command]
   if (operation) {
     await executeBatchOperation(operation)
   }
@@ -96,7 +120,7 @@ const handleBatchAction = async (command: string) => {
 
 // 检查是否有可执行的操作
 const canExecuteOperation = (command: string): boolean => {
-  const operation = props.operations[command]
+  const operation = visibleOperations.value[command]
   return operation ? props.selectedItems.some(operation.filterCondition) : false
 }
 </script>

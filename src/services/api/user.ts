@@ -8,9 +8,9 @@ import type {
     View,
     PageQueryDTO,
     PageResponse,
-    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO
+    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO, ViewDTO
 } from '@/types';
-import { RoleListType } from '@/types';
+import { RolesType } from '@/types';
 
 // 权限校验API
 export const authApi = {
@@ -116,7 +116,7 @@ export const roleApi = {
      * @param type 列表类型
      * @returns 角色列表
      */
-    getRoleList(type?: RoleListType) {
+    getRoleList(type?: RolesType) {
         return http.get<Role[]>('/role/list', { params: { type } });
     },
 
@@ -124,8 +124,8 @@ export const roleApi = {
      * 获取角色树
      * @returns 角色树
      */
-    getRoleTree() {
-        return http.get<RoleVO[]>('/role/tree');
+    getRoleTree(type?: RolesType) {
+        return http.get<RoleVO[]>('/role/tree', { params: { type } });
     },
 
     /**
@@ -173,10 +173,24 @@ export const viewApi = {
 
     /**
      * 获取菜单树
-     * @param targetRoleId 目标角色ID，可选参数
      */
-    getMenuTree(targetRoleId?: number) {
-        return http.get<ViewVO[]>('/view/menu/tree', { params: { targetRoleId } });
+    getMenuTree() {
+        return http.get<ViewVO[]>('/view/menu/tree');
+    },
+
+    /**
+     * 获取菜单和按钮树
+     * @param targetRoleId 目标角色ID
+     */
+    getMenuAndButtonTree(targetRoleId?: number) {
+        return http.get<ViewVO[]>('/view/menu/button/tree', { params: { targetRoleId } });
+    },
+
+    /**
+     * 获取目录树
+     */
+    getDirectoryTree() {
+        return http.get<ViewVO[]>('/view/directory/tree');
     },
 
     /**
@@ -185,5 +199,45 @@ export const viewApi = {
      */
     getViewList(keyword: string) {
         return http.get<View[]>('/view/list', { params: { keyword } });
+    },
+
+    /**
+     * 获取权限码列表
+     */
+    getPermissionCode() {
+        return http.get<string[]>('/view/permission/code');
+    },
+
+    /**
+     * 添加页面
+     * @param view 页面添加请求参数
+     */
+    addView(view: ViewDTO) {
+        return http.post<void>('/view/add', { data: view, showSuccess: true });
+    },
+
+    /**
+     * 修改页面
+     * @param view 页面修改请求参数
+     */
+    modifyView(view: ViewDTO) {
+        return http.post<void>('/view/modify', { data: view, showSuccess: true });
+    },
+
+    /**
+     * 删除页面
+     * @param viewId 页面ID
+     */
+    deleteView(viewId: number) {
+        return http.get<void>('/view/delete', { params: { viewId }, showSuccess: true });
+    },
+
+    /**
+     * 移动页面
+     * @param viewId 页面ID
+     * @param isUp 是否向上移动
+     */
+    moveView(viewId: number, isUp: boolean) {
+        return http.get<void>('/view/move', { params: { viewId, isUp } });
     }
 }

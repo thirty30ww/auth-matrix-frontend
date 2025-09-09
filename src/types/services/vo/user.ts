@@ -1,7 +1,7 @@
 // 用户基础信息接口
 
 // 角色接口
-import {UserSex, ViewType} from "@/types";
+import { UserSex, ViewType } from "@/types";
 
 export interface Role {
     id: number;
@@ -53,6 +53,7 @@ export interface View {
     frontNodeId: number;
     behindNodeId: number;
     icon: string;
+    permissionCode?: string;
     isValid: boolean;
 }
 
@@ -60,5 +61,6 @@ export interface View {
 export interface ViewVO {
     node: View;
     hasPermission?: boolean;
+    hasChange?: boolean;
     children: ViewVO[];
 }

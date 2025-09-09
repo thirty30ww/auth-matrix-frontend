@@ -102,7 +102,7 @@ watch(() => route.path, () => {
         @mouseenter="hoveredTab = tab.path"
         @mouseleave="hoveredTab = ''"
       >
-        <el-icon class="tab-icon">
+        <el-icon v-if="tab.icon" class="tab-icon">
           <component :is="tab.icon" />
         </el-icon>
         <span v-if="tab.path !== HOME.PATH" class="tab-title">{{ tab.title }}</span>

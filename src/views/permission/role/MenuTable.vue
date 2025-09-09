@@ -17,7 +17,6 @@ const props = defineProps<Props>()
 // Emits
 interface Emits {
   (e: 'confirm', viewIds: number[]): void
-  (e: 'reset'): void
 }
 
 const emit = defineEmits<Emits>()
@@ -48,10 +47,25 @@ const canModifyRole = computed(() => {
   return props.selectedRole?.hasPermission ?? false
 })
 
+// 检查特定菜单项是否可以修改
+const canModifyMenuItem = (row: ViewVO) => {
+  // 首先检查角色是否有修改权限
+  if (!canModifyRole.value) {
+    return false
+  }
+  
+  // 然后检查菜单项的hasChange字段
+  if (row.hasChange === false) {
+    return false
+  }
+  
+  return true
+}
+
 // 切换菜单权限
 const togglePermission = (row: ViewVO) => {
-  // 检查是否有修改权限
-  if (!canModifyRole.value) {
+  // 检查是否可以修改该菜单项
+  if (!canModifyMenuItem(row)) {
     return
   }
   
@@ -132,7 +146,6 @@ const handleConfirm = () => {
 const handleReset = () => {
   // 恢复到原始状态
   localMenuData.value = JSON.parse(JSON.stringify(originalMenuData.value))
-  emit('reset')
 }
 
 // 展开全部菜单
@@ -224,14 +237,14 @@ defineExpose({
           <ClickableTag 
             v-if="row.hasPermission === true" 
             type="success" 
-            :disabled="!canModifyRole"
+            :disabled="!canModifyMenuItem(row)"
             :text="PermissionStatus.YES"
             @click="() => togglePermission(row)"
           />
           <ClickableTag 
             v-else-if="row.hasPermission === false" 
             type="danger" 
-            :disabled="!canModifyRole"
+            :disabled="!canModifyMenuItem(row)"
             :text="PermissionStatus.NO"
             @click="() => togglePermission(row)"
           />

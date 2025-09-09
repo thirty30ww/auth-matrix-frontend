@@ -1,6 +1,6 @@
 // 密码修改请求接口
 import type {BaseListDTO} from "@/types";
-import {UserSex} from "@/types";
+import {UserSex, ViewType} from "@/types";
 
 export interface AddUserDTO {
     username: string;
@@ -48,4 +48,19 @@ export interface RoleDTO {
     name: string;
     description: string;
     parentNodeId: number;
+}
+
+// 页面DTO
+export interface ViewDTO {
+    id?: number;
+    name: string;
+    path?: string;
+    component?: string;
+    type: ViewType;
+    permissionCode?: string;
+    parentNodeId: number;
+    frontNodeId?: number;
+    behindNodeId?: number;
+    icon?: string;
+    isValid: boolean;
 }

@@ -39,19 +39,21 @@
         <template #label>
           <RequiredLabel required>上级角色</RequiredLabel>
         </template>
-        <el-select
+        <el-tree-select
           v-model="formData.parentNodeId"
+          :data="roleTreeOptions"
+          :props="{ 
+            value: 'id', 
+            label: 'name', 
+            children: 'children' 
+          }"
           placeholder="请选择上级角色"
           clearable
+          check-strictly
+          :render-after-expand="false"
+          default-expand-all
           style="width: 100%"
-        >
-          <el-option
-            v-for="role in parentRoleList"
-            :key="role.id"
-            :label="role.name"
-            :value="role.id"
-          />
-        </el-select>
+        />
       </el-form-item>
     </el-form>
     
@@ -65,12 +67,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
-import { type FormInstance } from 'element-plus'
+import {computed, reactive, ref, watch} from 'vue'
+import {type FormInstance} from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import api from '@/services'
-import { type Role, type RoleDTO, RoleListType } from '@/types'
+import {type Role, type RoleDTO, RolesType, type RoleVO} from '@/types'
 
 // Props
 interface Props {
@@ -97,7 +99,7 @@ const emit = defineEmits<Emits>()
 
 // 响应式数据
 const formRef = ref<FormInstance>()
-const parentRoleList = ref<Role[]>([])
+const roleTreeOptions = ref<any[]>([])
 
 // 对话框显示状态
 const dialogVisible = computed({
@@ -115,10 +117,69 @@ const formData = reactive({
   parentNodeId: undefined as number | undefined
 })
 
-// 获取父角色列表
-const getParentRoleList = async () => {
+// 递归获取节点及其所有子节点的ID
+const getAllRoleIds = (role: RoleVO): number[] => {
+  const ids = [role.node.id]
+  if (role.children && role.children.length > 0) {
+    role.children.forEach(child => {
+      ids.push(...getAllRoleIds(child))
+    })
+  }
+  return ids
+}
+
+// 递归过滤节点，排除指定的ID列表
+const filterRoleNodes = (roles: RoleVO[], excludeIds: number[]): RoleVO[] => {
+  return roles
+    .filter(role => !excludeIds.includes(role.node.id))
+    .map(role => ({
+      ...role,
+      children: role.children ? filterRoleNodes(role.children, excludeIds) : []
+    }))
+}
+
+// 获取角色树数据
+const getRoleTreeData = async () => {
   if (props.showParentSelect) {
-    parentRoleList.value = await api.role.getRoleList(RoleListType.CHILD_AND_SELF)
+    const data = await api.role.getRoleTree(RolesType.CHILD_AND_SELF)
+    if (data) {
+      let filteredData = data
+      
+      // 如果是编辑模式，需要过滤掉当前编辑的角色及其所有子角色
+      if (isEdit.value && props.roleData) {
+        // 在角色树中找到当前编辑的角色节点
+        const findRoleInTree = (roles: RoleVO[], roleId: number): RoleVO | null => {
+          for (const role of roles) {
+            if (role.node.id === roleId) {
+              return role
+            }
+            if (role.children && role.children.length > 0) {
+              const found = findRoleInTree(role.children, roleId)
+              if (found) return found
+            }
+          }
+          return null
+        }
+        
+        const currentRoleNode = findRoleInTree(data, props.roleData.id)
+        if (currentRoleNode) {
+          const excludeIds = getAllRoleIds(currentRoleNode)
+          filteredData = filterRoleNodes(data, excludeIds)
+        }
+      }
+      
+      // 转换数据格式以适配tree-select
+      const convertToTreeData = (roles: RoleVO[]): any[] => {
+        return roles.map(role => ({
+          id: role.node.id,
+          name: role.node.name,
+          description: role.node.description,
+          children: convertToTreeData(role.children || [])
+        }))
+      }
+      
+      roleTreeOptions.value = convertToTreeData(filteredData)
+    }
   }
 }
 
@@ -148,8 +209,8 @@ watch(() => props.roleData, (newData) => {
 // 监听对话框显示状态
 watch(() => props.visible, (visible) => {
   if (visible) {
-    // 获取父角色列表
-    getParentRoleList()
+    // 获取角色树数据
+    getRoleTreeData()
     
     if (props.roleData && isEdit.value) {
       fillFormData(props.roleData)

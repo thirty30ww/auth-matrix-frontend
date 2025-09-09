@@ -4,5 +4,6 @@ import { ViewType } from '@/types'
 export const VIEW_TYPE_TAG_MAP = {
     [ViewType.DIRECTORY]: 'warning',
     [ViewType.MENU]: 'success',
-    [ViewType.PAGE]: 'primary'
+    [ViewType.PAGE]: 'primary',
+    [ViewType.BUTTON]: 'info'
 }

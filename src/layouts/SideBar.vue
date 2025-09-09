@@ -31,7 +31,9 @@
             :index="String(menu.node.id)"
           >
             <template #title>
-              <el-icon><component :is="menu.node.icon" /></el-icon>
+              <el-icon v-if="menu.node.icon">
+                <component :is="menu.node.icon" />
+              </el-icon>
               <span>{{ menu.node.name }}</span>
             </template>
             
@@ -40,7 +42,9 @@
               <el-menu-item 
                 :index="subMenu.node.path"
               >
-                <el-icon><component :is="subMenu.node.icon" /></el-icon>
+                <el-icon v-if="subMenu.node.icon">
+                  <component :is="subMenu.node.icon" />
+                </el-icon>
                 <span>{{ subMenu.node.name }}</span>
               </el-menu-item>
             </template>

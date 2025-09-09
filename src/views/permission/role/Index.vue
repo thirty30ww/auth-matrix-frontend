@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { ElMessageBox } from 'element-plus'
-import type { RoleVO, ViewVO, Role } from '@/types'
+import {onMounted, ref} from 'vue'
+import {ElMessageBox} from 'element-plus'
+import type {Role, RoleVO, ViewVO} from '@/types'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
@@ -28,19 +28,20 @@ const showParentSelect = ref(true)
 const getRoleTree = async () => {
   isLoadingRoles.value = true
   try {
-    const response = await api.role.getRoleTree()
-    roleTableData.value = response
+    roleTableData.value = await api.role.getRoleTree()
   } finally {
     isLoadingRoles.value = false
   }
 }
 
-// 获取菜单列表数据（带加载动画）
+// 获取菜单列表数据
 const getMenuTree = async (roleId?: number) => {
   isLoadingMenus.value = true
   try {
-    const response = await api.view.getMenuTree(roleId)
-    menuTableData.value = response
+    const data = await api.view.getMenuAndButtonTree(roleId)
+    if (data) {
+      menuTableData.value = data
+    }
   } finally {
     isLoadingMenus.value = false
   }
@@ -62,10 +63,10 @@ const handleAddRole = () => {
 
 // 角色行操作方法
 const handleAddChildRole = (row: RoleVO) => {
-  // 行内添加子角色，ParentNodeId固定为当前点击行的角色ID
+  // 行内添加子角色，ParentNodeId默认为当前点击行的角色ID，但允许用户修改
   currentRoleData.value = null
   currentParentNodeId.value = row.node.id
-  showParentSelect.value = false
+  showParentSelect.value = true // 显示父角色选择器
   roleDialogVisible.value = true
 }
 
@@ -78,30 +79,23 @@ const handleEditRole = (row: RoleVO) => {
 }
 
 const handleDeleteRole = async (row: RoleVO) => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除角色 "${row.node.name}" 吗？此操作不可撤销。`,
-      '删除确认',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }
-    )
-    
-    await api.role.deleteRole(row.node.id)
-    await getRoleTree() // 重新加载角色树
-    
-    // 如果删除的是当前选中的角色，清空选中状态
-    if (selectedRole.value?.node.id === row.node.id) {
-      selectedRole.value = null
-      menuTableData.value = []
+  await ElMessageBox.confirm(
+    `确定要删除角色 "${row.node.name}" 吗？此操作不可撤销。`,
+    '删除确认',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
     }
-  } catch (error) {
-    // 用户取消删除或删除失败
-    if (error !== 'cancel') {
-      console.error('删除角色失败:', error)
-    }
+  )
+
+  await api.role.deleteRole(row.node.id)
+  await getRoleTree() // 重新加载角色树
+
+  // 如果删除的是当前选中的角色，清空选中状态
+  if (selectedRole.value?.node.id === row.node.id) {
+    selectedRole.value = null
+    menuTableData.value = []
   }
 }
 
@@ -147,15 +141,6 @@ const handleConfirm = async (viewIds: number[]) => {
   }
 }
 
-const handleReset = async () => {
-  if (!selectedRole.value) {
-    return
-  }
-  
-  // 重新加载原始菜单数据
-  await getMenuTree(selectedRole.value.node.id)
-}
-
 // 初始化
 onMounted(async () => {
   await getRoleTree()
@@ -187,7 +172,6 @@ onMounted(async () => {
       :selected-role="selectedRole"
       :loading="isLoadingMenus"
       @confirm="handleConfirm"
-      @reset="handleReset"
     />
 
     <!-- 角色对话框 -->

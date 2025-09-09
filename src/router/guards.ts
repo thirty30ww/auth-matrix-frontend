@@ -13,8 +13,6 @@ export function setupRouterGuards(router: Router) {
         // 检查路由是否需要认证, 默认为true
         const requiresAuth = to.meta.requiresAuth !== false;
 
-        console.log(to.meta);
-
         if (requiresAuth && !isLoggedIn) {
             next({ path: '/login' });
         } else if (to.path === '/login' && isLoggedIn) {

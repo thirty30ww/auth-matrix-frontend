@@ -46,6 +46,7 @@ const handleClick = (action: ActionLink, event: Event) => {
 .action-links {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
 }
 
@@ -55,7 +56,6 @@ const handleClick = (action: ActionLink, event: Event) => {
   font-size: 14px;
   padding: 0 8px;
   border-right: 1px solid var(--el-border-color-light);
-  flex: 1;
   text-align: center;
 }
 

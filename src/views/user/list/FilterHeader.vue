@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { Search, Refresh } from '@element-plus/icons-vue'
 import api from '@/services'
-import {type Role, RoleListType} from '@/types'
+import {type Role, type RoleVO, RolesType} from '@/types'
 import DateRangeFilter from '@/components/basic/DateRangeFilter.vue'
 
 // 定义 props
@@ -27,14 +27,27 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // 响应式数据
-const roleList = ref<Role[]>([])
+const roleTreeData = ref<any[]>([])
 
 // 计算属性，用于双向绑定
 const localSearchForm = ref({ ...props.searchForm })
 
-// 获取角色列表
-const getRoleList = async () => {
-  roleList.value = await api.role.getRoleList(RoleListType.ALL)
+// 获取角色树数据
+const getRoleTreeData = async () => {
+  const data = await api.role.getRoleTree(RolesType.ALL)
+  if (data) {
+    // 转换数据格式以适配tree-select
+    const convertToTreeData = (roles: RoleVO[]): any[] => {
+      return roles.map(role => ({
+        id: role.node.id,
+        name: role.node.name,
+        description: role.node.description,
+        children: convertToTreeData(role.children || [])
+      }))
+    }
+    
+    roleTreeData.value = convertToTreeData(data)
+  }
 }
 
 // 处理重置
@@ -87,7 +100,7 @@ watch(() => props.searchForm, (newVal) => {
 
 // 初始化
 onMounted(() => {
-  getRoleList()
+  getRoleTreeData()
 })
 </script>
 
@@ -105,20 +118,22 @@ onMounted(() => {
         </template>
       </el-input>
 
-      <el-select
+      <el-tree-select
         v-model="localSearchForm.roleId"
+        :data="roleTreeData"
+        :props="{ 
+          value: 'id', 
+          label: 'name', 
+          children: 'children' 
+        }"
         placeholder="请选择角色"
         clearable
+        check-strictly
+        :render-after-expand="false"
+        default-expand-all
         style="width: 200px"
         @change="handleRoleChange"
-      >
-        <el-option
-          v-for="role in roleList"
-          :key="role.id"
-          :label="role.name"
-          :value="role.id"
-        />
-      </el-select>
+      />
 
       <DateRangeFilter
         :start-date="localSearchForm.createTimeStart"

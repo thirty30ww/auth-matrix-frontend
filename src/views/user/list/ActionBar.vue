@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import BatchOperations, { type BatchOperation } from '@/components/basic/BatchOperations.vue'
 import type { UserVO } from '@/types'
 import api from '@/services'
+import { useViewStore } from '@/stores/view'
 
 // 定义 props
 interface Props {
@@ -18,6 +20,13 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+const viewStore = useViewStore()
+
+// 检查是否有批量操作权限
+const hasAnyBatchOperationPermission = computed(() => {
+  return viewStore.hasAnyPermission(['user:ban', 'user:unban'])
+})
+
 // 打开添加用户对话框
 const openAddUserDialog = () => {
   emit('add-user')
@@ -31,7 +40,8 @@ const userBatchOperations: Record<string, BatchOperation<UserVO>> = {
     confirmTitle: '批量封禁确认',
     warningMessage: '请选择有权限的用户进行封禁',
     filterCondition: (user: UserVO) => user.hasPermission,
-    apiMethod: (userIds: number[]) => api.user.banUser(userIds)
+    apiMethod: (userIds: number[]) => api.user.banUser(userIds),
+    permission: 'user:ban'
   },
   unban: {
     action: 'unban',
@@ -39,7 +49,8 @@ const userBatchOperations: Record<string, BatchOperation<UserVO>> = {
     confirmTitle: '批量解封确认',
     warningMessage: '请选择有权限的用户进行解封',
     filterCondition: (user: UserVO) => user.hasPermission,
-    apiMethod: (userIds: number[]) => api.user.unbanUser(userIds)
+    apiMethod: (userIds: number[]) => api.user.unbanUser(userIds),
+    permission: 'user:unban'
   }
 }
 
@@ -52,13 +63,14 @@ const handleBatchSuccess = () => {
 <template>
   <div class="table-actions">
     <div class="left-actions">
-      <el-button type="primary" @click="openAddUserDialog">
+      <el-button v-permission="['user:add']" type="primary" @click="openAddUserDialog">
         <el-icon class="el-icon--left"><Plus /></el-icon>
         添加
       </el-button>
       
       <!-- 批量操作组件 -->
       <BatchOperations 
+        v-if="hasAnyBatchOperationPermission"
         :selected-items="selectedUsers"
         :operations="userBatchOperations"
         item-name="用户"

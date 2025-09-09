@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, computed } from 'vue'
 import type { RoleVO } from '@/types'
 import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
-import {PermissionStatus} from "../../../constant";
+import {PermissionStatus} from "../../../constant"
+import { useUserStore } from '@/stores'
 
 // Props
 interface Props {
@@ -28,8 +29,16 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
+// Stores
+const userStore = useUserStore()
+
 // Refs
 const roleTableRef = ref()
+
+// Computed
+const currentUserRoleIds = computed(() => {
+  return userStore.userInfo?.roles?.map(role => role.id) || []
+})
 
 // 角色表格行点击事件
 const handleRoleRowClick = (row: RoleVO) => {
@@ -104,11 +113,14 @@ const handleDeleteRole = (row: RoleVO) => {
 
 // 获取角色行操作配置
 const getRoleActions = (row: RoleVO) => {
+  // 添加按钮disabled条件：不仅要hasPermission为false，还要该角色不在当前用户的角色列表中
+  const isAddDisabled = !row.hasPermission && !currentUserRoleIds.value.includes(row.node.id)
+  
   return [
     {
       label: '添加',
       onClick: () => handleAddChildRole(row),
-      disabled: !row.hasPermission,
+      disabled: isAddDisabled,
       type: 'default' as const
     },
     {

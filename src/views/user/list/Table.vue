@@ -8,6 +8,8 @@ import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
 import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
+import { computed } from 'vue'
+import { useViewStore } from '@/stores/view'
 
 // 定义 props
 interface Props {
@@ -40,6 +42,18 @@ interface Emits {
 
 defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const viewStore = useViewStore()
+
+// 检查是否有任何用户操作权限
+const hasAnyUserOperationPermission = computed(() => {
+  return viewStore.hasAnyPermission(['user:update', 'user:ban', 'user:unban'])
+})
+
+// 检查是否有批量操作权限（用于控制选择列显示）
+const hasAnyBatchOperationPermission = computed(() => {
+  return viewStore.hasAnyPermission(['user:ban', 'user:unban'])
+})
 
 // 性别筛选选项 - 使用工具函数动态生成
 const sexFilterOptions = getValues(UserSex).map(value => ({
@@ -95,21 +109,30 @@ const handleSizeChange = (size: number) => {
 // 获取操作按钮配置
 const getActionLinks = (user: UserVO) => {
   const isBanned = !user.isValid
+  const actions = []
   
-  return [
-    {
+  // 修改按钮 - 需要 user:update 权限
+  if (viewStore.hasPermission('user:update')) {
+    actions.push({
       label: '修改',
       onClick: () => handleEdit(user),
       disabled: !user.hasPermission,
       type: 'default' as const
-    },
-    {
+    })
+  }
+  
+  // 封禁/解封按钮 - 需要对应的权限
+  const banPermission = isBanned ? 'user:unban' : 'user:ban'
+  if (viewStore.hasPermission(banPermission)) {
+    actions.push({
       label: isBanned ? '解封' : '封禁',
       onClick: () => handleBanToggle(user),
       disabled: !user.hasPermission,
       type: isBanned ? 'success' as const : 'danger' as const
-    }
-  ]
+    })
+  }
+  
+  return actions
 }
 </script>
 
@@ -125,6 +148,7 @@ const getActionLinks = (user: UserVO) => {
     >
       <!-- 选择列 -->
       <el-table-column 
+        v-if="hasAnyBatchOperationPermission"
         type="selection" 
         width="55" 
         align="center" 
@@ -191,7 +215,7 @@ const getActionLinks = (user: UserVO) => {
           />
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="120px" align="center">
+      <el-table-column v-if="hasAnyUserOperationPermission" label="操作" min-width="120px" align="center">
         <template #default="{ row }">
           <ActionLinks :actions="getActionLinks(row)" />
         </template>

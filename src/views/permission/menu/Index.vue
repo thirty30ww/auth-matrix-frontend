@@ -1,20 +1,29 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import { useViewStore } from '@/stores'
 import { VIEW_TYPE_TAG_MAP } from '@/constant'
 import { getValue, useTableExpandCollapse } from '@/utils'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
+import MenuDialog from '@/components/business/MenuDialog.vue'
 import type { ViewVO } from '@/types'
+import { ViewType } from '@/types'
+import api from '@/services'
 
 const viewStore = useViewStore()
 const menuTableRef = ref()
 const isLoading = ref(false)
+const menuAndButtonTreeData = ref<ViewVO[]>([])
+
+// MenuDialog 相关状态
+const menuDialogVisible = ref(false)
+const currentMenuData = ref<ViewVO | null>(null)
 
 // 使用树形表格展开/折叠钩子
 const { expandAll: handleExpandAll, collapseAll: handleCollapseAll } = useTableExpandCollapse(
   menuTableRef,
-  () => viewStore.viewTree
+  () => menuAndButtonTreeData.value
 )
 
 onMounted(async () => {
@@ -25,52 +34,150 @@ onMounted(async () => {
 const loadMenuData = async () => {
   isLoading.value = true
   try {
-    await viewStore.getViewTree()
+    const data = await api.view.getMenuAndButtonTree()
+    if (data) {
+      menuAndButtonTreeData.value = data
+    }
   } finally {
     isLoading.value = false
   }
 }
 
-// 添加菜单（暂未实现）
+// 添加菜单
 const handleAddMenu = () => {
-  console.log('添加菜单功能暂未实现')
+  currentMenuData.value = null
+  menuDialogVisible.value = true
 }
 
 // 菜单行操作方法
 const handleAddChildMenu = (row: ViewVO) => {
-  console.log('添加子菜单功能暂未实现', row)
+  // 根据父节点类型设置默认的子节点类型
+  let defaultType = ViewType.DIRECTORY
+  if (row.node.type === ViewType.MENU) {
+    // 如果父节点是菜单，默认添加按钮
+    defaultType = ViewType.BUTTON
+  } else if (row.node.type === ViewType.DIRECTORY) {
+    // 如果父节点是目录，默认添加目录
+    defaultType = ViewType.DIRECTORY
+  }
+  
+  // 为添加子菜单，传递父节点信息以便在对话框中预选
+  currentMenuData.value = {
+    node: {
+      id: 0,
+      name: '',
+      path: '',
+      component: '',
+      type: defaultType,
+      parentNodeId: row.node.id, // 设置父节点ID为当前行的ID
+      frontNodeId: 0,
+      behindNodeId: 0,
+      icon: '',
+      permissionCode: '',
+      isValid: true
+    },
+    children: []
+  }
+  menuDialogVisible.value = true
 }
 
 const handleEditMenu = (row: ViewVO) => {
-  console.log('修改菜单功能暂未实现', row)
+  currentMenuData.value = row
+  menuDialogVisible.value = true
 }
 
-const handleDeleteMenu = (row: ViewVO) => {
-  console.log('删除菜单功能暂未实现', row)
+const handleDeleteMenu = async (row: ViewVO) => {
+  // 确认删除操作
+  const confirmed = await ElMessageBox.confirm(
+    '确定要删除该菜单吗？删除后不可恢复。',
+    '确认删除',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).catch(() => false)
+  
+  if (!confirmed) return
+  
+  await viewStore.deleteView(row.node.id)
+  await loadMenuData()
+}
+
+// 上移菜单
+const handleMoveUp = async (row: ViewVO) => {
+  await api.view.moveView(row.node.id, true)
+  await loadMenuData()
+}
+
+// 下移菜单
+const handleMoveDown = async (row: ViewVO) => {
+  await api.view.moveView(row.node.id, false)
+  await loadMenuData()
+}
+
+
+// 处理MenuDialog成功事件
+const handleMenuDialogSuccess = async () => {
+  await loadMenuData()
 }
 
 // 获取菜单行操作配置
 const getMenuActions = (row: ViewVO) => {
-  return [
-    {
-      label: '添加',
-      onClick: () => handleAddChildMenu(row),
-      disabled: false, // 暂时不禁用，等接口实现后可以根据权限控制
-      type: 'default' as const
-    },
-    {
-      label: '修改',
-      onClick: () => handleEditMenu(row),
-      disabled: false,
-      type: 'default' as const
-    },
-    {
-      label: '删除',
-      onClick: () => handleDeleteMenu(row),
-      disabled: false,
-      type: 'danger' as const
-    }
-  ]
+  // 检查当前行是否不允许修改（hasChange为false）
+  const isNotChangeable = row.hasChange === false
+  
+  // 检查当前行是否为按钮类型
+  const isButton = row.node.type === ViewType.BUTTON
+  
+  const actions = []
+  
+  // 添加按钮始终显示，但按钮类型或无权限时禁用
+  actions.push({
+    label: '添加',
+    onClick: () => handleAddChildMenu(row),
+    // 如果是按钮类型或者hasChange为false，则禁用添加功能
+    disabled: isNotChangeable || isButton,
+    type: 'default' as const
+  })
+  
+  // 上移按钮 - 始终显示，但根据位置禁用
+  actions.push({
+    label: '上移',
+    onClick: () => handleMoveUp(row),
+    // frontNodeId === 0 表示是第一个时禁用
+    disabled: row.node.frontNodeId === 0,
+    type: 'default' as const
+  })
+  
+  // 下移按钮 - 始终显示，但根据位置禁用
+  actions.push({
+    label: '下移',
+    onClick: () => handleMoveDown(row),
+    // behindNodeId === 0 表示是最后一个时禁用
+    disabled: row.node.behindNodeId === 0,
+    type: 'default' as const
+  })
+  
+  // 修改按钮始终显示
+  actions.push({
+    label: '修改',
+    onClick: () => handleEditMenu(row),
+    // 如果hasChange为false，则禁用修改功能
+    disabled: isNotChangeable,
+    type: 'default' as const
+  })
+  
+  // 删除按钮始终显示
+  actions.push({
+    label: '删除',
+    onClick: () => handleDeleteMenu(row),
+    // 如果hasChange为false，则禁用删除功能
+    disabled: isNotChangeable,
+    type: 'danger' as const
+  })
+  
+  return actions
 }
 </script>
 
@@ -96,7 +203,7 @@ const getMenuActions = (row: ViewVO) => {
     
     <el-table
       ref="menuTableRef"
-      :data="viewStore.menuTree"
+      :data="menuAndButtonTreeData"
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       default-expand-all
@@ -117,12 +224,17 @@ const getMenuActions = (row: ViewVO) => {
           <span>{{ row.node.path }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="类型" min-width="100">
+      <el-table-column label="可见" min-width="100">
         <template #default="{ row }">
-          <el-tag :type="getValue(VIEW_TYPE_TAG_MAP, row.node.type, 'default')">{{ row.node.type }}</el-tag>
+          <span>{{ row.node.isValid ? "是" : "否" }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180" align="center">
+      <el-table-column label="类型" min-width="100">
+        <template #default="{ row }">
+          <el-tag :type="getValue(VIEW_TYPE_TAG_MAP, row.node.type, 'primary')">{{ row.node.type }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="280" align="center">
         <template #default="{ row }">
           <ActionLinks :actions="getMenuActions(row)" />
         </template>
@@ -132,6 +244,13 @@ const getMenuActions = (row: ViewVO) => {
       </template>
     </el-table>
   </el-card>
+  
+  <!-- 菜单对话框 -->
+  <MenuDialog 
+    v-model:visible="menuDialogVisible"
+    :menu-data="currentMenuData"
+    @success="handleMenuDialogSuccess"
+  />
 </template>
 
 <style scoped>
