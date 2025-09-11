@@ -6,6 +6,7 @@ import ActionLinks from '@/components/basic/ActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import {PermissionStatus} from "../../../constant"
 import { useUserStore } from '@/stores'
+import { useViewStore } from '@/stores/view'
 
 // Props
 interface Props {
@@ -31,6 +32,7 @@ const emit = defineEmits<Emits>()
 
 // Stores
 const userStore = useUserStore()
+const viewStore = useViewStore()
 
 // Refs
 const roleTableRef = ref()
@@ -38,6 +40,15 @@ const roleTableRef = ref()
 // Computed
 const currentUserRoleIds = computed(() => {
   return userStore.userInfo?.roles?.map(role => role.id) || []
+})
+
+// 检查是否有任何角色操作权限
+const hasAnyRoleOperationPermission = computed(() => {
+  return viewStore.hasAnyPermission([
+    'permission:role:add',
+    'permission:role:modify', 
+    'permission:role:delete'
+  ])
 })
 
 // 角色表格行点击事件
@@ -116,26 +127,42 @@ const getRoleActions = (row: RoleVO) => {
   // 添加按钮disabled条件：不仅要hasPermission为false，还要该角色不在当前用户的角色列表中
   const isAddDisabled = !row.hasPermission && !currentUserRoleIds.value.includes(row.node.id)
   
-  return [
+  // 检查相关权限
+  const canAdd = viewStore.hasPermission('permission:role:add')
+  const canModify = viewStore.hasPermission('permission:role:modify')
+  const canDelete = viewStore.hasPermission('permission:role:delete')
+  
+  const allActions = [
     {
       label: '添加',
       onClick: () => handleAddChildRole(row),
       disabled: isAddDisabled,
-      type: 'default' as const
+      type: 'default' as const,
+      permission: canAdd
     },
     {
       label: '修改',
       onClick: () => handleEditRole(row),
       disabled: !row.hasPermission,
-      type: 'default' as const
+      type: 'default' as const,
+      permission: canModify
     },
     {
       label: '删除',
       onClick: () => handleDeleteRole(row),
       disabled: !row.hasPermission,
-      type: 'danger' as const
+      type: 'danger' as const,
+      permission: canDelete
     }
   ]
+  
+  // 只返回有权限的操作
+  return allActions.filter(action => action.permission).map(action => ({
+    label: action.label,
+    onClick: action.onClick,
+    disabled: action.disabled,
+    type: action.type
+  }))
 }
 
 // 暴露方法给父组件
@@ -150,7 +177,7 @@ defineExpose({
     <!-- 角色操作按钮 -->
     <div class="role-action-bar">
       <div class="left-actions">
-        <el-button type="primary" @click="handleAddRole">
+        <el-button v-permission="'permission:role:add'" type="primary" @click="handleAddRole">
           <el-icon class="el-icon--left"><Plus /></el-icon>
           添加
         </el-button>
@@ -187,7 +214,7 @@ defineExpose({
           />
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180" align="center">
+      <el-table-column v-if="hasAnyRoleOperationPermission" label="操作" width="180" align="center">
         <template #default="{ row }">
           <ActionLinks :actions="getRoleActions(row)" />
         </template>

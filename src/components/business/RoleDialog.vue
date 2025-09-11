@@ -244,7 +244,7 @@ const handleSubmit = async () => {
       parentNodeId: formData.parentNodeId!
     }
 
-    await api.role.updateRole(modifyData)
+    await api.role.modifyRole(modifyData)
     emit('success')
     handleClose()
   } else {

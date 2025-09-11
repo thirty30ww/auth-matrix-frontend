@@ -47,7 +47,7 @@ const viewStore = useViewStore()
 
 // 检查是否有任何用户操作权限
 const hasAnyUserOperationPermission = computed(() => {
-  return viewStore.hasAnyPermission(['user:update', 'user:ban', 'user:unban'])
+  return viewStore.hasAnyPermission(['user:modify', 'user:ban', 'user:unban'])
 })
 
 // 检查是否有批量操作权限（用于控制选择列显示）
@@ -111,8 +111,8 @@ const getActionLinks = (user: UserVO) => {
   const isBanned = !user.isValid
   const actions = []
   
-  // 修改按钮 - 需要 user:update 权限
-  if (viewStore.hasPermission('user:update')) {
+  // 修改按钮 - 需要 user:modify 权限
+  if (viewStore.hasPermission('user:modify')) {
     actions.push({
       label: '修改',
       onClick: () => handleEdit(user),
@@ -175,7 +175,7 @@ const getActionLinks = (user: UserVO) => {
           />
         </template>
       </el-table-column>
-      <el-table-column label="角色" min-width="250px">
+      <el-table-column label="角色" min-width="280px">
         <template #default="{ row }">
           <el-tag
              v-for="role in row.roles"

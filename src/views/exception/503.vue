@@ -13,10 +13,6 @@
           <el-icon class="el-icon--left"><ArrowLeft /></el-icon>
           返回上一页
         </el-button>
-        <el-button @click="refresh">
-          <el-icon class="el-icon--left"><Refresh /></el-icon>
-          刷新页面
-        </el-button>
       </div>
     </div>
   </div>
@@ -41,11 +37,6 @@ const goBack = () => {
   // 关闭当前503页面的标签
   tabsStore.removeTab('/503')
   router.go(-1)
-}
-
-const refresh = () => {
-  // 刷新当前页面
-  location.reload()
 }
 </script>
 

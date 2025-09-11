@@ -12,4 +12,8 @@
     --height-size-page: calc(100vh - var(--height-size-tab-bar) - var(--height-size-header) - var(--padding-size-main-bottom) - var(--padding-size-main-top) - 2 * var(--margin-size-spacing-1));
 
     --height-size-color-picker-item: var(--height-size-sm);
+
+    /* 图标选择器尺寸 */
+    --height-size-icon-item: 32px;
+    --height-size-icon-selector-dropdown: 240px;
 }

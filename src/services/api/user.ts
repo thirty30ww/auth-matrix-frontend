@@ -30,6 +30,15 @@ export const authApi = {
     refresh(refreshToken: string) {
         return http.get<JwtVO>('/auth/refresh', { params: { refreshToken }, showError: false });
     },
+
+    /**
+     * 退出登录
+     * @param refreshToken 刷新令牌
+     * @param showSuccess 是否显示成功提示，可选参数
+     */
+    logout(refreshToken: string, showSuccess?: boolean) {
+        return http.get('/auth/logout', { params: { refreshToken }, showSuccess });
+    }
 };
 
 // 用户信息API
@@ -98,15 +107,6 @@ export const userApi = {
     getUserList(request: PageQueryDTO<GetUserListDTO>) {
         return http.post<PageResponse<UserVO>>('/user/list', { data: request });
     },
-
-    /**
-     * 退出登录
-     * @param refreshToken 刷新令牌
-     * @param showSuccess 是否显示成功提示，可选参数
-     */
-    logout(refreshToken: string, showSuccess?: boolean) {
-        return http.get('/user/logout', { params: { refreshToken }, showSuccess });
-    }
 };
 
 // 角色API
@@ -140,8 +140,8 @@ export const roleApi = {
      * 修改角色
      * @param role 角色修改请求参数
      */
-    updateRole(role: RoleDTO) {
-        return http.post<void>('/role/update', { data: role, showSuccess: true });
+    modifyRole(role: RoleDTO) {
+        return http.post<void>('/role/modify', { data: role, showSuccess: true });
     },
 
     /**

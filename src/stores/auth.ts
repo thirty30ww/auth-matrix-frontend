@@ -89,7 +89,7 @@ export const useAuthStore = defineStore('auth', {
                 return true
             } catch (error) {
                 // 刷新失败，清除认证信息并退出登录
-                await this.logout()
+                await this.logout(false)
                 return false
             }
         },
@@ -97,7 +97,7 @@ export const useAuthStore = defineStore('auth', {
         // 退出登录
         async logout(showSuccess?: boolean) {
             try {
-                await api.user.logout(this.refreshToken, showSuccess)
+                await api.auth.logout(this.refreshToken, showSuccess)
             } finally {
                 // 无论API调用成功与否，都清除本地认证信息
                 this.clearAuth()

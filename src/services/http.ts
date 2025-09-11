@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import { useAuthStore } from '@/stores';
+import { useAuthStore, useViewStore } from '@/stores';
 import type { ApiResponse, BaseRequest } from '@/types';
 
 // 创建axios实例
@@ -68,7 +68,13 @@ http.interceptors.response.use(
             } else {
                 return Promise.reject(new Error(res.message || '登录已过期'));
             }
-
+        // 如果是403错误（权限不足），尝试获取权限
+        } else if (res.code === 403) {
+            const viewStore = useViewStore();
+            await viewStore.getPermissionCodes();
+            if (showError) {
+                ElMessage.error(res.message || '权限不足');
+            }
         } else {
             // 显示错误信息
             if (showError) {

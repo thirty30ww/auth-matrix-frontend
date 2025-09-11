@@ -4,6 +4,7 @@ import type { ViewVO } from '@/types'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import { PermissionStatus } from "@/constant"
 import ClickableTag from '@/components/basic/ClickableTag.vue'
+import { useViewStore } from '@/stores/view'
 
 // Props
 interface Props {
@@ -20,6 +21,9 @@ interface Emits {
 }
 
 const emit = defineEmits<Emits>()
+
+// Stores
+const viewStore = useViewStore()
 
 // Refs
 const menuTableRef = ref()
@@ -42,6 +46,11 @@ const hasDataChanged = computed(() => {
   return JSON.stringify(localMenuData.value) !== JSON.stringify(originalMenuData.value)
 })
 
+// 检查是否有权限分配权限
+const hasAssignPermission = computed(() => {
+  return viewStore.hasPermission('permission:role:assign')
+})
+
 // 检查当前角色是否有修改权限
 const canModifyRole = computed(() => {
   return props.selectedRole?.hasPermission ?? false
@@ -49,12 +58,17 @@ const canModifyRole = computed(() => {
 
 // 检查特定菜单项是否可以修改
 const canModifyMenuItem = (row: ViewVO) => {
-  // 首先检查角色是否有修改权限
+  // 首先检查是否有权限分配权限
+  if (!hasAssignPermission.value) {
+    return false
+  }
+  
+  // 然后检查角色是否有修改权限
   if (!canModifyRole.value) {
     return false
   }
   
-  // 然后检查菜单项的hasChange字段
+  // 最后检查菜单项的hasChange字段
   if (row.hasChange === false) {
     return false
   }
@@ -197,6 +211,7 @@ defineExpose({
     <div class="menu-action-bar">
       <div class="right-actions">
         <el-button 
+          v-if="hasAssignPermission"
           type="primary" 
           :disabled="!hasDataChanged || !canModifyRole"
           @click="handleConfirm"
@@ -205,6 +220,7 @@ defineExpose({
           确认
         </el-button>
         <el-button 
+          v-if="hasAssignPermission"
           :disabled="!canModifyRole"
           @click="handleReset"
         >

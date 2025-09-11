@@ -13,4 +13,9 @@
     --width-size-color-picker-item: var(--width-size-sm);
 
     --width-size-drawer: 300px;
+
+    /* 图标选择器尺寸 */
+    --width-size-icon-item: 32px;
+    --width-size-icon-selector-dropdown: 416px;
+    /* 10个图标(32px) + 9个间隙(8px) + 左右padding(12px*2) = 320px + 72px + 24px = 416px */
 }

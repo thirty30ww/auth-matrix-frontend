@@ -64,6 +64,7 @@
               </template>
               <el-switch
                 v-model="formData.isValid"
+                :disabled="!canModifyValid"
               />
             </el-form-item>
           </el-col>
@@ -104,11 +105,10 @@
               <template #label>
                 <RequiredLabel>图标</RequiredLabel>
               </template>
-              <el-input
+              <IconSelector
                 v-model="formData.icon"
-                placeholder="请输入图标"
+                placeholder="请选择图标"
                 :disabled="isButtonType"
-                clearable
               />
             </el-form-item>
             
@@ -143,6 +143,7 @@ import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import TypeSelector from '@/components/basic/TypeSelector.vue'
+import IconSelector from '@/components/basic/IconSelector.vue'
 import api from '@/services'
 import { type ViewVO, type ViewDTO, ViewType } from '@/types'
 import { getValues } from '@/utils'
@@ -316,6 +317,45 @@ const isDirectoryType = computed(() => formData.type === ViewType.DIRECTORY)
 // 计算属性：是否为按钮类型
 const isButtonType = computed(() => formData.type === ViewType.BUTTON)
 
+// 检查所有子级是否都有hasChange权限
+const checkChildrenHasChange = (node: ViewVO): boolean => {
+  // 如果没有子节点，返回true（叶子节点不影响父节点的修改权限）
+  if (!node.children || node.children.length === 0) {
+    return true
+  }
+  
+  // 检查所有直接子节点是否都有hasChange权限
+  const allChildrenHaveChange = node.children.every(child => child.hasChange !== false)
+  
+  // 如果直接子节点都有权限，再递归检查所有子节点的子节点
+  if (allChildrenHaveChange) {
+    return node.children.every(child => checkChildrenHasChange(child))
+  }
+  
+  return false
+}
+
+// 计算属性：当前菜单项是否可以修改isValid字段
+const canModifyValid = computed(() => {
+  // 如果是添加模式，允许修改
+  if (!isEdit.value) {
+    return true
+  }
+  
+  // 如果是编辑模式，需要检查当前节点及其所有子节点的hasChange状态
+  if (props.menuData) {
+    // 首先检查当前节点自身的hasChange状态
+    if (props.menuData.hasChange === false) {
+      return false
+    }
+    
+    // 然后检查所有子节点的hasChange状态
+    return checkChildrenHasChange(props.menuData)
+  }
+  
+  return true
+})
+
 // 重置表单
 const resetForm = () => {
   formData.name = ''
@@ -400,6 +440,9 @@ watch(() => formData.parentNodeId, (newParentId, oldParentId) => {
 // 监听对话框显示状态
 watch(() => props.visible, async (visible) => {
   if (visible) {
+    // 对话框打开时先清空所有表单数据
+    resetForm()
+    
     // 获取菜单树数据
     await getMenuTreeData()
     
@@ -407,15 +450,13 @@ watch(() => props.visible, async (visible) => {
       // 编辑模式：填充现有数据
       fillFormData(props.menuData)
     } else if (props.menuData && !isEdit.value) {
-      // 添加子菜单模式：重置表单但保留预设的父节点ID和类型
-      resetForm()
+      // 添加子菜单模式：保留预设的父节点ID和类型
       formData.parentNodeId = props.menuData.node.parentNodeId
       formData.type = props.menuData.node.type // 使用传入的类型
-    } else {
-      // 添加根菜单模式：完全重置
-      resetForm()
     }
+    // 添加根菜单模式：已经在开头重置了，无需额外处理
   }
+  // 关闭时不做任何处理，保持表单状态
 })
 
 // 关闭对话框
