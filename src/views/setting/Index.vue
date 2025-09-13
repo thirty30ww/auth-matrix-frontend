@@ -1,37 +1,29 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { Check, Refresh } from '@element-plus/icons-vue'
-import { settingApi } from '@/services/api/system'
-import type { SettingVO } from '@/types/services/vo/system'
+import {computed, onMounted, ref} from 'vue'
+import {ElMessage, ElMessageBox} from 'element-plus'
+import {Check, Refresh} from '@element-plus/icons-vue'
+import {settingApi} from '@/services/api/system'
+import {useSystemStore} from '@/stores/system'
+import type {SettingVO} from '@/types/services/vo/system'
+import type {SettingDTO} from '@/types/services/dto/system'
 
 // 响应式数据
 const settings = ref<SettingVO[]>([])
-const loading = ref(false)
-const saving = ref(false)
+const systemStore = useSystemStore()
 
 // 表单数据，用于编辑
 const formData = ref<Record<string, any>>({})
 
 // 获取设置数据
 const loadSettings = async () => {
-  try {
-    loading.value = true
-    // 调用 getSettingVOS 接口获取数据
-    const response = await settingApi.getSettingVOS()
-    settings.value = response
-    
-    // 初始化表单数据
-    formData.value = {}
-    settings.value.forEach(setting => {
-      formData.value[setting.field] = setting.value
-    })
-  } catch (error) {
-    console.error('加载设置失败:', error)
-    ElMessage.error('加载设置失败')
-  } finally {
-    loading.value = false
-  }
+  // 调用 getSettingVOS 接口获取数据
+  settings.value = await settingApi.getSettingVOS()
+
+  // 初始化表单数据
+  formData.value = {}
+  settings.value.forEach(setting => {
+    formData.value[setting.field] = setting.value
+  })
 }
 
 // 判断设置值的类型
@@ -44,42 +36,34 @@ const getSettingType = (value: any): string => {
 
 // 保存设置
 const saveSettings = async () => {
-  try {
-    await ElMessageBox.confirm(
-      '确定要保存这些设置吗？',
-      '确认保存',
-      {
-        confirmButtonText: '保存',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    
-    saving.value = true
-    
-    // 这里等待后端保存接口完成
-    // const updatePromises = settings.value.map(setting => {
-    //   return settingApi.updateSetting(setting.field, formData.value[setting.field])
-    // })
-    // await Promise.all(updatePromises)
-    
-    // 模拟保存延迟
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // 更新本地数据
-    settings.value.forEach(setting => {
-      setting.value = formData.value[setting.field]
-    })
-    
-    ElMessage.success('设置保存成功')
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error('保存设置失败:', error)
-      ElMessage.error('保存设置失败')
+  await ElMessageBox.confirm(
+    '确定要保存这些设置吗？',
+    '确认保存',
+    {
+      confirmButtonText: '保存',
+      cancelButtonText: '取消',
+      type: 'warning',
     }
-  } finally {
-    saving.value = false
+  )
+
+  // 准备修改的设置数据
+  const modifiedSettings: SettingDTO[] = settings.value
+    .filter(setting => formData.value[setting.field] !== setting.value)
+    .map(setting => ({
+      id: setting.id,
+      value: formData.value[setting.field]
+    }))
+
+  // 如果有修改的设置，调用修改接口
+  if (modifiedSettings.length > 0) {
+    await settingApi.modifySettings(modifiedSettings)
   }
+
+  // 重新加载设置数据以确保数据同步
+  await loadSettings()
+
+  // 刷新系统store中的项目标题
+  await systemStore.fetchProjectTitle()
 }
 
 // 重置表单
@@ -105,7 +89,7 @@ onMounted(() => {
 
 <template>
   <div class="setting-container">
-    <el-card v-loading="loading">
+    <el-card>
        <div class="setting-actions">
          <el-button 
            :disabled="!hasChanges" 
@@ -117,7 +101,6 @@ onMounted(() => {
          <el-button 
            type="primary" 
            :disabled="!hasChanges"
-           :loading="saving"
            @click="saveSettings"
          >
            <el-icon class="el-icon--left"><Check /></el-icon>

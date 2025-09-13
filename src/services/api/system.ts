@@ -1,6 +1,7 @@
 import http from "@/services/http.ts";
 import { SettingField } from "@/types";
-import type {SettingVO} from "@/types/services/vo/system.ts";
+import type { SettingVO } from "@/types/services/vo/system.ts";
+import type { SettingDTO } from "@/types/services/dto/system.ts";
 
 /**
  * 文件上传 API
@@ -25,14 +26,14 @@ export const settingApi = {
      * 获取系统设置 (类型映射)
      */
     getSetting(settingField: SettingField) {
-        return http.get<any>('/setting/get', {params: {settingField}});
+        return http.get<any>('/setting/get', { params: { settingField } });
     },
 
     /**
      * 获取公共系统设置 (类型映射)
      */
     getPublicSetting(settingField: SettingField) {
-        return http.get<any>('/setting/public/get', {params: {settingField}});
+        return http.get<any>('/setting/public/get', { params: { settingField } });
     },
 
     /**
@@ -40,5 +41,13 @@ export const settingApi = {
      */
     getSettingVOS() {
         return http.get<SettingVO[]>('/setting/values');
+    },
+
+    /**
+     * 修改系统设置
+     * @param settingDTOS 系统设置值对象
+     */
+    modifySettings(settingDTOS: SettingDTO[]) {
+        return http.post('/setting/modify', { data: settingDTOS, showSuccess: true });
     }
 }

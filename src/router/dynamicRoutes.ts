@@ -74,7 +74,7 @@ function clearDynamicRoutes(router: Router) {
     if (mainLayoutRoute && mainLayoutRoute.children) {
         // 移除所有动态添加的子路由
         mainLayoutRoute.children.forEach(childRoute => {
-            if (childRoute.name && childRoute.name !== 'Home') { // 保留静态首页路由
+            if (childRoute.name) {
                 router.removeRoute(childRoute.name);
             }
         });
