@@ -203,16 +203,16 @@ export const useThemeStore = defineStore('theme', {
                     `circle(${endRadius}px at ${x}px ${y}px)`,
                 ]
 
+                // 始终让新视图从圆圈扩散出来覆盖旧视图
+                // new视图的z-index更高，所以应该是扩散效果
                 document.documentElement.animate(
                     {
-                        clipPath: isDark.value ? [...clipPath].reverse() : clipPath,
+                        clipPath: clipPath, // 从小圆扩散到大圆
                     },
                     {
                         duration: 500,
                         easing: 'ease-out',
-                        pseudoElement: isDark.value
-                            ? '::view-transition-old(root)'
-                            : '::view-transition-new(root)',
+                        pseudoElement: '::view-transition-new(root)', // 新视图扩散
                     }
                 )
             })

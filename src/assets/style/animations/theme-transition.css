@@ -7,20 +7,11 @@
     mix-blend-mode: normal;
 }
 
-/* 控制新旧主题图像的层级 */
+/* 控制新旧主题图像的层级 - 保持简单一致的层级关系 */
 ::view-transition-old(root) {
     z-index: 1;
 }
 
 ::view-transition-new(root) {
-    z-index: 2147483646;
-}
-
-/* 暗色模式时反转层级顺序，确保动画方向正确 */
-html.dark::view-transition-old(root) {
-    z-index: 2147483646;
-}
-
-html.dark::view-transition-new(root) {
-    z-index: 1;
+    z-index: 2;
 }

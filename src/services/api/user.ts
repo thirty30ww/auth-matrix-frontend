@@ -12,7 +12,9 @@ import type {
 } from '@/types';
 import { RolesType } from '@/types';
 
-// 权限校验API
+/**
+ * 权限校验 API
+ */
 export const authApi = {
     /**
      * 用户登录
@@ -41,7 +43,9 @@ export const authApi = {
     }
 };
 
-// 用户信息API
+/**
+ * 用户信息 API
+ */
 export const userApi = {
     /**
      * 获取用户信息
@@ -109,7 +113,9 @@ export const userApi = {
     },
 };
 
-// 角色API
+/**
+ * 角色 API
+ */
 export const roleApi = {
     /**
      * 获取角色列表
@@ -162,7 +168,9 @@ export const roleApi = {
     }
 }
 
-// 页面API
+/**
+ * 页面 API
+ */
 export const viewApi = {
     /**
      * 获取页面树

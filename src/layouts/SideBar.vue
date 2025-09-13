@@ -2,7 +2,7 @@
   <div class="sidebar" :class="{ collapsed: isCollapsed }">
     <div class="logo">
       <LogoIcon size="30px" />
-      <span v-if="!isCollapsed">Prose Pulse</span>
+      <span v-if="!isCollapsed">{{ systemStore.projectTitle }}</span>
     </div>
     
     <el-menu
@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import {useRouter} from 'vue-router'
-import {useAuthStore, useUserStore, useViewStore} from '@/stores'
+import {useAuthStore, useUserStore, useViewStore, useSystemStore} from '@/stores'
 import {computed, onMounted} from 'vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
@@ -104,6 +104,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const viewStore = useViewStore()
+const systemStore = useSystemStore()
 const userInfo = computed(() => userStore.userInfo)
 
 // 组件挂载时加载菜单数据
