@@ -1,6 +1,6 @@
 // 密码修改请求接口
-import type {BaseListDTO} from "@/types";
-import {UserSex, ViewType} from "@/types";
+import type { BaseListDTO } from "@/types";
+import { UserSex, ViewType } from "@/types";
 
 export interface AddUserDTO {
     username: string;
@@ -17,7 +17,7 @@ export interface ChangePassWordDTO {
 }
 
 // 获取用户列表请求接口
-export interface GetUserListDTO extends BaseListDTO{
+export interface GetUserListDTO extends BaseListDTO {
     username?: string;
     name?: string;
     sex?: UserSex;

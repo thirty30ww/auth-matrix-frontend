@@ -44,8 +44,9 @@ export const useAuthStore = defineStore('auth', {
                 // 登录成功后获取用户信息
                 await getUserStore().getUserInfo();
 
-                // 获取权限码
+                // 获取权限码和菜单数据
                 await getViewStore().getPermissionCodes();
+                await getViewStore().getMenuTree();
 
                 await reloadRoutes(router);
 
@@ -88,14 +89,33 @@ export const useAuthStore = defineStore('auth', {
                 })
                 return true
             } catch (error) {
-                // 刷新失败，清除认证信息并退出登录
-                await this.logout(false)
+                // 刷新失败，清除认证信息并退出登录，跳过确认
+                await this.logout(false, true)
                 return false
             }
         },
 
         // 退出登录
-        async logout(showSuccess?: boolean) {
+        async logout(showSuccess?: boolean, skipConfirm?: boolean) {
+            // 如果不跳过确认，显示确认对话框
+            if (!skipConfirm) {
+                const { ElMessageBox } = await import('element-plus')
+                try {
+                    await ElMessageBox.confirm(
+                        '确定要退出登录吗？',
+                        '退出确认',
+                        {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }
+                    )
+                } catch {
+                    // 用户取消退出
+                    return
+                }
+            }
+
             try {
                 await api.auth.logout(this.refreshToken, showSuccess)
             } finally {

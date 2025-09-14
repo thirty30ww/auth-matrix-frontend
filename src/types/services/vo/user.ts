@@ -64,3 +64,10 @@ export interface ViewVO {
     hasChange?: boolean;
     children: ViewVO[];
 }
+
+// 偏好设置接口
+export interface Preference {
+    id: number;
+    field: string;
+    value: string;
+}

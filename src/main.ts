@@ -34,11 +34,14 @@ const themeStore = useThemeStore()
 const authStore = useAuthStore()
 
 // 初始化主题色
-themeStore.initThemeColors()
-
-// 加载动态路由
 if (authStore.userLoggedIn) {
+    // 用户已登录，从后端初始化偏好设置
+    await themeStore.initializeFromBackend()
+    // 加载动态路由
     await ensureRoutesLoaded(router)
+} else {
+    // 用户未登录，使用本地存储初始化
+    await themeStore.initThemeColors()
 }
 
 // 初始化路由

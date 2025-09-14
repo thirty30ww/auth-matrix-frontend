@@ -16,10 +16,10 @@
       </template>
       <template #default="{ item }">
         <div class="search-item">
-          <el-icon v-if="item.icon" class="search-item-icon">
-            <component :is="item.icon" />
+          <el-icon v-if="item.node.icon" class="search-item-icon">
+            <component :is="item.node.icon" />
           </el-icon>
-          <span class="search-item-name">{{ item.name }}</span>
+          <span class="search-item-name">{{ item.node.name }}</span>
         </div>
       </template>
     </el-autocomplete>
@@ -30,39 +30,43 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
-import type { View } from '@/types'
+import type { ViewVO } from '@/types'
 import api from "@/services";
 
 const router = useRouter()
 const searchKeyword = ref('')
 
 // 缓存上一次的搜索结果
-let lastResults: View[] = []
+let lastResults: ViewVO[] = []
 let currentQuery = ''
 
 // el-autocomplete 的查询函数 - 静默更新搜索结果
-const querySearch = async (queryString: string, cb: (results: View[]) => void) => {
+const querySearch = async (queryString: string, cb: (results: ViewVO[]) => void) => {
   if (!queryString.trim()) {
     lastResults = []
     cb([])
     return
   }
 
-  // 先返回上次的结果，保持弹出框不消失
-  cb(lastResults)
+  // 如果是新的查询，清空上次结果
+  if (currentQuery !== queryString) {
+    cb([])
+    lastResults = []
+  }
+  
   currentQuery = queryString
 
-  const views = await api.view.getViewList(queryString)
+  const viewVOs = await api.view.getViewList(queryString)
   if (currentQuery === queryString) {
-    const newResults = views.slice(0, 6)
+    const newResults = viewVOs.slice(0, 6)
     lastResults = newResults
     cb(newResults)
   }
 }
 
 // 处理选择
-const handleSelect = (item: View) => {
-  router.push(item.path)
+const handleSelect = (item: ViewVO) => {
+  router.push(item.node.path)
   searchKeyword.value = ''
   // 清空缓存
   lastResults = []

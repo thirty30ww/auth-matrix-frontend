@@ -1,6 +1,7 @@
 <template>
   <div class="sidebar" :class="{ collapsed: isCollapsed }">
-    <div class="logo">
+    <!-- Logo区域 - 当设置为显示在侧边栏时 -->
+    <div v-if="themeStore.logoPosition === LOGO_POSITIONS.SIDEBAR" class="logo">
       <LogoIcon size="30px" />
       <span v-if="!isCollapsed">{{ systemStore.projectTitle }}</span>
     </div>
@@ -9,6 +10,7 @@
       :collapse="isCollapsed"
       :default-active="activePath"
       class="el-menu-vertical"
+      :class="{ 'menu-without-logo': themeStore.logoPosition === LOGO_POSITIONS.HEADER }"
       @select="handleSelect"
       router
       :unique-opened="true"
@@ -88,7 +90,8 @@
 
 <script setup lang="ts">
 import {useRouter} from 'vue-router'
-import {useAuthStore, useUserStore, useViewStore, useSystemStore} from '@/stores'
+import {useAuthStore, useUserStore, useViewStore, useSystemStore, useThemeStore} from '@/stores'
+import { LOGO_POSITIONS } from '@/stores/theme'
 import {computed, onMounted} from 'vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
@@ -105,11 +108,12 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 const viewStore = useViewStore()
 const systemStore = useSystemStore()
+const themeStore = useThemeStore()
 const userInfo = computed(() => userStore.userInfo)
 
-// 组件挂载时加载菜单数据
+// 组件挂载时检查菜单数据，如果没有则加载（兜底逻辑）
 onMounted(async () => {
-  if (authStore.userLoggedIn) {
+  if (authStore.userLoggedIn && !viewStore.hasMenuTree) {
     await viewStore.getMenuTree()
   }
 })
@@ -167,6 +171,10 @@ const handleSelect = (key: string) => {
 .el-menu-vertical {
   border-right: none;
   flex: 1;
+}
+
+.menu-without-logo {
+  height: 100%;
 }
 
 /* 用户信息样式 */

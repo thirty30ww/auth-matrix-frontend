@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useThemeStore } from '@/stores'
+import { LOGO_POSITIONS, THEME_COLORS, type LogoPosition } from '@/stores/theme'
+import LayoutPreview from '@/components/basic/LayoutPreview.vue'
 
 // 定义 props
 interface Props {
@@ -32,6 +34,23 @@ const selectThemeColor = (colorId: string) => {
 const isCurrentTheme = (colorId: string) => {
   return themeStore.currentThemeColor === colorId
 }
+
+// 处理logo位置选择
+const selectLogoPosition = (position: LogoPosition) => {
+  themeStore.setLogoPosition(position)
+}
+
+// Logo位置选项
+const logoPositionOptions = [
+  { 
+    label: '侧边栏', 
+    value: LOGO_POSITIONS.SIDEBAR
+  },
+  { 
+    label: '顶栏', 
+    value: LOGO_POSITIONS.HEADER
+  }
+]
 </script>
 
 <template>
@@ -48,7 +67,7 @@ const isCurrentTheme = (colorId: string) => {
         
         <div class="color-palette">
           <el-tooltip
-            v-for="theme in themeStore.themeColors"
+            v-for="theme in THEME_COLORS"
             :key="theme.id"
             :content="theme.name"
             placement="bottom"
@@ -62,6 +81,27 @@ const isCurrentTheme = (colorId: string) => {
             >
             </div>
           </el-tooltip>
+        </div>
+      </div>
+
+      <!-- Logo位置设置 -->
+      <div class="setting-section">
+        <div class="section-title">Logo位置</div>
+        
+        <div class="layout-options">
+          <div
+            v-for="option in logoPositionOptions"
+            :key="option.value"
+            class="layout-option"
+            :class="{ active: themeStore.logoPosition === option.value }"
+            @click="selectLogoPosition(option.value)"
+          >
+            <LayoutPreview 
+              :is-header-layout="option.value === LOGO_POSITIONS.HEADER" 
+              :is-active="themeStore.logoPosition === option.value"
+            />
+            <div class="layout-option-label">{{ option.label }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -97,5 +137,34 @@ const isCurrentTheme = (colorId: string) => {
 .color-item.active {
   border-color: var(--el-color-primary);
   box-shadow: 0 0 0 5px var(--el-color-primary-light-8);
+}
+
+.setting-section {
+  margin-bottom: var(--margin-size-spacing-4);
+}
+
+/* 布局选项样式 */
+.layout-options {
+  display: flex;
+  gap: var(--margin-size-spacing-3);
+}
+
+.layout-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin-size-spacing-2);
+  padding: var(--padding-size-spacing-3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-lg);
+}
+
+
+.layout-option-label {
+  font-weight: 500;
+  color: var(--el-text-color-primary);
+  font-size: var(--font-size-sm);
+  text-align: center;
 }
 </style>
