@@ -1,18 +1,16 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import api from '@/services'
-import { SettingField } from '@/types'
+import {SettingField} from '@/types'
 
 export const useSystemStore = defineStore('system', {
     state: () => ({
-        projectTitle: 'Prose Pulse' as string
+        projectTitle: '' as string
     }),
 
     actions: {
         // 获取项目名称
         async fetchProjectTitle() {
-            const title = await api.setting.getPublicSetting(SettingField.PROJECT_TITLE)
-
-            this.projectTitle = title || 'Prose Pulse'
+            this.projectTitle = await api.setting.getPublicSetting(SettingField.PROJECT_TITLE)
 
             // 更新文档标题
             document.title = this.projectTitle

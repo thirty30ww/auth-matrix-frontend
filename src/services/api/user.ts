@@ -5,10 +5,9 @@ import type {
     UpdateUserDTO,
     ViewVO,
     ChangePassWordDTO,
-    View,
     PageQueryDTO,
     PageResponse,
-    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO, ViewDTO
+    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO, ViewDTO, Preference
 } from '@/types';
 import { RolesType } from '@/types';
 
@@ -111,6 +110,22 @@ export const userApi = {
     getUserList(request: PageQueryDTO<GetUserListDTO>) {
         return http.post<PageResponse<UserVO>>('/user/list', { data: request });
     },
+
+    /**
+     * 获取用户偏好设置
+     */
+    getPreferences() {
+        return http.get<Preference[]>('/user/preferences/get');
+    },
+
+    /**
+     * 保存用户偏好设置
+     * @param field 偏好设置字段
+     * @param value 偏好设置值
+     */
+    savePreferences(field: string, value: string) {
+        return http.get<void>('/user/preferences/save', { params: { field, value } });
+    }
 };
 
 /**
@@ -206,7 +221,7 @@ export const viewApi = {
      * @param keyword 搜索关键词，可选参数
      */
     getViewList(keyword: string) {
-        return http.get<View[]>('/view/list', { params: { keyword } });
+        return http.get<ViewVO[]>('/view/list', { params: { keyword } });
     },
 
     /**

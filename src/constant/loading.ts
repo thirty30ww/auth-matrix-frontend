@@ -5,7 +5,7 @@
 // 延迟时间配置
 export const LOADING_DELAY = {
     /** 延迟显示时间，超过此时间才显示loading（毫秒） */
-    SHOW_DELAY: 50,
+    SHOW_DELAY: 100,
     /** 最小显示时长，防止闪烁（毫秒） */
     MIN_DURATION: 300,
     /** 隐藏动画延迟时间（毫秒） */

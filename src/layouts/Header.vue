@@ -1,11 +1,18 @@
 <template>
   <div class="header">
     <div class="header-left">
+      <!-- Logo区域 - 当设置为显示在顶栏时，放在最左边 -->
+      <div v-if="themeStore.logoPosition === LOGO_POSITIONS.HEADER" class="header-logo">
+        <LogoIcon size="30px" />
+        <span class="logo-text">{{ systemStore.projectTitle }}</span>
+      </div>
+      
       <IconButton @click="toggleSidebar">
         <el-icon>
           <component :is="sidebarIcon" />
         </el-icon>
       </IconButton>
+      
       <div class="breadcrumb-container">
         <Breadcrumb />
       </div>
@@ -33,14 +40,12 @@
       </IconButton>
     </div>
   </div>
-
-  <!-- 设置侧弹框 -->
-  <SettingsDrawer v-model="settingsVisible" />
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useThemeStore } from '@/stores'
+import { useThemeStore, useSystemStore } from '@/stores'
+import { LOGO_POSITIONS } from '@/stores/theme'
 import { 
   FullScreen, 
   Aim, 
@@ -53,7 +58,7 @@ import {
 import IconButton from '@/components/basic/IconButton.vue'
 import Breadcrumb from '@/components/business/Breadcrumb.vue'
 import SearchBox from '@/components/business/SearchBox.vue'
-import SettingsDrawer from '@/components/business/SettingsDrawer.vue'
+import LogoIcon from '@/components/business/LogoIcon.vue'
 
 const props = defineProps({
   isSidebarCollapsed: {
@@ -62,11 +67,11 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['toggle-sidebar'])
+const emit = defineEmits(['toggle-sidebar', 'open-settings'])
 
 const themeStore = useThemeStore()
+const systemStore = useSystemStore()
 const isFullscreen = ref(false)
-const settingsVisible = ref(false)
 
 // 切换全屏
 const toggleFullscreen = () => {
@@ -93,7 +98,7 @@ const toggleDarkMode = (event: MouseEvent) => {
 
 // 打开设置面板
 const openSettings = () => {
-  settingsVisible.value = true
+  emit('open-settings')
 }
 
 // 计算图标
@@ -124,6 +129,29 @@ const sidebarIcon = computed(() => {
 .header-left {
   display: flex;
   align-items: center;
+}
+
+.header-logo {
+  /* 完全模拟侧边栏logo的样式和尺寸 */
+  width: var(--width-size-sidebar);
+  height: var(--height-size-header);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: var(--el-text-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0; /* 防止被压缩 */
+  /* 抵消header的左内边距，让logo位置与侧边栏完全一致 */
+  margin-left: calc(-1 * var(--padding-size-header));
+}
+
+.logo-text {
+  white-space: nowrap;
 }
 
 .breadcrumb-container {

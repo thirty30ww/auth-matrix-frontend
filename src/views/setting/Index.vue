@@ -171,22 +171,21 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: var(--padding-size-lg) 0;
 }
 
 .setting-info {
   flex: 1;
-  margin-right: 24px;
 }
 
 .setting-label {
   font-weight: 600;
   color: var(--el-text-color-primary);
-  margin-bottom: 4px;
+  margin-bottom: var(--margin-size-spacing-1);
 }
 
 .setting-description {
-  font-size: 13px;
+  font-size: var(--font-size-xs);
   color: var(--el-text-color-placeholder);
   line-height: 1.4;
   opacity: 0.8;
