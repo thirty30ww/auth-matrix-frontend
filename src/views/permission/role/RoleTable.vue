@@ -6,7 +6,7 @@ import ActionLinks from '@/components/basic/ActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import {PermissionStatus} from "../../../constant"
 import { useUserStore } from '@/stores'
-import { useViewStore } from '@/stores/view'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 // Props
 interface Props {
@@ -32,7 +32,7 @@ const emit = defineEmits<Emits>()
 
 // Stores
 const userStore = useUserStore()
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 
 // Refs
 const roleTableRef = ref()

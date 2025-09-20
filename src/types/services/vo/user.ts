@@ -1,7 +1,7 @@
 // 用户基础信息接口
 
 // 角色接口
-import { UserSex, ViewType } from "@/types";
+import { UserSex, PermissionType } from "@/types";
 
 export interface Role {
     id: number;
@@ -43,12 +43,12 @@ export interface JwtVO {
 }
 
 // 页面接口
-export interface View {
+export interface Permission {
     id: number;
     name: string;
     path: string;
     component: string;
-    type: ViewType;
+    type: PermissionType;
     parentNodeId: number;
     frontNodeId: number;
     behindNodeId: number;
@@ -58,11 +58,11 @@ export interface View {
 }
 
 // 页面树节点接口
-export interface ViewVO {
-    node: View;
+export interface PermissionVO {
+    node: Permission;
     hasPermission?: boolean;
     hasChange?: boolean;
-    children: ViewVO[];
+    children: PermissionVO[];
 }
 
 // 偏好设置接口

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useAuthStore, useUserStore, useTabsStore, useViewStore, useSystemStore } from '@/stores'
+import { useAuthStore, useUserStore, useTabsStore, usePermissionStore, useSystemStore } from '@/stores'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const tabsStore = useTabsStore()
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 const systemStore = useSystemStore()
 
 onMounted(async () => {

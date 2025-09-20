@@ -9,7 +9,7 @@ import ActionLinks from '@/components/basic/ActionLinks.vue'
 import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
 import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
 import { computed } from 'vue'
-import { useViewStore } from '@/stores/view'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 // 定义 props
 interface Props {
@@ -43,7 +43,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 
 // 检查是否有任何用户操作权限
 const hasAnyUserOperationPermission = computed(() => {

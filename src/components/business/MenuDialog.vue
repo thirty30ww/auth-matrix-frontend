@@ -145,13 +145,13 @@ import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import TypeSelector from '@/components/basic/TypeSelector.vue'
 import IconSelector from '@/components/basic/IconSelector.vue'
 import api from '@/services'
-import { type ViewVO, type ViewDTO, ViewType } from '@/types'
+import { type PermissionVO, type PermissionDTO, PermissionType } from '@/types'
 import { getValues } from '@/utils'
 
 // Props
 interface Props {
   visible: boolean
-  menuData?: ViewVO | null
+  menuData?: PermissionVO | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -182,7 +182,7 @@ const isEdit = computed(() => !!props.menuData && props.menuData.node.id > 0)
 // 表单数据
 const formData = reactive({
   name: '',
-  type: ViewType.DIRECTORY,
+  type: PermissionType.DIRECTORY,
   path: '',
   component: '',
   icon: '',
@@ -192,7 +192,7 @@ const formData = reactive({
 })
 
 // 递归获取节点及其所有子节点的ID
-const getAllNodeIds = (node: ViewVO): number[] => {
+const getAllNodeIds = (node: PermissionVO): number[] => {
   const ids = [node.node.id]
   if (node.children && node.children.length > 0) {
     node.children.forEach(child => {
@@ -203,7 +203,7 @@ const getAllNodeIds = (node: ViewVO): number[] => {
 }
 
 // 递归过滤节点，排除指定的ID列表
-const filterNodes = (nodes: ViewVO[], excludeIds: number[]): ViewVO[] => {
+const filterNodes = (nodes: PermissionVO[], excludeIds: number[]): PermissionVO[] => {
   return nodes
     .filter(node => !excludeIds.includes(node.node.id))
     .map(node => ({
@@ -214,7 +214,7 @@ const filterNodes = (nodes: ViewVO[], excludeIds: number[]): ViewVO[] => {
 
 // 获取菜单树数据
 const getMenuTreeData = async () => {
-  const data = await api.view.getMenuTree()
+  const data = await api.permission.getMenuTree()
   if (data) {
     let filteredData = data
     
@@ -225,7 +225,7 @@ const getMenuTreeData = async () => {
     }
     
     // 转换数据格式以适配tree-select，包含节点类型信息
-    const convertToTreeData = (nodes: ViewVO[]): any[] => {
+    const convertToTreeData = (nodes: PermissionVO[]): any[] => {
       return nodes.map(node => ({
         id: node.node.id,
         name: node.node.name,
@@ -239,7 +239,7 @@ const getMenuTreeData = async () => {
       {
         id: 0,
         name: '根节点',
-        type: ViewType.DIRECTORY,
+        type: PermissionType.DIRECTORY,
         children: convertToTreeData(filteredData)
       }
     ]
@@ -249,7 +249,7 @@ const getMenuTreeData = async () => {
 // 获取当前选择的父节点信息
 const getSelectedParentNode = () => {
   if (formData.parentNodeId === 0) {
-    return { type: ViewType.DIRECTORY } // 根节点视为目录类型
+    return { type: PermissionType.DIRECTORY } // 根节点视为目录类型
   }
   
   // 递归查找节点
@@ -275,8 +275,8 @@ const typeOptions = computed(() => {
   
   // 如果没有选择父节点，不能选择任何类型
   if (!selectedParent) {
-    return getValues(ViewType)
-      .filter(value => value !== ViewType.PAGE)
+    return getValues(PermissionType)
+      .filter(value => value !== PermissionType.PAGE)
       .map(value => ({
         label: value,
         value: value,
@@ -286,18 +286,18 @@ const typeOptions = computed(() => {
   
   const parentType = selectedParent.type
   
-  return getValues(ViewType)
-    .filter(value => value !== ViewType.PAGE)
+  return getValues(PermissionType)
+    .filter(value => value !== PermissionType.PAGE)
     .map(value => {
       let disabled = false
       
       // 根据父节点类型限制子节点类型
-      if (parentType === ViewType.DIRECTORY) {
+      if (parentType === PermissionType.DIRECTORY) {
         // 目录只能添加菜单和目录
-        disabled = !(value === ViewType.MENU || value === ViewType.DIRECTORY)
-      } else if (parentType === ViewType.MENU) {
+        disabled = !(value === PermissionType.MENU || value === PermissionType.DIRECTORY)
+      } else if (parentType === PermissionType.MENU) {
         // 菜单只能添加按钮
-        disabled = value !== ViewType.BUTTON
+        disabled = value !== PermissionType.BUTTON
       } else {
         // 按钮和页面不能有子节点
         disabled = true
@@ -312,13 +312,13 @@ const typeOptions = computed(() => {
 })
 
 // 计算属性：是否为目录类型
-const isDirectoryType = computed(() => formData.type === ViewType.DIRECTORY)
+const isDirectoryType = computed(() => formData.type === PermissionType.DIRECTORY)
 
 // 计算属性：是否为按钮类型
-const isButtonType = computed(() => formData.type === ViewType.BUTTON)
+const isButtonType = computed(() => formData.type === PermissionType.BUTTON)
 
 // 检查所有子级是否都有hasChange权限
-const checkChildrenHasChange = (node: ViewVO): boolean => {
+const checkChildrenHasChange = (node: PermissionVO): boolean => {
   // 如果没有子节点，返回true（叶子节点不影响父节点的修改权限）
   if (!node.children || node.children.length === 0) {
     return true
@@ -359,7 +359,7 @@ const canModifyValid = computed(() => {
 // 重置表单
 const resetForm = () => {
   formData.name = ''
-  formData.type = ViewType.DIRECTORY
+  formData.type = PermissionType.DIRECTORY
   formData.path = ''
   formData.component = ''
   formData.icon = ''
@@ -369,7 +369,7 @@ const resetForm = () => {
 }
 
 // 填充表单数据（编辑模式）
-const fillFormData = (menuData: ViewVO) => {
+const fillFormData = (menuData: PermissionVO) => {
   formData.name = menuData.node.name
   formData.type = menuData.node.type
   formData.path = menuData.node.path || ''
@@ -400,18 +400,18 @@ watch(() => props.menuData, (newData) => {
 watch(() => formData.type, (newType, oldType) => {
   if (newType !== oldType) {
     // 当切换到目录或按钮时，清空路径和组件
-    if (newType === ViewType.DIRECTORY || newType === ViewType.BUTTON) {
+    if (newType === PermissionType.DIRECTORY || newType === PermissionType.BUTTON) {
       formData.path = ''
       formData.component = ''
     }
     
     // 当切换到按钮时，清空图标
-    if (newType === ViewType.BUTTON) {
+    if (newType === PermissionType.BUTTON) {
       formData.icon = ''
     }
     
     // 当切换到非按钮类型时，清空权限码
-    if (newType !== ViewType.BUTTON) {
+    if (newType !== PermissionType.BUTTON) {
       formData.permissionCode = ''
     }
   }
@@ -426,12 +426,12 @@ watch(() => formData.parentNodeId, (newParentId, oldParentId) => {
       const parentType = selectedParent.type
       
       // 根据父节点类型自动设置合适的默认类型
-      if (parentType === ViewType.DIRECTORY) {
+      if (parentType === PermissionType.DIRECTORY) {
         // 目录节点下，默认选择目录类型
-        formData.type = ViewType.DIRECTORY
-      } else if (parentType === ViewType.MENU) {
+        formData.type = PermissionType.DIRECTORY
+      } else if (parentType === PermissionType.MENU) {
         // 菜单节点下，默认选择按钮类型
-        formData.type = ViewType.BUTTON
+        formData.type = PermissionType.BUTTON
       }
     }
   }
@@ -467,17 +467,17 @@ const handleClose = () => {
 // 字段处理规则配置
 const fieldRules = {
   // 路径和组件：只有菜单类型才需要
-  path: (type: ViewType) => type === ViewType.MENU ? formData.path : '',
-  component: (type: ViewType) => type === ViewType.MENU ? formData.component : '',
+  path: (type: PermissionType) => type === PermissionType.MENU ? formData.path : '',
+  component: (type: PermissionType) => type === PermissionType.MENU ? formData.component : '',
   // 图标：按钮类型不需要
-  icon: (type: ViewType) => type === ViewType.BUTTON ? '' : (formData.icon || ''),
+  icon: (type: PermissionType) => type === PermissionType.BUTTON ? '' : (formData.icon || ''),
   // 权限码：只有按钮类型才需要
-  permissionCode: (type: ViewType) => type === ViewType.BUTTON ? (formData.permissionCode || '') : ''
+  permissionCode: (type: PermissionType) => type === PermissionType.BUTTON ? (formData.permissionCode || '') : ''
 }
 
 // 根据类型构建提交数据的辅助函数
-const buildSubmitData = (baseData: Partial<ViewDTO>): ViewDTO => {
-  const result = { ...baseData } as ViewDTO
+const buildSubmitData = (baseData: Partial<PermissionDTO>): PermissionDTO => {
+  const result = { ...baseData } as PermissionDTO
   
   // 使用配置规则处理字段
   result.path = fieldRules.path(formData.type)
@@ -509,14 +509,14 @@ const handleSubmit = async () => {
       id: props.menuData.node.id
     })
 
-    await api.view.modifyView(modifyData)
+    await api.permission.modifyPermission(modifyData)
     emit('success')
     handleClose()
   } else {
     // 添加菜单
     const addData = buildSubmitData(baseData)
 
-    await api.view.addView(addData)
+    await api.permission.addPermission(addData)
     emit('success')
     handleClose()
   }

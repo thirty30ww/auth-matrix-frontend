@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {ElMessageBox} from 'element-plus'
-import type {Role, RoleVO, ViewVO} from '@/types'
+import type {Role, RoleVO, PermissionVO} from '@/types'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
@@ -9,7 +9,7 @@ import RoleDialog from '@/components/business/RoleDialog.vue'
 
 // 响应式数据
 const roleTableData = ref<RoleVO[]>([])
-const menuTableData = ref<ViewVO[]>([])
+const menuTableData = ref<PermissionVO[]>([])
 const selectedRole = ref<RoleVO | null>(null)
 const roleTableRef = ref()
 const menuPermissionRef = ref()
@@ -38,7 +38,7 @@ const getRoleTree = async () => {
 const getMenuTree = async (roleId?: number) => {
   isLoadingMenus.value = true
   try {
-    const data = await api.view.getMenuAndButtonTree(roleId)
+    const data = await api.permission.getMenuAndButtonTree(roleId)
     if (data) {
       menuTableData.value = data
     }

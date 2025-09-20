@@ -4,7 +4,7 @@ import { Plus } from '@element-plus/icons-vue'
 import BatchOperations, { type BatchOperation } from '@/components/basic/BatchOperations.vue'
 import type { UserVO } from '@/types'
 import api from '@/services'
-import { useViewStore } from '@/stores/view'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 // 定义 props
 interface Props {
@@ -20,7 +20,7 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 
 // 检查是否有批量操作权限
 const hasAnyBatchOperationPermission = computed(() => {

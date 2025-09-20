@@ -34,7 +34,7 @@
 import { computed } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useViewStore } from '@/stores/view'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 // 批量操作配置接口
 export interface BatchOperation<T = any> {
@@ -62,7 +62,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 
 // 过滤有权限的操作
 const visibleOperations = computed(() => {

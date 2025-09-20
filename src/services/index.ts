@@ -1,4 +1,4 @@
-import {authApi, roleApi, userApi, viewApi} from './api/user.ts';
+import {authApi, roleApi, userApi, permissionApi} from './api/user.ts';
 import {fileApi, settingApi} from "@/services/api/system.ts";
 
 // 统一导出所有API
@@ -6,7 +6,7 @@ const api = {
     auth: authApi,
     user: userApi,
     role: roleApi,
-    view: viewApi,
+    permission: permissionApi,
     file: fileApi,
     setting: settingApi,
 };

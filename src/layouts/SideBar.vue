@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import {useRouter} from 'vue-router'
-import {useAuthStore, useUserStore, useViewStore, useSystemStore, useThemeStore} from '@/stores'
+import {useAuthStore, useUserStore, usePermissionStore, useSystemStore, useThemeStore} from '@/stores'
 import { LOGO_POSITIONS } from '@/stores/theme'
 import {computed, onMounted} from 'vue'
 import IconButton from '@/components/basic/IconButton.vue'
@@ -106,7 +106,7 @@ defineProps({
 const router = useRouter()
 const authStore = useAuthStore()
 const userStore = useUserStore()
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 const systemStore = useSystemStore()
 const themeStore = useThemeStore()
 const userInfo = computed(() => userStore.userInfo)

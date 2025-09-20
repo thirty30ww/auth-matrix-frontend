@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  首页
+  欢迎你
 </template>
 
 <style scoped>

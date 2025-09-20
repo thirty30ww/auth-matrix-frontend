@@ -2,26 +2,26 @@
 import { onMounted, ref, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { useViewStore } from '@/stores'
+import { usePermissionStore } from '@/stores'
 import { VIEW_TYPE_TAG_MAP } from '@/constant'
 import { getValue, useTableExpandCollapse } from '@/utils'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import MenuDialog from '@/components/business/MenuDialog.vue'
-import type { ViewVO } from '@/types'
-import { ViewType } from '@/types'
+import type { PermissionVO } from '@/types'
+import { PermissionType } from '@/types'
 import api from '@/services'
 import { reloadRoutes } from '@/router/dynamicRoutes'
 
 const router = useRouter()
-const viewStore = useViewStore()
+const permissionStore = usePermissionStore()
 const menuTableRef = ref()
 const isLoading = ref(false)
-const menuAndButtonTreeData = ref<ViewVO[]>([])
+const menuAndButtonTreeData = ref<PermissionVO[]>([])
 
 // MenuDialog 相关状态
 const menuDialogVisible = ref(false)
-const currentMenuData = ref<ViewVO | null>(null)
+const currentMenuData = ref<PermissionVO | null>(null)
 
 // 使用树形表格展开/折叠钩子
 const { expandAll: handleExpandAll, collapseAll: handleCollapseAll } = useTableExpandCollapse(
@@ -30,14 +30,14 @@ const { expandAll: handleExpandAll, collapseAll: handleCollapseAll } = useTableE
 )
 
 // 权限检查计算属性
-const canAddMenu = computed(() => viewStore.hasPermission('permission:menu:add'))
-const canModifyMenu = computed(() => viewStore.hasPermission('permission:menu:modify'))
-const canDeleteMenu = computed(() => viewStore.hasPermission('permission:menu:delete'))
-const canMoveMenu = computed(() => viewStore.hasPermission('permission:menu:move'))
+const canAddMenu = computed(() => permissionStore.hasPermission('permission:menu:add'))
+const canModifyMenu = computed(() => permissionStore.hasPermission('permission:menu:modify'))
+const canDeleteMenu = computed(() => permissionStore.hasPermission('permission:menu:delete'))
+const canMoveMenu = computed(() => permissionStore.hasPermission('permission:menu:move'))
 
 // 检查是否有任何菜单操作权限
 const hasAnyMenuOperationPermission = computed(() => {
-  return viewStore.hasAnyPermission([
+  return permissionStore.hasAnyPermission([
     'permission:menu:add',
     'permission:menu:modify',
     'permission:menu:delete',
@@ -53,7 +53,7 @@ onMounted(async () => {
 const loadMenuData = async () => {
   isLoading.value = true
   try {
-    const data = await api.view.getMenuAndButtonTree()
+    const data = await api.permission.getMenuAndButtonTree()
     if (data) {
       menuAndButtonTreeData.value = data
     }
@@ -69,15 +69,15 @@ const handleAddMenu = () => {
 }
 
 // 菜单行操作方法
-const handleAddChildMenu = (row: ViewVO) => {
+const handleAddChildMenu = (row: PermissionVO) => {
   // 根据父节点类型设置默认的子节点类型
-  let defaultType = ViewType.DIRECTORY
-  if (row.node.type === ViewType.MENU) {
+  let defaultType = PermissionType.DIRECTORY
+  if (row.node.type === PermissionType.MENU) {
     // 如果父节点是菜单，默认添加按钮
-    defaultType = ViewType.BUTTON
-  } else if (row.node.type === ViewType.DIRECTORY) {
+    defaultType = PermissionType.BUTTON
+  } else if (row.node.type === PermissionType.DIRECTORY) {
     // 如果父节点是目录，默认添加目录
-    defaultType = ViewType.DIRECTORY
+    defaultType = PermissionType.DIRECTORY
   }
   
   // 为添加子菜单，传递父节点信息以便在对话框中预选
@@ -100,12 +100,12 @@ const handleAddChildMenu = (row: ViewVO) => {
   menuDialogVisible.value = true
 }
 
-const handleEditMenu = (row: ViewVO) => {
+const handleEditMenu = (row: PermissionVO) => {
   currentMenuData.value = row
   menuDialogVisible.value = true
 }
 
-const handleDeleteMenu = async (row: ViewVO) => {
+const handleDeleteMenu = async (row: PermissionVO) => {
   // 确认删除操作
   const confirmed = await ElMessageBox.confirm(
     '确定要删除该菜单吗？删除后不可恢复。',
@@ -119,28 +119,28 @@ const handleDeleteMenu = async (row: ViewVO) => {
   
   if (!confirmed) return
   
-  await viewStore.deleteView(row.node.id)
+  await permissionStore.deleteView(row.node.id)
   await loadMenuData()
   // 同步更新侧边栏菜单数据
-  await viewStore.getMenuTree()
+  await permissionStore.getMenuTree()
   // 重新加载动态路由以移除已删除的页面路由
   await reloadRoutes(router)
 }
 
 // 上移菜单
-const handleMoveUp = async (row: ViewVO) => {
-  await api.view.moveView(row.node.id, true)
+const handleMoveUp = async (row: PermissionVO) => {
+  await api.permission.movePermission(row.node.id, true)
   await loadMenuData()
   // 同步更新侧边栏菜单数据
-  await viewStore.getMenuTree()
+  await permissionStore.getMenuTree()
 }
 
 // 下移菜单
-const handleMoveDown = async (row: ViewVO) => {
-  await api.view.moveView(row.node.id, false)
+const handleMoveDown = async (row: PermissionVO) => {
+  await api.permission.movePermission(row.node.id, false)
   await loadMenuData()
   // 同步更新侧边栏菜单数据
-  await viewStore.getMenuTree()
+  await permissionStore.getMenuTree()
 }
 
 
@@ -148,18 +148,18 @@ const handleMoveDown = async (row: ViewVO) => {
 const handleMenuDialogSuccess = async () => {
   await loadMenuData()
   // 同步更新侧边栏菜单数据
-  await viewStore.getMenuTree()
+  await permissionStore.getMenuTree()
   // 重新加载动态路由以包含新的页面路由
   await reloadRoutes(router)
 }
 
 // 获取菜单行操作配置
-const getMenuActions = (row: ViewVO) => {
+const getMenuActions = (row: PermissionVO) => {
   // 检查当前行是否不允许修改（hasChange为false）
   const isNotChangeable = row.hasChange === false
   
   // 检查当前行是否为按钮类型
-  const isButton = row.node.type === ViewType.BUTTON
+  const isButton = row.node.type === PermissionType.BUTTON
   
   const allActions = []
   

@@ -3,11 +3,11 @@ import type {
     UserVO,
     JwtVO,
     UpdateUserDTO,
-    ViewVO,
+    PermissionVO,
     ChangePassWordDTO,
     PageQueryDTO,
     PageResponse,
-    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO, ViewDTO, Preference
+    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO, PermissionDTO, Preference
 } from '@/types';
 import { RolesType } from '@/types';
 
@@ -186,19 +186,19 @@ export const roleApi = {
 /**
  * 页面 API
  */
-export const viewApi = {
+export const permissionApi = {
     /**
      * 获取页面树
      */
     getViewTree() {
-        return http.get<ViewVO[]>('/view/tree');
+        return http.get<PermissionVO[]>('/permission/tree');
     },
 
     /**
      * 获取菜单树
      */
     getMenuTree() {
-        return http.get<ViewVO[]>('/view/menu/tree');
+        return http.get<PermissionVO[]>('/permission/menu/tree');
     },
 
     /**
@@ -206,14 +206,7 @@ export const viewApi = {
      * @param targetRoleId 目标角色ID
      */
     getMenuAndButtonTree(targetRoleId?: number) {
-        return http.get<ViewVO[]>('/view/menu/button/tree', { params: { targetRoleId } });
-    },
-
-    /**
-     * 获取目录树
-     */
-    getDirectoryTree() {
-        return http.get<ViewVO[]>('/view/directory/tree');
+        return http.get<PermissionVO[]>('/permission/menu/button/tree', { params: { targetRoleId } });
     },
 
     /**
@@ -221,46 +214,46 @@ export const viewApi = {
      * @param keyword 搜索关键词，可选参数
      */
     getViewList(keyword: string) {
-        return http.get<ViewVO[]>('/view/list', { params: { keyword } });
+        return http.get<PermissionVO[]>('/permission/list', { params: { keyword } });
     },
 
     /**
      * 获取权限码列表
      */
     getPermissionCode() {
-        return http.get<string[]>('/view/permission/code');
+        return http.get<string[]>('/permission/permission/code');
     },
 
     /**
      * 添加页面
-     * @param view 页面添加请求参数
+     * @param permissionDTO 页面添加请求参数
      */
-    addView(view: ViewDTO) {
-        return http.post<void>('/view/add', { data: view, showSuccess: true });
+    addPermission(permissionDTO: PermissionDTO) {
+        return http.post<void>('/permission/add', { data: permissionDTO, showSuccess: true });
     },
 
     /**
      * 修改页面
-     * @param view 页面修改请求参数
+     * @param permissionDTO 页面修改请求参数
      */
-    modifyView(view: ViewDTO) {
-        return http.post<void>('/view/modify', { data: view, showSuccess: true });
+    modifyPermission(permissionDTO: PermissionDTO) {
+        return http.post<void>('/permission/modify', { data: permissionDTO, showSuccess: true });
     },
 
     /**
      * 删除页面
-     * @param viewId 页面ID
+     * @param permissionId 页面ID
      */
-    deleteView(viewId: number) {
-        return http.get<void>('/view/delete', { params: { viewId }, showSuccess: true });
+    deletePermission(permissionId: number) {
+        return http.get<void>('/permission/delete', { params: { viewId: permissionId }, showSuccess: true });
     },
 
     /**
      * 移动页面
-     * @param viewId 页面ID
+     * @param permissionId 页面ID
      * @param isUp 是否向上移动
      */
-    moveView(viewId: number, isUp: boolean) {
-        return http.get<void>('/view/move', { params: { viewId, isUp } });
+    movePermission(permissionId: number, isUp: boolean) {
+        return http.get<void>('/permission/move', { params: { viewId: permissionId, isUp } });
     }
 }

@@ -1,9 +1,9 @@
-import { ViewType } from '@/types'
+import { PermissionType } from '@/types'
 
 // 菜单类型对应的标签类型映射
 export const VIEW_TYPE_TAG_MAP = {
-    [ViewType.DIRECTORY]: 'warning',
-    [ViewType.MENU]: 'success',
-    [ViewType.PAGE]: 'primary',
-    [ViewType.BUTTON]: 'info'
+    [PermissionType.DIRECTORY]: 'warning',
+    [PermissionType.MENU]: 'success',
+    [PermissionType.PAGE]: 'primary',
+    [PermissionType.BUTTON]: 'info'
 }

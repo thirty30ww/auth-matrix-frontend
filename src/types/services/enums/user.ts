@@ -22,7 +22,7 @@ export enum RolesType {
 /**
  * 视图类型枚举
  */
-export enum ViewType {
+export enum PermissionType {
     DIRECTORY = "目录",
     MENU = "菜单",
     PAGE = "页面",

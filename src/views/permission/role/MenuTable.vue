@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, nextTick, watch, computed } from 'vue'
-import type { ViewVO } from '@/types'
+import type { PermissionVO } from '@/types'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import { PermissionStatus } from "@/constant"
 import ClickableTag from '@/components/basic/ClickableTag.vue'
-import { useViewStore } from '@/stores/view'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 // Props
 interface Props {
-  menuTableData: ViewVO[]
+  menuTableData: PermissionVO[]
   selectedRole: any
   loading?: boolean
 }
@@ -23,16 +23,16 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 // Stores
-const viewStore = useViewStore()
+const viewStore = usePermissionStore()
 
 // Refs
 const menuTableRef = ref()
 
 // 本地菜单数据副本，用于权限修改
-const localMenuData = ref<ViewVO[]>([])
+const localMenuData = ref<PermissionVO[]>([])
 
 // 初始菜单数据，用于重置
-const originalMenuData = ref<ViewVO[]>([])
+const originalMenuData = ref<PermissionVO[]>([])
 
 // 监听菜单数据变化，更新本地副本
 watch(() => props.menuTableData, (newData) => {
@@ -57,7 +57,7 @@ const canModifyRole = computed(() => {
 })
 
 // 检查特定菜单项是否可以修改
-const canModifyMenuItem = (row: ViewVO) => {
+const canModifyMenuItem = (row: PermissionVO) => {
   // 首先检查是否有权限分配权限
   if (!hasAssignPermission.value) {
     return false
@@ -77,7 +77,7 @@ const canModifyMenuItem = (row: ViewVO) => {
 }
 
 // 切换菜单权限
-const togglePermission = (row: ViewVO) => {
+const togglePermission = (row: PermissionVO) => {
   // 检查是否可以修改该菜单项
   if (!canModifyMenuItem(row)) {
     return
@@ -98,7 +98,7 @@ const togglePermission = (row: ViewVO) => {
 }
 
 // 递归设置子菜单权限
-const setChildrenPermission = (children: ViewVO[], hasPermission: boolean) => {
+const setChildrenPermission = (children: PermissionVO[], hasPermission: boolean) => {
   children.forEach(child => {
     child.hasPermission = hasPermission
     if (child.children && child.children.length > 0) {
@@ -108,8 +108,8 @@ const setChildrenPermission = (children: ViewVO[], hasPermission: boolean) => {
 }
 
 // 启用所有父级和祖先页面权限
-const enableParentPermissions = (currentRow: ViewVO) => {
-  const findAndEnableParent = (data: ViewVO[], targetRow: ViewVO): boolean => {
+const enableParentPermissions = (currentRow: PermissionVO) => {
+  const findAndEnableParent = (data: PermissionVO[], targetRow: PermissionVO): boolean => {
     for (const item of data) {
       if (item.children && item.children.includes(targetRow)) {
         // 启用父页面权限
@@ -132,10 +132,10 @@ const enableParentPermissions = (currentRow: ViewVO) => {
 }
 
 // 收集有权限的菜单ID
-const getPermissionViewIds = (data: ViewVO[]): number[] => {
+const getPermissionViewIds = (data: PermissionVO[]): number[] => {
   const viewIds: number[] = []
   
-  const collectIds = (items: ViewVO[]) => {
+  const collectIds = (items: PermissionVO[]) => {
     items.forEach(item => {
       if (item.hasPermission === true) {
         viewIds.push(item.node.id)

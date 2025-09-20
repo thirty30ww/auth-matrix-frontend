@@ -3,13 +3,13 @@ import api from '@/services'
 import router from '@/router'
 import { useUserStore } from "@/stores/user.ts";
 import { useTabsStore } from "@/stores/tabs.ts";
-import { useViewStore } from "@/stores/view.ts";
+import { usePermissionStore } from "@/stores/permission.ts";
 import { reloadRoutes, resetRoutesLoadedState } from "@/router/dynamicRoutes.ts";
 
 // 使用函数形式延迟获取store
 const getUserStore = () => useUserStore();
 const getTabsStore = () => useTabsStore();
-const getViewStore = () => useViewStore();
+const getViewStore = () => usePermissionStore();
 
 // 全局刷新状态管理
 let isRefreshing = false;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import { useAuthStore, useViewStore } from '@/stores';
+import { useAuthStore, usePermissionStore } from '@/stores';
 import type { ApiResponse, BaseRequest } from '@/types';
 
 // 创建axios实例
@@ -70,7 +70,7 @@ http.interceptors.response.use(
             }
         // 如果是403错误（权限不足），尝试获取权限
         } else if (res.code === 403) {
-            const viewStore = useViewStore();
+            const viewStore = usePermissionStore();
             await viewStore.getPermissionCodes();
             if (showError) {
                 ElMessage.error(res.message || '权限不足');

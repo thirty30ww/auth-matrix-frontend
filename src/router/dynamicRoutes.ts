@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router';
-import type { ViewVO } from '@/types';
-import { useViewStore } from '@/stores';
+import type { PermissionVO } from '@/types';
+import { usePermissionStore } from '@/stores';
 
 // 组件映射表
 const viewsModules = import.meta.glob('@/views/**/*.vue');
@@ -84,7 +84,7 @@ function clearDynamicRoutes(router: Router) {
 
 // 从后端加载路由
 async function loadRoutesFromBackend(router: Router) {
-    const viewStore = useViewStore();
+    const viewStore = usePermissionStore();
     const viewNodes = await viewStore.getViewTree();
 
     if (viewNodes && viewNodes.length > 0) {
@@ -96,7 +96,7 @@ async function loadRoutesFromBackend(router: Router) {
 }
 
 // 生成并添加路由
-function generateAndAddRoutes(viewNodes: ViewVO[], router: Router) {
+function generateAndAddRoutes(viewNodes: PermissionVO[], router: Router) {
     viewNodes.forEach(item => {
         // 创建路由对象
         const componentPath = `/src/views${item.node.component}.vue`;

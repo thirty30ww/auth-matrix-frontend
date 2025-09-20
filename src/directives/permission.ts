@@ -7,7 +7,7 @@
  */
 
 import type { Directive, DirectiveBinding } from 'vue'
-import { useViewStore } from '@/stores/view'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 interface PermissionConfig {
     codes: string | string[]
@@ -29,7 +29,7 @@ function parseValue(value: PermissionValue): PermissionConfig {
 
 // 检查权限
 function checkPermission(config: PermissionConfig): boolean {
-    const viewStore = useViewStore()
+    const viewStore = usePermissionStore()
     const { codes, mode = 'any' } = config
 
     if (typeof codes === 'string') {

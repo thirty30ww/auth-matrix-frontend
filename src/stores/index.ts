@@ -1,7 +1,7 @@
 import { useAuthStore } from './auth'
 import { useThemeStore } from './theme'
 import { useUserStore } from './user'
-import { useViewStore } from './view'
+import { usePermissionStore } from './permission.ts'
 import { useTabsStore } from './tabs'
 import { useSystemStore } from './system'
 
@@ -9,7 +9,7 @@ export {
     useAuthStore,
     useThemeStore,
     useUserStore,
-    useViewStore,
+    usePermissionStore,
     useTabsStore,
     useSystemStore
 } 

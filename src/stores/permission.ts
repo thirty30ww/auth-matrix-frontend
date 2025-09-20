@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import type { ViewVO } from '@/types'
+import type { PermissionVO } from '@/types'
 import api from "@/services";
 
-export const useViewStore = defineStore('view', {
+export const usePermissionStore = defineStore('view', {
     state: () => ({
-        viewTree: [] as ViewVO[],           // 用于路由生成的完整页面树
-        menuTree: [] as ViewVO[],           // 用于侧边栏显示的菜单树
+        viewTree: [] as PermissionVO[],           // 用于路由生成的完整页面树
+        menuTree: [] as PermissionVO[],           // 用于侧边栏显示的菜单树
         permissionCodes: [] as string[],    // 用户权限码列表
     }),
 
@@ -33,7 +33,7 @@ export const useViewStore = defineStore('view', {
     actions: {
         // 获取页面树数据
         async getViewTree() {
-            const data = await api.view.getViewTree()
+            const data = await api.permission.getViewTree()
             if (data) {
                 this.viewTree = data
             }
@@ -42,7 +42,7 @@ export const useViewStore = defineStore('view', {
 
         // 获取菜单树数据（用于侧边栏显示）
         async getMenuTree() {
-            const data = await api.view.getMenuTree()
+            const data = await api.permission.getMenuTree()
             if (data) {
                 this.menuTree = data
             }
@@ -51,7 +51,7 @@ export const useViewStore = defineStore('view', {
 
         // 获取用户权限码
         async getPermissionCodes() {
-            const data = await api.view.getPermissionCode()
+            const data = await api.permission.getPermissionCode()
             if (data) {
                 this.permissionCodes = data
             }
@@ -60,7 +60,7 @@ export const useViewStore = defineStore('view', {
 
         // 删除视图
         async deleteView(viewId: number) {
-            return await api.view.deleteView(viewId)
+            return await api.permission.deletePermission(viewId)
         },
 
         // 清除所有视图数据
