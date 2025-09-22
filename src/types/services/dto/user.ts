@@ -47,7 +47,7 @@ export interface RoleDTO {
     id?: number;
     name: string;
     description: string;
-    parentNodeId: number;
+    parentNodeId?: number; // 全局角色时可以为空
 }
 
 // 页面DTO

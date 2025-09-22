@@ -7,6 +7,8 @@ import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
 import RoleDialog from '@/components/business/RoleDialog.vue'
 import { useRolePageCache } from '@/composables/usePageCache'
+import { usePermissionStore } from '@/stores/permission'
+import { isGlobalRole, getRoleTypeLabel } from '@/constant'
 
 // 响应式数据
 const roleTableData = ref<RoleVO[]>([])
@@ -24,15 +26,42 @@ const roleDialogVisible = ref(false)
 const currentRoleData = ref<Role | null>(null)
 const currentParentNodeId = ref<number | undefined>(undefined)
 const showParentSelect = ref(true)
+const showRoleTypeSelect = ref(false)
 
 // 页面缓存
 const rolePageCache = useRolePageCache()
+
+// 权限 store
+const permissionStore = usePermissionStore()
+
+// 处理全局角色权限的递归函数
+const processRolePermissions = (roles: RoleVO[]): RoleVO[] => {
+  const hasGlobalRolePermission = permissionStore.hasPermission('permission:role:global')
+  
+  return roles.map(role => {
+    const processedRole = { ...role }
+    
+    // 如果是全局角色但用户没有全局角色权限，设置 hasPermission 为 false
+    if (isGlobalRole(processedRole.node.level) && !hasGlobalRolePermission) {
+      processedRole.hasPermission = false
+    }
+    
+    // 递归处理子角色
+    if (processedRole.children && processedRole.children.length > 0) {
+      processedRole.children = processRolePermissions(processedRole.children)
+    }
+    
+    return processedRole
+  })
+}
 
 // 获取角色列表数据（带加载动画）
 const getRoleTree = async () => {
   isLoadingRoles.value = true
   try {
-    roleTableData.value = await api.role.getRoleTree()
+    const rawData = await api.role.getRoleTree()
+    // 处理全局角色权限
+    roleTableData.value = processRolePermissions(rawData)
   } finally {
     isLoadingRoles.value = false
   }
@@ -71,6 +100,7 @@ const handleAddRole = () => {
   currentRoleData.value = null
   currentParentNodeId.value = undefined
   showParentSelect.value = true
+  showRoleTypeSelect.value = true // 顶部添加时显示角色类型选择器
   roleDialogVisible.value = true
 }
 
@@ -80,6 +110,7 @@ const handleAddChildRole = (row: RoleVO) => {
   currentRoleData.value = null
   currentParentNodeId.value = row.node.id
   showParentSelect.value = true // 显示父角色选择器
+  showRoleTypeSelect.value = false // 行内添加时不显示角色类型选择器
   roleDialogVisible.value = true
 }
 
@@ -88,12 +119,16 @@ const handleEditRole = (row: RoleVO) => {
   currentRoleData.value = row.node
   currentParentNodeId.value = undefined
   showParentSelect.value = true
+  showRoleTypeSelect.value = false // 编辑时不显示角色类型选择器
   roleDialogVisible.value = true
 }
 
 const handleDeleteRole = async (row: RoleVO) => {
+  const isGlobalRoleToDelete = isGlobalRole(row.node.level)
+  const roleTypeText = getRoleTypeLabel(row.node.level)
+  
   await ElMessageBox.confirm(
-    `确定要删除角色 "${row.node.name}" 吗？此操作不可撤销。`,
+    `确定要删除${roleTypeText} "${row.node.name}" 吗？此操作不可撤销。`,
     '删除确认',
     {
       confirmButtonText: '确定',
@@ -102,7 +137,13 @@ const handleDeleteRole = async (row: RoleVO) => {
     }
   )
 
-  await api.role.deleteRole(row.node.id)
+  // 根据角色类型调用不同的删除API
+  if (isGlobalRoleToDelete) {
+    await api.role.deleteGlobalRole(row.node.id)
+  } else {
+    await api.role.deleteRole(row.node.id)
+  }
+  
   await getRoleTree() // 重新加载角色树
 
   // 如果删除的是当前选中的角色，清空选中状态
@@ -148,7 +189,15 @@ const handleConfirm = async (viewIds: number[]) => {
   
   isLoadingMenus.value = true
   try {
-    await api.role.assignView(selectedRole.value.node.id, viewIds)
+    const isGlobalRoleSelected = isGlobalRole(selectedRole.value.node.level)
+    
+    // 根据角色类型调用不同的权限分配API
+    if (isGlobalRoleSelected) {
+      await api.role.assignGlobalPermission(selectedRole.value.node.id, viewIds)
+    } else {
+      await api.role.assignPermission(selectedRole.value.node.id, viewIds)
+    }
+    
     // 重新加载菜单数据以反映最新的权限状态
     await getMenuTree(selectedRole.value.node.id)
   } finally {
@@ -230,6 +279,7 @@ onMounted(async () => {
       :role-data="currentRoleData"
       :parent-node-id="currentParentNodeId"
       :show-parent-select="showParentSelect"
+      :show-role-type-select="showRoleTypeSelect"
       @success="handleRoleDialogSuccess"
     />
   </el-card>

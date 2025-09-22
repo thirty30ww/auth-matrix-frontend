@@ -60,6 +60,8 @@ const hasAnyRoleOperationPermission = computed(() => {
   ])
 })
 
+
+
 // 角色表格行点击事件
 const handleRoleRowClick = (row: RoleVO) => {
   emit('roleRowClick', row)
@@ -101,13 +103,16 @@ const handleDeleteRole = (row: RoleVO) => {
 
 // 获取角色行操作配置
 const getRoleActions = (row: RoleVO) => {
-  // 添加按钮disabled条件：不仅要hasPermission为false，还要该角色不在当前用户的角色列表中
-  const isAddDisabled = !row.hasPermission && !currentUserRoleIds.value.includes(row.node.id)
+  // 检查是否为全局角色
+  const isGlobalRole = row.node.level === -1
   
-  // 检查相关权限
-  const canAdd = permissionStore.hasPermission('permission:role:add')
-  const canModify = permissionStore.hasPermission('permission:role:modify')
-  const canDelete = permissionStore.hasPermission('permission:role:delete')
+  // 添加按钮disabled条件：全局角色不能添加子角色，或者没有权限的情况
+  const isAddDisabled = isGlobalRole || (!row.hasPermission && !currentUserRoleIds.value.includes(row.node.id))
+  
+  // 检查基础权限（用于显示按钮）
+  const hasAddPermission = permissionStore.hasPermission('permission:role:add')
+  const hasModifyPermission = permissionStore.hasPermission('permission:role:modify')
+  const hasDeletePermission = permissionStore.hasPermission('permission:role:delete')
   
   const allActions = [
     {
@@ -115,25 +120,25 @@ const getRoleActions = (row: RoleVO) => {
       onClick: () => handleAddChildRole(row),
       disabled: isAddDisabled,
       type: 'default' as const,
-      permission: canAdd
+      permission: hasAddPermission
     },
     {
       label: '修改',
       onClick: () => handleEditRole(row),
       disabled: !row.hasPermission,
       type: 'default' as const,
-      permission: canModify
+      permission: hasModifyPermission
     },
     {
       label: '删除',
       onClick: () => handleDeleteRole(row),
       disabled: !row.hasPermission,
       type: 'danger' as const,
-      permission: canDelete
+      permission: hasDeletePermission
     }
   ]
   
-  // 只返回有权限的操作
+  // 只返回有基础权限的操作（显示按钮，但可能被禁用）
   return allActions.filter(action => action.permission).map(action => ({
     label: action.label,
     onClick: action.onClick,
@@ -211,8 +216,15 @@ defineExpose({
       v-table-loading="{ loading: $props.loading || false, text: '加载角色数据中...' }"
     >
       <el-table-column prop="node.name" label="角色名称" min-width="120px"/>
-      <el-table-column prop="node.description" label="描述" min-width="300px"/>
-      <el-table-column label="权限状态" min-width="100px">
+      <el-table-column label="类型" min-width="80px">
+        <template #default="{ row }">
+          <el-tag :type="row.node.level === -1 ? 'warning' : 'success'" size="small">
+            {{ row.node.level === -1 ? '全局角色' : '普通角色' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="node.description" label="描述" min-width="280px"/>
+      <el-table-column label="权限状态" min-width="80px">
         <template #default="{ row }">
           <StatusDot 
             :status="row.hasPermission" 
@@ -222,7 +234,7 @@ defineExpose({
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="hasAnyRoleOperationPermission" label="操作" width="180" align="center">
+      <el-table-column v-if="hasAnyRoleOperationPermission" label="操作" width="160" align="center">
         <template #default="{ row }">
           <ActionLinks :actions="getRoleActions(row)" />
         </template>

@@ -158,11 +158,27 @@ export const roleApi = {
     },
 
     /**
+     * 添加全局角色
+     * @param role 角色添加请求参数
+     */
+    addGlobalRole(role: RoleDTO) {
+        return http.post<void>('/role/add/global', { data: role, showSuccess: true });
+    },
+
+    /**
      * 修改角色
      * @param role 角色修改请求参数
      */
     modifyRole(role: RoleDTO) {
         return http.post<void>('/role/modify', { data: role, showSuccess: true });
+    },
+
+    /**
+     * 修改全局角色
+     * @param role 角色修改请求参数
+     */
+    modifyGlobalRole(role: RoleDTO) {
+        return http.post<void>('/role/modify/global', { data: role, showSuccess: true });
     },
 
     /**
@@ -174,13 +190,30 @@ export const roleApi = {
     },
 
     /**
+     * 删除全局角色
+     * @param roleId 角色ID
+     */
+    deleteGlobalRole(roleId: number) {
+        return http.get<void>('/role/delete/global', { params: { roleId }, showSuccess: true });
+    },
+
+    /**
      * 分配角色视图
      * @param roleId 角色ID
-     * @param viewIds 视图ID列表
+     * @param permissionIds 权限ID列表
      */
-    assignView(roleId: number, viewIds: number[]) {
-        return http.post<void>('/role/assign/view', { data: { roleId, viewIds }, showSuccess: true });
-    }
+    assignPermission(roleId: number, permissionIds: number[]) {
+        return http.post<void>('/role/assign/permission', { data: { roleId, viewIds: permissionIds }, showSuccess: true });
+    },
+
+    /**
+     * 分配全局角色视图
+     * @param roleId 角色ID
+     * @param permissionIds 权限ID列表
+     */
+    assignGlobalPermission(roleId: number, permissionIds: number[]) {
+        return http.post<void>('/role/assign/permission/global', { data: { roleId, viewIds: permissionIds }, showSuccess: true });
+    },
 }
 
 /**

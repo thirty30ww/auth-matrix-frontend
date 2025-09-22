@@ -11,6 +11,17 @@
       label-width="100px"
       label-position="right"
     >
+      <!-- 角色类型选择器 -->
+      <el-form-item v-if="showRoleTypeSelect && !isEdit">
+        <template #label>
+          <RequiredLabel required>角色类型</RequiredLabel>
+        </template>
+        <TypeSelector
+          v-model="roleType"
+          :options="roleTypeOptions"
+        />
+      </el-form-item>
+      
       <el-form-item>
         <template #label>
           <RequiredLabel required>角色名称</RequiredLabel>
@@ -35,7 +46,7 @@
         />
       </el-form-item>
 
-      <el-form-item v-if="showParentSelect">
+      <el-form-item v-if="shouldShowParentSelect">
         <template #label>
           <RequiredLabel required>上级角色</RequiredLabel>
         </template>
@@ -71,8 +82,10 @@ import {computed, reactive, ref, watch} from 'vue'
 import {type FormInstance} from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import RequiredLabel from '@/components/basic/RequiredLabel.vue'
+import TypeSelector from '@/components/basic/TypeSelector.vue'
 import api from '@/services'
 import {type Role, type RoleDTO, RolesType, type RoleVO} from '@/types'
+import {RoleConstants, RoleTypeOptions, isGlobalRole, getRoleType} from '@/constant'
 
 // Props
 interface Props {
@@ -80,13 +93,15 @@ interface Props {
   roleData?: Role | null
   parentNodeId?: number // 固定的父节点ID（用于行内添加）
   showParentSelect?: boolean // 是否显示父节点选择器
+  showRoleTypeSelect?: boolean // 是否显示角色类型选择器（仅在顶部添加时显示）
 }
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
   roleData: null,
   parentNodeId: undefined,
-  showParentSelect: true
+  showParentSelect: true,
+  showRoleTypeSelect: false
 })
 
 // Emits
@@ -109,6 +124,20 @@ const dialogVisible = computed({
 
 // 是否为编辑模式
 const isEdit = computed(() => !!props.roleData && props.roleData.id > 0)
+
+// 角色类型选项
+const roleTypeOptions = RoleTypeOptions
+
+// 角色类型
+const roleType = ref<'normal' | 'global'>(RoleConstants.ROLE_TYPES.NORMAL)
+
+// 是否为全局角色
+const isGlobalRoleSelected = computed(() => roleType.value === RoleConstants.ROLE_TYPES.GLOBAL)
+
+// 是否显示上级角色选择器（动态计算）
+const shouldShowParentSelect = computed(() => {
+  return props.showParentSelect && !isGlobalRoleSelected.value
+})
 
 // 表单数据
 const formData = reactive({
@@ -140,7 +169,7 @@ const filterRoleNodes = (roles: RoleVO[], excludeIds: number[]): RoleVO[] => {
 
 // 获取角色树数据
 const getRoleTreeData = async () => {
-  if (props.showParentSelect) {
+  if (shouldShowParentSelect.value) {
     const data = await api.role.getRoleTree(RolesType.CHILD_AND_SELF)
     if (data) {
       let filteredData = data
@@ -188,6 +217,7 @@ const resetForm = () => {
   formData.name = ''
   formData.description = ''
   formData.parentNodeId = props.parentNodeId
+  roleType.value = RoleConstants.ROLE_TYPES.NORMAL
 }
 
 // 填充表单数据（编辑模式）
@@ -195,6 +225,8 @@ const fillFormData = (roleData: Role) => {
   formData.name = roleData.name
   formData.description = roleData.description
   formData.parentNodeId = roleData.parentNodeId
+  // 根据level判断角色类型
+  roleType.value = getRoleType(roleData.level)
 }
 
 // 监听角色数据变化
@@ -227,6 +259,15 @@ watch(() => props.parentNodeId, (newParentNodeId) => {
   }
 })
 
+// 监听角色类型变化，重新获取角色树数据
+watch(() => roleType.value, () => {
+  getRoleTreeData()
+  // 如果切换到全局角色，清空parentNodeId
+  if (isGlobalRoleSelected.value) {
+    formData.parentNodeId = undefined
+  }
+})
+
 // 关闭对话框
 const handleClose = () => {
   emit('update:visible', false)
@@ -237,26 +278,47 @@ const handleSubmit = async () => {
   if (!formRef.value) return
 
   if (isEdit.value) {
+    // 编辑模式：根据原始角色的level判断类型，而不是根据当前选择的roleType
+    const isEditingGlobalRole = props.roleData ? isGlobalRole(props.roleData.level) : false
+    
     const modifyData: RoleDTO = {
       id: props.roleData?.id, // 修改时必须传ID
       name: formData.name,
-      description: formData.description,
-      parentNodeId: formData.parentNodeId!
+      description: formData.description
+    }
+    
+    // 只有普通角色才需要传递parentNodeId
+    if (!isEditingGlobalRole && formData.parentNodeId !== undefined) {
+      modifyData.parentNodeId = formData.parentNodeId
     }
 
-    await api.role.modifyRole(modifyData)
+    // 根据原始角色类型调用不同的修改API
+    if (isEditingGlobalRole) {
+      await api.role.modifyGlobalRole(modifyData)
+    } else {
+      await api.role.modifyRole(modifyData)
+    }
     emit('success')
     handleClose()
   } else {
     // 添加角色
-    const roleData = {
+    const roleData: RoleDTO = {
       // 添加时不传ID
       name: formData.name,
-      description: formData.description,
-      ...(formData.parentNodeId !== undefined && { parentNodeId: formData.parentNodeId })
+      description: formData.description
+    }
+    
+    // 只有普通角色才需要传递parentNodeId
+    if (!isGlobalRoleSelected.value && formData.parentNodeId !== undefined) {
+      roleData.parentNodeId = formData.parentNodeId
     }
 
-    await api.role.addRole(roleData as RoleDTO)
+    // 根据选择的角色类型调用不同的添加API
+    if (isGlobalRoleSelected.value) {
+      await api.role.addGlobalRole(roleData)
+    } else {
+      await api.role.addRole(roleData)
+    }
     emit('success')
     handleClose()
   }
