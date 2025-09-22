@@ -4,6 +4,7 @@ import { useUserStore } from './user'
 import { usePermissionStore } from './permission.ts'
 import { useTabsStore } from './tabs'
 import { useSystemStore } from './system'
+import { usePageCacheStore } from './pageCache'
 
 export {
     useAuthStore,
@@ -11,5 +12,6 @@ export {
     useUserStore,
     usePermissionStore,
     useTabsStore,
-    useSystemStore
+    useSystemStore,
+    usePageCacheStore
 } 

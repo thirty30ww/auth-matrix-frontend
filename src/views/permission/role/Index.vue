@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {ElMessageBox} from 'element-plus'
 import type {Role, RoleVO, PermissionVO} from '@/types'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
 import RoleDialog from '@/components/business/RoleDialog.vue'
+import { useRolePageCache } from '@/composables/usePageCache'
 
 // 响应式数据
 const roleTableData = ref<RoleVO[]>([])
@@ -23,6 +24,9 @@ const roleDialogVisible = ref(false)
 const currentRoleData = ref<Role | null>(null)
 const currentParentNodeId = ref<number | undefined>(undefined)
 const showParentSelect = ref(true)
+
+// 页面缓存
+const rolePageCache = useRolePageCache()
 
 // 获取角色列表数据（带加载动画）
 const getRoleTree = async () => {
@@ -51,6 +55,15 @@ const getMenuTree = async (roleId?: number) => {
 const handleRoleRowClick = async (row: RoleVO) => {
   selectedRole.value = row
   await getMenuTree(row.node.id)
+  
+  // 缓存选中的角色
+  rolePageCache.updateCache({
+    selectedRole: {
+      id: row.node.id,
+      name: row.node.name,
+      description: row.node.description
+    }
+  })
 }
 
 // 添加角色按钮点击事件（顶部添加）
@@ -96,6 +109,8 @@ const handleDeleteRole = async (row: RoleVO) => {
   if (selectedRole.value?.node.id === row.node.id) {
     selectedRole.value = null
     menuTableData.value = []
+    // 清除缓存中的选中角色
+    rolePageCache.updateCache({ selectedRole: undefined })
   }
 }
 
@@ -141,10 +156,45 @@ const handleConfirm = async (viewIds: number[]) => {
   }
 }
 
+// 递归查找角色
+const findRoleById = (roles: RoleVO[], id: number): RoleVO | null => {
+  for (const role of roles) {
+    if (role.node.id === id) {
+      return role
+    }
+    if (role.children && role.children.length > 0) {
+      const found = findRoleById(role.children, id)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+// 从缓存恢复选中的角色
+const restoreSelectedRole = () => {
+  const cached = rolePageCache.restoreFromCache()
+  if (cached?.selectedRole && roleTableData.value.length > 0) {
+    const role = findRoleById(roleTableData.value, cached.selectedRole.id)
+    if (role) {
+      selectedRole.value = role
+      // 加载该角色的菜单数据
+      getMenuTree(role.node.id)
+    }
+  }
+}
+
+// 监听角色数据变化，恢复选中状态
+watch(() => roleTableData.value, () => {
+  if (roleTableData.value.length > 0) {
+    restoreSelectedRole()
+  }
+}, { immediate: true })
+
 // 初始化
 onMounted(async () => {
   await getRoleTree()
-  // 初始化时不加载菜单，等待用户选择角色
+  // 角色数据加载完成后，尝试恢复选中状态
+  restoreSelectedRole()
 })
 </script>
 

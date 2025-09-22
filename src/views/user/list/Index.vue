@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import api from '@/services'
 import {type PageQueryDTO, type PageResponse, type SortDTO, type UserVO, type GetUserListDTO, UserSex} from '@/types'
 import { SortDirection } from '@/types'
+import { useListPageCache } from '@/composables/usePageCache'
 import UserDialog from '@/components/business/UserDialog.vue'
 import UserListFilterHeader from './FilterHeader.vue'
 import UserListActionBar from './ActionBar.vue'
 import UserListTable from './Table.vue'
+
+// 初始化页面缓存
+const { 
+  restoreFromCache, 
+  updateCache
+} = useListPageCache()
 
 // 响应式数据
 const userList = ref<UserVO[]>([])
@@ -41,6 +48,31 @@ const searchForm = ref({
     direction: SortDirection.NONE
   }
 })
+
+// 从缓存恢复数据
+const restoreDataFromCache = () => {
+  const cached = restoreFromCache()
+  if (cached) {
+    // 恢复搜索条件
+    if (cached.searchForm) {
+      searchForm.value = { ...searchForm.value, ...cached.searchForm }
+    }
+    // 恢复分页信息
+    if (cached.pageInfo) {
+      pageInfo.value = { ...pageInfo.value, ...cached.pageInfo }
+    }
+  }
+}
+
+// 监听搜索条件变化，自动保存到缓存
+watch(searchForm, () => {
+  updateCache({ searchForm: searchForm.value })
+}, { deep: true })
+
+// 监听分页信息变化，自动保存到缓存
+watch(pageInfo, () => {
+  updateCache({ pageInfo: pageInfo.value })
+}, { deep: true })
 
 // 处理用户对话框成功事件
 const handleUserDialogSuccess = () => {
@@ -196,6 +228,10 @@ const handleBatchSuccess = () => {
 
 // 初始化
 onMounted(() => {
+  // 先尝试从缓存恢复数据
+  restoreDataFromCache()
+  
+  // 如果有缓存数据，直接加载数据；否则使用默认参数加载
   getUserList()
 })
 </script>

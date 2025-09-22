@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { usePermissionStore } from '@/stores'
 import { VIEW_TYPE_TAG_MAP } from '@/constant'
-import { getValue, useTableExpandCollapse } from '@/utils'
+import { getValue } from '@/utils'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import MenuDialog from '@/components/business/MenuDialog.vue'
@@ -12,6 +12,7 @@ import type { PermissionVO } from '@/types'
 import { PermissionType } from '@/types'
 import api from '@/services'
 import { reloadRoutes } from '@/router/dynamicRoutes'
+import { useTreeTableExpandState } from '@/utils/treeTable'
 
 const router = useRouter()
 const permissionStore = usePermissionStore()
@@ -23,11 +24,13 @@ const menuAndButtonTreeData = ref<PermissionVO[]>([])
 const menuDialogVisible = ref(false)
 const currentMenuData = ref<PermissionVO | null>(null)
 
-// 使用树形表格展开/折叠钩子
-const { expandAll: handleExpandAll, collapseAll: handleCollapseAll } = useTableExpandCollapse(
-  menuTableRef,
-  () => menuAndButtonTreeData.value
-)
+// 树型表格展开状态管理
+const {
+  handleExpandChange,
+  restoreExpandedState,
+  expandAll,
+  collapseAll
+} = useTreeTableExpandState('menuTable')
 
 // 权限检查计算属性
 const canAddMenu = computed(() => permissionStore.hasPermission('permission:menu:add'))
@@ -45,9 +48,11 @@ const hasAnyMenuOperationPermission = computed(() => {
   ])
 })
 
-onMounted(async () => {
-  await loadMenuData()
-})
+// 展开全部
+const handleExpandAll = () => expandAll(menuTableRef, menuAndButtonTreeData)
+
+// 折叠全部
+const handleCollapseAll = () => collapseAll(menuTableRef, menuAndButtonTreeData)
 
 // 加载菜单数据
 const loadMenuData = async () => {
@@ -61,6 +66,21 @@ const loadMenuData = async () => {
     isLoading.value = false
   }
 }
+
+// 监听数据变化，恢复展开状态
+watch(() => menuAndButtonTreeData.value, () => {
+  if (menuAndButtonTreeData.value.length > 0) {
+    restoreExpandedState(menuTableRef, menuAndButtonTreeData, handleExpandAll)
+  }
+}, { immediate: true })
+
+onMounted(async () => {
+  await loadMenuData()
+  // 数据加载完成后恢复展开状态
+  if (menuAndButtonTreeData.value.length > 0) {
+    restoreExpandedState(menuTableRef, menuAndButtonTreeData, handleExpandAll)
+  }
+})
 
 // 添加菜单
 const handleAddMenu = () => {
@@ -248,7 +268,7 @@ const getMenuActions = (row: PermissionVO) => {
       :data="menuAndButtonTreeData"
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-      default-expand-all
+      @expand-change="handleExpandChange"
       v-table-loading="{ loading: isLoading, text: '加载菜单数据中...' }"
     >
       <el-table-column label="菜单名称" min-width="200">

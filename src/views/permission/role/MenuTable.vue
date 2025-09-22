@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, nextTick, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import type { PermissionVO } from '@/types'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import { PermissionStatus } from "@/constant"
 import ClickableTag from '@/components/basic/ClickableTag.vue'
 import { usePermissionStore } from '@/stores/permission.ts'
+import { useTreeTableExpandState } from '@/utils/treeTable'
 
 // Props
 interface Props {
@@ -28,6 +29,14 @@ const viewStore = usePermissionStore()
 // Refs
 const menuTableRef = ref()
 
+// 树型表格展开状态管理
+const {
+  handleExpandChange,
+  restoreExpandedState,
+  expandAll,
+  collapseAll
+} = useTreeTableExpandState('roleMenuTable')
+
 // 本地菜单数据副本，用于权限修改
 const localMenuData = ref<PermissionVO[]>([])
 
@@ -39,6 +48,11 @@ watch(() => props.menuTableData, (newData) => {
   // 深拷贝菜单数据
   localMenuData.value = JSON.parse(JSON.stringify(newData))
   originalMenuData.value = JSON.parse(JSON.stringify(newData))
+  
+  // 数据更新后恢复展开状态
+  if (newData.length > 0) {
+    restoreExpandedState(menuTableRef, localMenuData, internalExpandAllMenus)
+  }
 }, { immediate: true, deep: true })
 
 // 检查数据是否有变化
@@ -162,46 +176,23 @@ const handleReset = () => {
   localMenuData.value = JSON.parse(JSON.stringify(originalMenuData.value))
 }
 
-// 展开全部菜单
-const expandAllMenus = async () => {
-  await nextTick()
-  
-  const expandAllRows = (data: any[], tableRef: any) => {
-    data.forEach(item => {
-      if (item.children && item.children.length > 0) {
-        tableRef.toggleRowExpansion(item, true)
-        expandAllRows(item.children, tableRef)
-      }
-    })
-  }
-  
-  if (menuTableRef.value && localMenuData.value.length > 0) {
-    expandAllRows(localMenuData.value, menuTableRef.value)
-  }
-}
+// 内部展开方法（供父组件调用）
+const internalExpandAllMenus = () => expandAll(menuTableRef, localMenuData)
 
-// 折叠全部菜单
-const collapseAllMenus = async () => {
-  await nextTick()
-  
-  const collapseAllRows = (data: any[], tableRef: any) => {
-    data.forEach(item => {
-      if (item.children && item.children.length > 0) {
-        tableRef.toggleRowExpansion(item, false)
-        collapseAllRows(item.children, tableRef)
-      }
-    })
+// 内部折叠方法（供父组件调用）
+const internalCollapseAllMenus = () => collapseAll(menuTableRef, localMenuData)
+
+// 组件挂载后恢复展开状态
+onMounted(() => {
+  if (localMenuData.value.length > 0) {
+    restoreExpandedState(menuTableRef, localMenuData, internalExpandAllMenus)
   }
-  
-  if (menuTableRef.value && localMenuData.value.length > 0) {
-    collapseAllRows(localMenuData.value, menuTableRef.value)
-  }
-}
+})
 
 // 暴露方法给父组件
 defineExpose({
-  expandAllMenus,
-  collapseAllMenus
+  expandAllMenus: internalExpandAllMenus,
+  collapseAllMenus: internalCollapseAllMenus
 })
 </script>
 
@@ -235,7 +226,7 @@ defineExpose({
       :data="localMenuData"
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-      default-expand-all
+      @expand-change="handleExpandChange"
       v-table-loading="{ loading: $props.loading || false, text: '加载菜单权限中...' }"
     >
       <el-table-column label="菜单名称" min-width="200">

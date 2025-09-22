@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick, computed } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import type { RoleVO } from '@/types'
 import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
@@ -7,6 +7,7 @@ import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import {PermissionStatus} from "../../../constant"
 import { useUserStore } from '@/stores'
 import { usePermissionStore } from '@/stores/permission.ts'
+import { useTreeTableExpandState } from '@/utils/treeTable'
 
 // Props
 interface Props {
@@ -36,6 +37,14 @@ const viewStore = usePermissionStore()
 
 // Refs
 const roleTableRef = ref()
+
+// 树型表格展开状态管理
+const {
+  handleExpandChange,
+  restoreExpandedState,
+  expandAll,
+  collapseAll
+} = useTreeTableExpandState('roleTable')
 
 // Computed
 const currentUserRoleIds = computed(() => {
@@ -72,42 +81,10 @@ const handleCollapseAll = () => {
 }
 
 // 内部展开方法（供父组件调用）
-const expandAll = async () => {
-  await nextTick()
-  
-  // 递归展开所有行
-  const expandAllRows = (data: any[], tableRef: any) => {
-    data.forEach(item => {
-      if (item.children && item.children.length > 0) {
-        tableRef.toggleRowExpansion(item, true)
-        expandAllRows(item.children, tableRef)
-      }
-    })
-  }
-  
-  if (roleTableRef.value && props.roleTableData.length > 0) {
-    expandAllRows(props.roleTableData, roleTableRef.value)
-  }
-}
+const internalExpandAll = () => expandAll(roleTableRef, props.roleTableData)
 
 // 内部折叠方法（供父组件调用）
-const collapseAll = async () => {
-  await nextTick()
-  
-  // 递归折叠所有行
-  const collapseAllRows = (data: any[], tableRef: any) => {
-    data.forEach(item => {
-      if (item.children && item.children.length > 0) {
-        tableRef.toggleRowExpansion(item, false)
-        collapseAllRows(item.children, tableRef)
-      }
-    })
-  }
-  
-  if (roleTableRef.value && props.roleTableData.length > 0) {
-    collapseAllRows(props.roleTableData, roleTableRef.value)
-  }
-}
+const internalCollapseAll = () => collapseAll(roleTableRef, props.roleTableData)
 
 // 角色行操作方法
 const handleAddChildRole = (row: RoleVO) => {
@@ -165,10 +142,41 @@ const getRoleActions = (row: RoleVO) => {
   }))
 }
 
+// 监听数据变化，恢复展开状态
+watch(() => props.roleTableData, () => {
+  if (props.roleTableData.length > 0) {
+    restoreExpandedState(roleTableRef, props.roleTableData, internalExpandAll)
+  }
+}, { immediate: true })
+
+// 组件挂载后恢复展开状态
+onMounted(() => {
+  if (props.roleTableData.length > 0) {
+    restoreExpandedState(roleTableRef, props.roleTableData, internalExpandAll)
+  }
+})
+
+// 设置当前选中行的方法
+const setCurrentRow = (row: RoleVO | null) => {
+  if (roleTableRef.value && row) {
+    nextTick(() => {
+      roleTableRef.value.setCurrentRow(row)
+    })
+  } else if (roleTableRef.value && !row) {
+    roleTableRef.value.setCurrentRow()
+  }
+}
+
+// 监听选中角色变化，设置表格高亮
+watch(() => props.selectedRole, (newRole) => {
+  setCurrentRow(newRole)
+}, { immediate: true })
+
 // 暴露方法给父组件
 defineExpose({
-  expandAll,
-  collapseAll
+  expandAll: internalExpandAll,
+  collapseAll: internalCollapseAll,
+  setCurrentRow
 })
 </script>
 
@@ -199,7 +207,7 @@ defineExpose({
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       highlight-current-row
       @row-click="handleRoleRowClick"
-      default-expand-all
+      @expand-change="handleExpandChange"
       v-table-loading="{ loading: $props.loading || false, text: '加载角色数据中...' }"
     >
       <el-table-column prop="node.name" label="角色名称" min-width="120px"/>
