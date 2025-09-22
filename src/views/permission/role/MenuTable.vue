@@ -24,7 +24,7 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 // Stores
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 
 // Refs
 const menuTableRef = ref()
@@ -62,7 +62,7 @@ const hasDataChanged = computed(() => {
 
 // 检查是否有权限分配权限
 const hasAssignPermission = computed(() => {
-  return viewStore.hasPermission('permission:role:assign')
+  return permissionStore.hasPermission('permission:role:assign')
 })
 
 // 检查当前角色是否有修改权限

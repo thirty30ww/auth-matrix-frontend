@@ -62,7 +62,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 
 // 过滤有权限的操作
 const visibleOperations = computed(() => {
@@ -71,7 +71,7 @@ const visibleOperations = computed(() => {
   for (const [key, operation] of Object.entries(props.operations)) {
     // 如果操作有权限要求，检查权限
     if (operation.permission) {
-      if (viewStore.hasPermission(operation.permission)) {
+      if (permissionStore.hasPermission(operation.permission)) {
         filtered[key] = operation
       }
     } else {

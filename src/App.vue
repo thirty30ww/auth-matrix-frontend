@@ -5,7 +5,7 @@ import { useAuthStore, useUserStore, useTabsStore, usePermissionStore, useSystem
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const tabsStore = useTabsStore()
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 const systemStore = useSystemStore()
 
 onMounted(async () => {
@@ -16,7 +16,7 @@ onMounted(async () => {
   if (authStore.userLoggedIn) {
     await userStore.getUserInfo()
     // 获取权限码
-    await viewStore.getPermissionCodes()
+    await permissionStore.getPermissionCodes()
     await tabsStore.initializeTabs()
   }
 })

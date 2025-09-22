@@ -43,16 +43,16 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 
 // 检查是否有任何用户操作权限
 const hasAnyUserOperationPermission = computed(() => {
-  return viewStore.hasAnyPermission(['user:modify', 'user:ban', 'user:unban'])
+  return permissionStore.hasAnyPermission(['user:modify', 'user:ban', 'user:unban'])
 })
 
 // 检查是否有批量操作权限（用于控制选择列显示）
 const hasAnyBatchOperationPermission = computed(() => {
-  return viewStore.hasAnyPermission(['user:ban', 'user:unban'])
+  return permissionStore.hasAnyPermission(['user:ban', 'user:unban'])
 })
 
 // 性别筛选选项 - 使用工具函数动态生成
@@ -112,7 +112,7 @@ const getActionLinks = (user: UserVO) => {
   const actions = []
   
   // 修改按钮 - 需要 user:modify 权限
-  if (viewStore.hasPermission('user:modify')) {
+  if (permissionStore.hasPermission('user:modify')) {
     actions.push({
       label: '修改',
       onClick: () => handleEdit(user),
@@ -123,7 +123,7 @@ const getActionLinks = (user: UserVO) => {
   
   // 封禁/解封按钮 - 需要对应的权限
   const banPermission = isBanned ? 'user:unban' : 'user:ban'
-  if (viewStore.hasPermission(banPermission)) {
+  if (permissionStore.hasPermission(banPermission)) {
     actions.push({
       label: isBanned ? '解封' : '封禁',
       onClick: () => handleBanToggle(user),

@@ -9,7 +9,7 @@ import { reloadRoutes, resetRoutesLoadedState } from "@/router/dynamicRoutes.ts"
 // 使用函数形式延迟获取store
 const getUserStore = () => useUserStore();
 const getTabsStore = () => useTabsStore();
-const getViewStore = () => usePermissionStore();
+const getPermissionStore = () => usePermissionStore();
 
 // 全局刷新状态管理
 let isRefreshing = false;
@@ -45,8 +45,8 @@ export const useAuthStore = defineStore('auth', {
                 await getUserStore().getUserInfo();
 
                 // 获取权限码和菜单数据
-                await getViewStore().getPermissionCodes();
-                await getViewStore().getMenuTree();
+                await getPermissionStore().getPermissionCodes();
+                await getPermissionStore().getMenuTree();
 
                 await reloadRoutes(router);
 
@@ -126,7 +126,7 @@ export const useAuthStore = defineStore('auth', {
                 // 清空所有标签页
                 getTabsStore().clearAllTabs()
                 // 清除视图数据（路由和菜单）
-                getViewStore().clearViewData()
+                getPermissionStore().clearViewData()
                 // 重置路由加载状态
                 resetRoutesLoadedState()
                 // 跳转到登录页

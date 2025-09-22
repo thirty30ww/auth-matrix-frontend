@@ -106,21 +106,21 @@ defineProps({
 const router = useRouter()
 const authStore = useAuthStore()
 const userStore = useUserStore()
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 const systemStore = useSystemStore()
 const themeStore = useThemeStore()
 const userInfo = computed(() => userStore.userInfo)
 
 // 组件挂载时检查菜单数据，如果没有则加载（兜底逻辑）
 onMounted(async () => {
-  if (authStore.userLoggedIn && !viewStore.hasMenuTree) {
-    await viewStore.getMenuTree()
+  if (authStore.userLoggedIn && !permissionStore.hasMenuTree) {
+    await permissionStore.getMenuTree()
   }
 })
 
 const activePath = computed(() => router.currentRoute.value.path)
 // 菜单树数据 - 从store中获取专门的菜单树
-const menuTree = computed(() => viewStore.menuTree)
+const menuTree = computed(() => permissionStore.menuTree)
 
 const handleCommand = (command: string) => {
   if (command === 'logout') {

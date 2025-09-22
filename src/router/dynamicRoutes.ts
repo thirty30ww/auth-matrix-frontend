@@ -84,8 +84,8 @@ function clearDynamicRoutes(router: Router) {
 
 // 从后端加载路由
 async function loadRoutesFromBackend(router: Router) {
-    const viewStore = usePermissionStore();
-    const viewNodes = await viewStore.getViewTree();
+    const permissionStore = usePermissionStore();
+    const viewNodes = await permissionStore.getViewTree();
 
     if (viewNodes && viewNodes.length > 0) {
         // 将后端返回的路由数据转换为路由配置

@@ -70,8 +70,8 @@ http.interceptors.response.use(
             }
         // 如果是403错误（权限不足），尝试获取权限
         } else if (res.code === 403) {
-            const viewStore = usePermissionStore();
-            await viewStore.getPermissionCodes();
+            const permissionStore = usePermissionStore();
+            await permissionStore.getPermissionCodes();
             if (showError) {
                 ElMessage.error(res.message || '权限不足');
             }

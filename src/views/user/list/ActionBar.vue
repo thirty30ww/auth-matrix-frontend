@@ -20,11 +20,11 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 
 // 检查是否有批量操作权限
 const hasAnyBatchOperationPermission = computed(() => {
-  return viewStore.hasAnyPermission(['user:ban', 'user:unban'])
+  return permissionStore.hasAnyPermission(['user:ban', 'user:unban'])
 })
 
 // 打开添加用户对话框

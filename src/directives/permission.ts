@@ -29,16 +29,16 @@ function parseValue(value: PermissionValue): PermissionConfig {
 
 // 检查权限
 function checkPermission(config: PermissionConfig): boolean {
-    const viewStore = usePermissionStore()
+    const permissionStore = usePermissionStore()
     const { codes, mode = 'any' } = config
 
     if (typeof codes === 'string') {
-        return viewStore.hasPermission(codes)
+        return permissionStore.hasPermission(codes)
     }
 
     return mode === 'any'
-        ? viewStore.hasAnyPermission(codes)
-        : viewStore.hasAllPermissions(codes)
+        ? permissionStore.hasAnyPermission(codes)
+        : permissionStore.hasAllPermissions(codes)
 }
 
 // 更新元素显示状态

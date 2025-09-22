@@ -23,7 +23,7 @@ import type {TabItem, PermissionVO} from "@/types";
 import { HOME } from '@/constant';
 
 const route = useRoute()
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 
 // 面包屑数据
 const breadcrumbItems = computed(() => {
@@ -69,7 +69,7 @@ const breadcrumbItems = computed(() => {
   }
 
   // 在页面树中查找当前路径
-  const pathItems = findPathInViewTree(viewStore.viewTree, currentPath)
+  const pathItems = findPathInViewTree(permissionStore.viewTree, currentPath)
   if (pathItems) {
     result.push(...pathItems)
   }

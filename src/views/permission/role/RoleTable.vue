@@ -33,7 +33,7 @@ const emit = defineEmits<Emits>()
 
 // Stores
 const userStore = useUserStore()
-const viewStore = usePermissionStore()
+const permissionStore = usePermissionStore()
 
 // Refs
 const roleTableRef = ref()
@@ -53,7 +53,7 @@ const currentUserRoleIds = computed(() => {
 
 // 检查是否有任何角色操作权限
 const hasAnyRoleOperationPermission = computed(() => {
-  return viewStore.hasAnyPermission([
+  return permissionStore.hasAnyPermission([
     'permission:role:add',
     'permission:role:modify', 
     'permission:role:delete'
@@ -105,9 +105,9 @@ const getRoleActions = (row: RoleVO) => {
   const isAddDisabled = !row.hasPermission && !currentUserRoleIds.value.includes(row.node.id)
   
   // 检查相关权限
-  const canAdd = viewStore.hasPermission('permission:role:add')
-  const canModify = viewStore.hasPermission('permission:role:modify')
-  const canDelete = viewStore.hasPermission('permission:role:delete')
+  const canAdd = permissionStore.hasPermission('permission:role:add')
+  const canModify = permissionStore.hasPermission('permission:role:modify')
+  const canDelete = permissionStore.hasPermission('permission:role:delete')
   
   const allActions = [
     {
