@@ -109,9 +109,9 @@ frontend/
 - **路由懒加载**：页面组件按需加载，提升首屏速度
 - **状态持久化**：关键状态本地持久化，刷新不丢失
 
-## 🔗 配套项目
+## 🔗 生态项目
 
-- **后端服务**：[Auth Matrix Backend](https://github.com/thirty30ww/auth-matrix-backend) - Spring Boot权限管理后端
+- **后端项目**：[Auth Matrix Backend](https://github.com/thirty30ww/auth-matrix-backend) - Spring Boot权限管理后端
 - **元仓库**：[Auth Matrix](https://github.com/thirty30ww/auth-matrix) - 包含前端、后端项目及发布的版本的元仓库
 - **部署方案**：支持Docker容器化部署和传统部署方式
 
