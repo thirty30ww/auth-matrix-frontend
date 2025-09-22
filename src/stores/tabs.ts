@@ -117,9 +117,5 @@ export const useTabsStore = defineStore('tabs', {
                 pageCacheStore.clearMultiplePageCache(pathsToCleanCache)
             }
         }
-    },
-
-    persist: {
-        storage: sessionStorage
     }
 })

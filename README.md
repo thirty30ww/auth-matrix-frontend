@@ -112,6 +112,7 @@ frontend/
 ## 🔗 配套项目
 
 - **后端服务**：[Auth Matrix Backend](https://github.com/thirty30ww/auth-matrix-backend) - Spring Boot权限管理后端
+- **元仓库**：[Auth Matrix](https://github.com/thirty30ww/auth-matrix) - 包含前端、后端项目及发布的版本的元仓库
 - **部署方案**：支持Docker容器化部署和传统部署方式
 
 ## 📄 开源协议

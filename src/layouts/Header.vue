@@ -13,6 +13,12 @@
         </el-icon>
       </IconButton>
       
+      <IconButton @click="refreshPage" title="刷新页面">
+        <el-icon>
+          <Refresh />
+        </el-icon>
+      </IconButton>
+      
       <div class="breadcrumb-container">
         <Breadcrumb />
       </div>
@@ -44,7 +50,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useThemeStore, useSystemStore } from '@/stores'
+import { usePageCacheStore } from '@/stores/pageCache'
 import { LOGO_POSITIONS } from '@/stores/theme'
 import { 
   FullScreen, 
@@ -53,7 +61,8 @@ import {
   Sunny, 
   Fold, 
   Expand,
-  Setting
+  Setting,
+  Refresh
 } from '@element-plus/icons-vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import Breadcrumb from '@/components/business/Breadcrumb.vue'
@@ -67,10 +76,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['toggle-sidebar', 'open-settings'])
+const emit = defineEmits(['toggle-sidebar', 'open-settings', 'refresh-main'])
 
+const route = useRoute()
 const themeStore = useThemeStore()
 const systemStore = useSystemStore()
+const pageCacheStore = usePageCacheStore()
 const isFullscreen = ref(false)
 
 // 切换全屏
@@ -101,6 +112,16 @@ const openSettings = () => {
   emit('open-settings')
 }
 
+// 刷新主内容区域
+const refreshPage = () => {
+  // 清除当前页面的缓存
+  const currentPath = route.path
+  pageCacheStore.clearPageCache(currentPath)
+  
+  // 触发主内容区域刷新
+  emit('refresh-main')
+}
+
 // 计算图标
 const fullscreenIcon = computed(() => {
   return isFullscreen.value ? Aim : FullScreen
@@ -129,6 +150,7 @@ const sidebarIcon = computed(() => {
 .header-left {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .header-logo {

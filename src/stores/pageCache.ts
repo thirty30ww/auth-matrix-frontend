@@ -64,11 +64,5 @@ export const usePageCacheStore = defineStore('pageCache', {
         getCachedPagePaths(): string[] {
             return Object.keys(this.cacheMap)
         }
-    },
-
-    // 使用 sessionStorage 存储，刷新后会清空
-    persist: {
-        storage: sessionStorage,
-        key: 'page-cache'
     }
 })

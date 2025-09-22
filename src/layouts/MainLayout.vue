@@ -12,6 +12,7 @@ const isCollapse = ref(false)
 const layoutContainer = ref()
 const themeStore = useThemeStore()
 const settingsDrawerVisible = ref(false)
+const refreshTrigger = ref(0)
 
 // 判断是否是顶栏布局模式
 const isHeaderLayout = computed(() => themeStore.logoPosition === LOGO_POSITIONS.HEADER)
@@ -22,6 +23,10 @@ const toggleSidebar = () => {
 
 const openSettingsDrawer = () => {
   settingsDrawerVisible.value = true
+}
+
+const handleRefreshMain = () => {
+  refreshTrigger.value++
 }
 
 onMounted(() => {
@@ -37,7 +42,7 @@ onMounted(() => {
         v-show="isHeaderLayout" 
         class="header-container header-full-width"
       >
-        <Header :isSidebarCollapsed="isCollapse" @toggle-sidebar="toggleSidebar" @open-settings="openSettingsDrawer" />
+        <Header :isSidebarCollapsed="isCollapse" @toggle-sidebar="toggleSidebar" @open-settings="openSettingsDrawer" @refresh-main="handleRefreshMain" />
       </el-header>
 
       <!-- 主体容器 -->
@@ -58,7 +63,7 @@ onMounted(() => {
             v-show="!isHeaderLayout"
             class="header-container"
           >
-            <Header :isSidebarCollapsed="isCollapse" @toggle-sidebar="toggleSidebar" @open-settings="openSettingsDrawer" />
+            <Header :isSidebarCollapsed="isCollapse" @toggle-sidebar="toggleSidebar" @open-settings="openSettingsDrawer" @refresh-main="handleRefreshMain" />
           </el-header>
 
           <div class="tab-bar-container">
@@ -66,7 +71,7 @@ onMounted(() => {
           </div>
           
           <el-main class="content-container">
-            <Main />
+            <Main :refreshTrigger="refreshTrigger" />
           </el-main>
         </el-container>
       </el-container>
