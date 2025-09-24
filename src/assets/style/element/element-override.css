@@ -206,11 +206,18 @@
 }
 
 /* textarea样式 */
+.el-textarea {
+    overflow: hidden;
+    border-radius: var(--radius-input);
+}
+
 .el-textarea__inner {
     border-radius: var(--radius-input);
     background-color: var(--pp-input-bg-color);
     resize: none;
     /* 禁止拖拽调整大小 */
+    overflow: auto;
+    /* 允许滚动但保持圆角 */
 }
 
 /* 移除textarea右下角的调整大小控件 */
@@ -310,6 +317,11 @@
 }
 
 /* 抽屉样式 */
+.el-drawer {
+    border-radius: var(--radius-dialog);
+    overflow: hidden;
+}
+
 .el-drawer__header {
     padding: var(--padding-size-drawer);
     margin-bottom: 0;
@@ -324,4 +336,29 @@
 /* 内容容器样式 */
 .el-container {
     height: 100%;
+}
+
+/* 描述列表组件圆角样式 - 使用 box-shadow 模拟边框 */
+.el-descriptions {
+    border-radius: var(--radius-item);
+    box-shadow: 0 0 0 1px var(--el-border-color);
+    overflow: hidden;
+}
+
+/* 移除外边框，保留内部分割线，统一边框样式 */
+.el-descriptions .el-descriptions__body .el-descriptions__table.is-bordered .el-descriptions__cell {
+    border-top: none;
+    border-left: none;
+    border-right: 1px solid var(--el-border-color);
+    border-bottom: 1px solid var(--el-border-color);
+}
+
+/* 移除最右列的右边框 */
+.el-descriptions .el-descriptions__body .el-descriptions__table.is-bordered .el-descriptions__cell:last-child {
+    border-right: none;
+}
+
+/* 移除最后一行的下边框 */
+.el-descriptions .el-descriptions__body .el-descriptions__table.is-bordered tr:last-child .el-descriptions__cell {
+    border-bottom: none;
 }

@@ -1,8 +1,7 @@
 // 用户基础信息接口
+import {UserSex, PermissionType, MethodType, OperationType} from "@/types";
 
 // 角色接口
-import { UserSex, PermissionType } from "@/types";
-
 export interface Role {
     id: number;
     name: string;
@@ -70,4 +69,23 @@ export interface Preference {
     id: number;
     field: string;
     value: string;
+}
+
+// 日志操作接口
+export interface LogOperationVO {
+    id: number;
+    userId?: number;
+    name?: string;
+    module: string;
+    description?: string;
+    type: OperationType;
+    method: MethodType;
+    code: number;
+    url: string;
+    ip: string;
+    requestParam?: string;
+    responseParam?: string;
+    errorMessage?: string;
+    operateTime: number;
+    createTime: string;
 }

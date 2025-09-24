@@ -28,3 +28,25 @@ export enum PermissionType {
     PAGE = "页面",
     BUTTON = "按钮"
 }
+
+/**
+ * 操作类型枚举
+ */
+export enum OperationType{
+    SELECT = "SELECT",
+    INSERT = "INSERT",
+    DELETE = "DELETE",
+    UPDATE = "UPDATE",
+    UPLOAD = "UPLOAD"
+}
+
+/**
+ * 方法类型枚举
+ */
+export enum MethodType {
+    GET = "GET",
+    POST = "POST",
+    PUT = "PUT",
+    DELETE = "DELETE",
+    PATCH = "PATCH"
+}

@@ -1,5 +1,5 @@
 // 密码修改请求接口
-import type { BaseListDTO } from "@/types";
+import {type BaseListDTO, MethodType, OperationType} from "@/types";
 import { UserSex, PermissionType } from "@/types";
 
 export interface AddUserDTO {
@@ -63,4 +63,14 @@ export interface PermissionDTO {
     behindNodeId?: number;
     icon?: string;
     isValid: boolean;
+}
+
+// 操作日志DTO
+export interface LogOperationDTO extends BaseListDTO {
+    name?: string;
+    module?: string;
+    description?: string;
+    code?: number;
+    type?: OperationType;
+    method?: MethodType;
 }

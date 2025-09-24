@@ -1,4 +1,4 @@
-import {authApi, roleApi, userApi, permissionApi} from './api/user.ts';
+import {authApi, roleApi, userApi, permissionApi, logApi} from './api/user.ts';
 import {fileApi, settingApi} from "@/services/api/system.ts";
 
 // 统一导出所有API
@@ -9,6 +9,7 @@ const api = {
     permission: permissionApi,
     file: fileApi,
     setting: settingApi,
+    log: logApi,
 };
 
 export default api;

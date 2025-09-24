@@ -7,7 +7,16 @@ import type {
     ChangePassWordDTO,
     PageQueryDTO,
     PageResponse,
-    GetUserListDTO, Role, AddUserDTO, ModifyUserDTO, RoleVO, RoleDTO, PermissionDTO, Preference
+    GetUserListDTO,
+    Role,
+    AddUserDTO,
+    ModifyUserDTO,
+    RoleVO,
+    RoleDTO,
+    PermissionDTO,
+    Preference,
+    LogOperationDTO,
+    LogOperationVO
 } from '@/types';
 import { RolesType } from '@/types';
 
@@ -278,7 +287,7 @@ export const permissionApi = {
      * @param permissionId 页面ID
      */
     deletePermission(permissionId: number) {
-        return http.get<void>('/permission/delete', { params: { viewId: permissionId }, showSuccess: true });
+        return http.get<void>('/permission/delete', { params: { permissionId }, showSuccess: true });
     },
 
     /**
@@ -287,6 +296,41 @@ export const permissionApi = {
      * @param isUp 是否向上移动
      */
     movePermission(permissionId: number, isUp: boolean) {
-        return http.get<void>('/permission/move', { params: { viewId: permissionId, isUp } });
+        return http.get<void>('/permission/move', { params: { permissionId, isUp } });
+    }
+}
+
+/**
+ * 日志 API
+ */
+export const logApi = {
+    /**
+     * 获取操作日志列表
+     * @param request 日志查询参数
+     */
+    getLogOperationList(request: PageQueryDTO<LogOperationDTO>) {
+        return http.post<PageResponse<LogOperationVO>>('/log/operation/list', { data: request });
+    },
+
+    /**
+     * 获取操作日志详情
+     * @param id 日志ID
+     */
+    getLogOperation(id: number) {
+        return http.get<LogOperationVO>('/log/operation/get', { params: { id } });
+    },
+
+    /**
+     * 获取操作日志状态码列表
+     */
+    getCodes() {
+        return http.get<number[]>('/log/operation/codes');
+    },
+
+    /**
+     * 获取操作日志模块列表
+     */
+    getModules() {
+        return http.get<string[]>('/log/operation/modules');
     }
 }

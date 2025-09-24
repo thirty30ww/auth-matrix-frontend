@@ -15,7 +15,7 @@ export const PermissionStatus = {
 }
 
 /**
- * 用户级别标签类型映射（仅前3个级别有特殊类型）
+ * 角色级别标签类型映射（仅前3个级别有特殊类型）
  */
 export const LevelTagType = {
     0: 'danger',   // level 0 - 红色

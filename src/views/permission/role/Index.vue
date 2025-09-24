@@ -5,7 +5,7 @@ import type {Role, RoleVO, PermissionVO} from '@/types'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
-import RoleDialog from '@/components/business/RoleDialog.vue'
+import RoleDialog from '@/views/permission/role/RoleDialog.vue'
 import { useRolePageCache } from '@/composables/usePageCache'
 import { usePermissionStore } from '@/stores/permission'
 import { isGlobalRole, getRoleTypeLabel } from '@/constant'
@@ -232,6 +232,14 @@ const restoreSelectedRole = () => {
   }
 }
 
+// 监听权限码变化，重新处理角色权限状态
+watch(() => permissionStore.permissionCodes, () => {
+  if (roleTableData.value.length > 0) {
+    // 重新处理角色权限状态
+    roleTableData.value = processRolePermissions(roleTableData.value)
+  }
+}, { deep: true })
+
 // 监听角色数据变化，恢复选中状态
 watch(() => roleTableData.value, () => {
   if (roleTableData.value.length > 0) {
@@ -241,6 +249,10 @@ watch(() => roleTableData.value, () => {
 
 // 初始化
 onMounted(async () => {
+  // 确保权限码已加载完成再获取角色树
+  if (!permissionStore.hasPermissionCodes) {
+    await permissionStore.getPermissionCodes()
+  }
   await getRoleTree()
   // 角色数据加载完成后，尝试恢复选中状态
   restoreSelectedRole()
