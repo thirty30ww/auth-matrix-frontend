@@ -239,7 +239,7 @@ defineExpose({
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="访问权限" min-width="100">
+      <el-table-column label="访问权限" min-width="100" fixed="right">
         <template #default="{ row }">
           <ClickableTag 
             v-if="row.hasPermission === true" 

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import type { LogOperationVO, SortDTO } from '@/types'
-import { OperationType, MethodType } from '@/types'
-import { getValues } from '@/utils'
-import { getStatusCodeType, getOperationTypeColor, getMethodTypeColor } from '@/constant'
-import ActionLinks from '@/components/basic/ActionLinks.vue'
+import type { LogLoginVO, SortDTO } from '@/types'
+import { LoginType, Status } from '@/types'
+import { getKeys, getValue, getMappings } from '@/utils'
+import { LoginTypeColor, StatusColor, elType } from '@/constant'
 import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
 import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
 
 // 定义 props
 interface Props {
-  logList: LogOperationVO[]
+  logList: LogLoginVO[]
   loading?: boolean
   pageInfo: {
     pageNum: number
@@ -18,13 +17,13 @@ interface Props {
     pages: number
   }
   searchForm: {
-    keyword?: string
-    module?: string
-    code?: number | null
-    type?: string
-    method?: string
-    createTimeStart?: string
-    createTimeEnd?: string
+    keyword: string
+    browser: string
+    operatingSystem: string
+    type: LoginType | null
+    status: Status | null
+    createTimeStart: string
+    createTimeEnd: string
     sort: SortDTO
   }
 }
@@ -35,22 +34,30 @@ interface Emits {
   (e: 'filter', field: string, value: string): void
   (e: 'page-change', page: number): void
   (e: 'size-change', size: number): void
-  (e: 'view-detail', log: LogOperationVO): void
 }
 
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-// 操作类型筛选选项
-const operationTypeFilterOptions = getValues(OperationType).map(value => ({
-  label: value,
-  value: value
+// 创建从枚举值到key的反向映射
+const loginTypeValueToKey = Object.fromEntries(
+  getMappings(LoginType).map(({key, value}) => [value, key])
+)
+
+const statusValueToKey = Object.fromEntries(
+  getMappings(Status).map(({key, value}) => [value, key])
+)
+
+// 登录类型筛选选项  
+const loginTypeFilterOptions = getKeys(LoginType).map(key => ({
+  label: LoginType[key as keyof typeof LoginType],
+  value: key
 }))
 
-// 请求方法筛选选项
-const methodTypeFilterOptions = getValues(MethodType).map(value => ({
-  label: value,
-  value: value
+// 状态筛选选项
+const statusFilterOptions = getKeys(Status).map(key => ({
+  label: Status[key as keyof typeof Status],
+  value: key
 }))
 
 // 处理排序变化
@@ -73,23 +80,6 @@ const handleSizeChange = (size: number) => {
   emit('size-change', size)
 }
 
-// 查看详情
-const handleViewDetail = (log: LogOperationVO) => {
-  emit('view-detail', log)
-}
-
-// 获取操作按钮配置
-const getActionLinks = (log: LogOperationVO) => {
-  return [
-    {
-      label: '详情',
-      onClick: () => handleViewDetail(log),
-      type: 'default' as const
-    }
-  ]
-}
-
-
 </script>
 
 <template>
@@ -97,54 +87,54 @@ const getActionLinks = (log: LogOperationVO) => {
     <el-table
       :data="logList"
       style="width: 100%"
-      v-table-loading="{ loading: $props.loading || false, text: '加载操作日志中...'}"
+      v-table-loading="{ loading: $props.loading || false, text: '加载登录日志中...'}"
     >
       <el-table-column prop="id" label="ID" min-width="80px" />
-      <el-table-column prop="name" label="操作人" min-width="100px" />
-      <el-table-column prop="module" label="模块" min-width="120px" />
-      <el-table-column prop="description" label="操作描述" min-width="200px" />
-      <el-table-column prop="type" label="操作类型" min-width="100px">
+      <el-table-column prop="name" label="用户名" min-width="120px" />
+      <el-table-column prop="ip" label="IP地址" min-width="140px" />
+      <el-table-column prop="browser" label="浏览器" min-width="120px" show-overflow-tooltip />
+      <el-table-column prop="operatingSystem" label="操作系统" min-width="120px" show-overflow-tooltip />
+      <el-table-column prop="deviceModel" label="设备" min-width="100px" show-overflow-tooltip />
+      <el-table-column prop="type" label="登录类型" min-width="100px">
         <template #header="{ column }">
           <FilterableTableHeader 
             :label="column.label"
             field="type"
-            :options="operationTypeFilterOptions"
-            :current-filter-value="searchForm.type || ''"
+            :options="loginTypeFilterOptions"
+            :current-filter-value="searchForm.type ? loginTypeValueToKey[searchForm.type] : ''"
             @filter="handleFilter"
           />
         </template>
         <template #default="{ row }">
-          <el-tag :type="getOperationTypeColor(row.type)">
+          <el-tag :type="getValue(LoginTypeColor, loginTypeValueToKey[row.type], elType.INFO as any)">
             {{ row.type }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="method" label="请求方法" min-width="100px">
+      <el-table-column prop="status" label="状态" min-width="80px">
         <template #header="{ column }">
           <FilterableTableHeader 
             :label="column.label"
-            field="method"
-            :options="methodTypeFilterOptions"
-            :current-filter-value="searchForm.method || ''"
+            field="status"
+            :options="statusFilterOptions"
+            :current-filter-value="searchForm.status ? statusValueToKey[searchForm.status] : ''"
             @filter="handleFilter"
           />
         </template>
         <template #default="{ row }">
-          <el-tag :type="getMethodTypeColor(row.method)">
-            {{ row.method }}
+          <el-tag :type="getValue(StatusColor, statusValueToKey[row.status], elType.INFO as any)">
+            {{ row.status }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="code" label="状态码" min-width="80px">
+      <el-table-column prop="errorMessage" label="错误信息" min-width="150px" show-overflow-tooltip>
         <template #default="{ row }">
-          <el-tag :type="getStatusCodeType(row.code)">
-            {{ row.code }}
-          </el-tag>
+          <span v-if="row.errorMessage" :title="row.errorMessage">
+            {{ row.errorMessage }}
+          </span>
         </template>
       </el-table-column>
-      <el-table-column prop="url" label="请求路径" min-width="150px" show-overflow-tooltip />
-      <el-table-column prop="ip" label="IP地址" min-width="120px" />
-      <el-table-column prop="operateTime" label="操作时间" min-width="100px">
+      <el-table-column prop="operateTime" label="操作耗时" min-width="100px">
         <template #header="{ column }">
           <SortableTableHeader 
             :label="column.label"
@@ -165,11 +155,6 @@ const getActionLinks = (log: LogOperationVO) => {
             :current-sort="searchForm.sort"
             @sort-change="handleSortChange"
           />
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" min-width="80px" align="center" fixed="right">
-        <template #default="{ row }">
-          <ActionLinks :actions="getActionLinks(row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -199,5 +184,4 @@ const getActionLinks = (log: LogOperationVO) => {
   justify-content: center;
   margin-top: 20px;
 }
-
 </style>

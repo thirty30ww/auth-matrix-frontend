@@ -1,4 +1,6 @@
-// 系统设置值接口
+/**
+ * 系统设置值接口
+ */
 export interface SettingVO {
     id: number;
     field: string;

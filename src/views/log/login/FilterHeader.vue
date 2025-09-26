@@ -8,8 +8,8 @@ import DateRangeFilter from '@/components/basic/DateRangeFilter.vue'
 interface Props {
   searchForm: {
     keyword: string
-    module: string
-    code: number | null
+    browser: string
+    operatingSystem: string
     createTimeStart: string
     createTimeEnd: string
   }
@@ -26,26 +26,26 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // 响应式数据
-const moduleOptions = ref<string[]>([])
-const codeOptions = ref<number[]>([])
+const browserOptions = ref<string[]>([])
+const operatingSystemOptions = ref<string[]>([])
 
 // 计算属性，用于双向绑定
 const localSearchForm = ref({ ...props.searchForm })
 
 
-// 获取模块列表
-const getModuleOptions = async () => {
-  const data = await api.log.getLogOperationModules()
+// 获取浏览器列表
+const getBrowserOptions = async () => {
+  const data = await api.log.getLogLoginBrowsers()
   if (data) {
-    moduleOptions.value = data
+    browserOptions.value = data
   }
 }
 
-// 获取状态码列表
-const getCodeOptions = async () => {
-  const data = await api.log.getLogOperationCodes()
+// 获取操作系统列表
+const getOperatingSystemOptions = async () => {
+  const data = await api.log.getLogLoginOperatingSystems()
   if (data) {
-    codeOptions.value = data
+    operatingSystemOptions.value = data
   }
 }
 
@@ -53,8 +53,8 @@ const getCodeOptions = async () => {
 const handleReset = () => {
   localSearchForm.value = {
     keyword: '',
-    module: '',
-    code: null,
+    browser: '',
+    operatingSystem: '',
     createTimeStart: '',
     createTimeEnd: ''
   }
@@ -62,14 +62,14 @@ const handleReset = () => {
   emit('reset')
 }
 
-// 处理模块变化
-const handleModuleChange = () => {
+// 处理浏览器变化
+const handleBrowserChange = () => {
   emit('update:searchForm', { ...localSearchForm.value })
   debouncedSearch()
 }
 
-// 处理状态码变化
-const handleCodeChange = () => {
+// 处理操作系统变化
+const handleOperatingSystemChange = () => {
   emit('update:searchForm', { ...localSearchForm.value })
   debouncedSearch()
 }
@@ -107,8 +107,8 @@ watch(() => props.searchForm, (newVal) => {
 
 // 初始化
 onMounted(() => {
-  getModuleOptions()
-  getCodeOptions()
+  getBrowserOptions()
+  getOperatingSystemOptions()
 })
 </script>
 
@@ -117,7 +117,7 @@ onMounted(() => {
     <div class="search-form">
       <el-input
         v-model="localSearchForm.keyword"
-        placeholder="请输入操作人或操作描述"
+        placeholder="请输入用户名"
         clearable
         style="width: 200px"
       >
@@ -127,32 +127,32 @@ onMounted(() => {
       </el-input>
 
       <el-select
-        v-model="localSearchForm.module"
-        placeholder="请选择模块"
+        v-model="localSearchForm.browser"
+        placeholder="请选择浏览器"
         clearable
         style="width: 200px"
-        @change="handleModuleChange"
+        @change="handleBrowserChange"
       >
         <el-option
-          v-for="module in moduleOptions"
-          :key="module"
-          :label="module"
-          :value="module"
+          v-for="browser in browserOptions"
+          :key="browser"
+          :label="browser"
+          :value="browser"
         />
       </el-select>
 
       <el-select
-        v-model="localSearchForm.code"
-        placeholder="请选择状态码"
+        v-model="localSearchForm.operatingSystem"
+        placeholder="请选择操作系统"
         clearable
         style="width: 200px"
-        @change="handleCodeChange"
+        @change="handleOperatingSystemChange"
       >
         <el-option
-          v-for="code in codeOptions"
-          :key="code"
-          :label="code"
-          :value="code"
+          v-for="os in operatingSystemOptions"
+          :key="os"
+          :label="os"
+          :value="os"
         />
       </el-select>
 

@@ -234,7 +234,7 @@ defineExpose({
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="hasAnyRoleOperationPermission" label="操作" width="160" align="center">
+      <el-table-column v-if="hasAnyRoleOperationPermission" label="操作" width="160" align="center" fixed="right">
         <template #default="{ row }">
           <ActionLinks :actions="getRoleActions(row)" />
         </template>

@@ -318,7 +318,7 @@
 
 /* 抽屉样式 */
 .el-drawer {
-    border-radius: var(--radius-dialog);
+    border-radius: var(--radius-dialog) var(--radius-none) var(--radius-none) var(--radius-dialog);
     overflow: hidden;
 }
 
@@ -330,6 +330,7 @@
 
 .el-drawer__body {
     padding: var(--padding-size-drawer);
+    padding-bottom: var(--padding-size-3xl);
     scrollbar-gutter: stable;
 }
 

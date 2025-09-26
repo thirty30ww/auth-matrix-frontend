@@ -215,7 +215,13 @@ const getActionLinks = (user: UserVO) => {
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="hasAnyUserOperationPermission" label="操作" min-width="120px" align="center">
+      <el-table-column 
+        v-if="hasAnyUserOperationPermission" 
+        label="操作" 
+        min-width="120px" 
+        align="center"
+        fixed="right"
+      >
         <template #default="{ row }">
           <ActionLinks :actions="getActionLinks(row)" />
         </template>

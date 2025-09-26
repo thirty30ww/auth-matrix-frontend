@@ -112,7 +112,6 @@ onMounted(() => {
 
 .aside-below-header {
   height: calc(100vh - var(--height-size-header));
-  border-radius: var(--radius-none) var(--radius-sidebar) var(--radius-none) var(--radius-none);
 }
 
 .body-container {

@@ -1,7 +1,10 @@
 // 密码修改请求接口
-import {type BaseListDTO, MethodType, OperationType} from "@/types";
+import {type BaseListDTO, LoginType, MethodType, OperationType, Status} from "@/types";
 import { UserSex, PermissionType } from "@/types";
 
+/**
+ * 用户添加请求接口
+ */
 export interface AddUserDTO {
     username: string;
     password: string;
@@ -10,13 +13,18 @@ export interface AddUserDTO {
     roleIds: number[];
 }
 
+/**
+ * 密码修改请求接口
+ */
 export interface ChangePassWordDTO {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
 }
 
-// 获取用户列表请求接口
+/**
+ * 获取用户列表请求接口
+ */
 export interface GetUserListDTO extends BaseListDTO {
     username?: string;
     name?: string;
@@ -25,7 +33,9 @@ export interface GetUserListDTO extends BaseListDTO {
     isValid?: boolean;
 }
 
-// 用户更新请求接口(修改自己的个人信息)
+/**
+ * 用户更新请求接口(修改自己的个人信息)
+ */
 export interface UpdateUserDTO {
     id: number;
     name?: string;
@@ -34,7 +44,9 @@ export interface UpdateUserDTO {
     signature?: string;
 }
 
-// 用户修改请求接口(修改别的用户)
+/**
+ * 用户修改请求接口(修改别的用户)
+ */
 export interface ModifyUserDTO {
     id: number;
     name: string;
@@ -42,7 +54,9 @@ export interface ModifyUserDTO {
     roleIds: number[];
 }
 
-// 角色DTO
+/**
+ * 角色DTO
+ */
 export interface RoleDTO {
     id?: number;
     name: string;
@@ -50,7 +64,9 @@ export interface RoleDTO {
     parentNodeId?: number; // 全局角色时可以为空
 }
 
-// 页面DTO
+/**
+ * 权限DTO
+ */
 export interface PermissionDTO {
     id?: number;
     name: string;
@@ -65,7 +81,9 @@ export interface PermissionDTO {
     isValid: boolean;
 }
 
-// 操作日志DTO
+/**
+ * 操作日志DTO
+ */
 export interface LogOperationDTO extends BaseListDTO {
     name?: string;
     module?: string;
@@ -73,4 +91,15 @@ export interface LogOperationDTO extends BaseListDTO {
     code?: number;
     type?: OperationType;
     method?: MethodType;
+}
+
+/**
+ * 登录日志DTO
+ */
+export interface LogLoginDTO extends BaseListDTO {
+    browser?: string;
+    operatingSystem?: string;
+    type?: LoginType;
+    status?: Status;
+    name?: string;
 }

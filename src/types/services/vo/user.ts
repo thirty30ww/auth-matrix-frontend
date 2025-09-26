@@ -1,7 +1,9 @@
 // 用户基础信息接口
-import {UserSex, PermissionType, MethodType, OperationType} from "@/types";
+import { UserSex, PermissionType, MethodType, OperationType, Status, LoginType } from "@/types";
 
-// 角色接口
+/**
+ * 角色接口
+ */
 export interface Role {
     id: number;
     name: string;
@@ -12,14 +14,18 @@ export interface Role {
     updateTime: string;
 }
 
-// 角色树节点接口
+/**
+ * 角色树节点接口
+ */
 export interface RoleVO {
     node: Role;
     hasPermission: boolean;
     children: RoleVO[];
 }
 
-// 用户接口
+/**
+ * 用户接口
+ */
 export interface UserVO {
     id: number;
     username: string;
@@ -34,14 +40,18 @@ export interface UserVO {
     updateTime: string;
 }
 
-// 登录结果接口
+/**
+ * 登录结果接口
+ */
 export interface JwtVO {
     accessToken: string;
     refreshToken: string;
     username: string;
 }
 
-// 页面接口
+/**
+ * 权限接口
+ */
 export interface Permission {
     id: number;
     name: string;
@@ -56,7 +66,9 @@ export interface Permission {
     isValid: boolean;
 }
 
-// 页面树节点接口
+/**
+ * 权限树节点接口
+ */
 export interface PermissionVO {
     node: Permission;
     hasPermission?: boolean;
@@ -64,14 +76,18 @@ export interface PermissionVO {
     children: PermissionVO[];
 }
 
-// 偏好设置接口
+/**
+ * 偏好设置接口
+ */
 export interface Preference {
     id: number;
     field: string;
     value: string;
 }
 
-// 日志操作接口
+/**
+ * 日志操作接口
+ */
 export interface LogOperationVO {
     id: number;
     userId?: number;
@@ -85,6 +101,23 @@ export interface LogOperationVO {
     ip: string;
     requestParam?: string;
     responseParam?: string;
+    errorMessage?: string;
+    operateTime: number;
+    createTime: string;
+}
+
+/**
+ * 登录日志VO
+ */
+export interface LogLoginVO {
+    id: number;
+    name?: string;
+    ip?: string;
+    browser: string;
+    operatingSystem: string;
+    deviceModel: string;
+    type: LoginType; // 后端返回的是 type 字段
+    status: Status; // 必填，后端保证不为空
     errorMessage?: string;
     operateTime: number;
     createTime: string;

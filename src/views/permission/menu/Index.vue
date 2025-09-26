@@ -296,7 +296,7 @@ const getMenuActions = (row: PermissionVO) => {
           <el-tag :type="getValue(VIEW_TYPE_TAG_MAP, row.node.type, 'primary')">{{ row.node.type }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="hasAnyMenuOperationPermission" label="操作" width="280" align="center">
+      <el-table-column v-if="hasAnyMenuOperationPermission" label="操作" width="280" align="center" fixed="right">
         <template #default="{ row }">
           <ActionLinks :actions="getMenuActions(row)" />
         </template>

@@ -1,43 +1,34 @@
-/**
- * 状态码类型映射
- */
-export const StatusCodeType = {
-    SUCCESS: 'success',  // 2xx
-    WARNING: 'warning',  // 4xx
-    DANGER: 'danger',    // 5xx
-    INFO: 'info'         // 其他
-} as const
+import { elType } from "@/constant/common.ts";
 
 /**
  * 操作类型颜色映射
  */
 export const OperationTypeColor = {
-    SELECT: 'primary',
-    INSERT: 'success',
-    UPDATE: 'warning',
-    DELETE: 'danger',
-    UPLOAD: 'info'
+    SELECT: elType.PRIMARY,
+    INSERT: elType.SUCCESS,
+    UPDATE: elType.WARNING,
+    DELETE: elType.DANGER,
+    UPLOAD: elType.INFO
 } as const
 
 /**
  * 请求方法颜色映射
  */
 export const MethodTypeColor = {
-    GET: 'primary',
-    POST: 'warning',
-    PUT: 'success',
-    DELETE: 'danger',
-    PATCH: 'warning'
+    GET: elType.PRIMARY,
+    POST: elType.WARNING,
+    PUT: elType.SUCCESS,
+    DELETE: elType.DANGER,
+    PATCH: elType.WARNING
 } as const
 
 /**
  * 根据状态码获取类型
  */
 export function getStatusCodeType(code: number): string {
-    if (code >= 200 && code < 300) return StatusCodeType.SUCCESS
-    if (code >= 400 && code < 500) return StatusCodeType.WARNING
-    if (code >= 500) return StatusCodeType.DANGER
-    return StatusCodeType.INFO
+    if (code >= 200 && code < 300) return elType.SUCCESS
+    if (code >= 400) return elType.DANGER
+    return elType.INFO
 }
 
 /**
@@ -53,3 +44,20 @@ export function getOperationTypeColor(type: string): string {
 export function getMethodTypeColor(method: string): string {
     return MethodTypeColor[method as keyof typeof MethodTypeColor] || MethodTypeColor.GET
 }
+
+/**
+ * 登录类型颜色映射
+ */
+export const LoginTypeColor = {
+    LOGIN: elType.SUCCESS,
+    LOGOUT: elType.WARNING,
+    REFRESH: elType.PRIMARY
+} as const
+
+/**
+ * 状态颜色映射
+ */
+export const StatusColor = {
+    SUCCESS: elType.SUCCESS,
+    FAILED: elType.DANGER
+} as const

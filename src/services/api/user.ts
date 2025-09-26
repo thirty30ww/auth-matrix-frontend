@@ -16,7 +16,7 @@ import type {
     PermissionDTO,
     Preference,
     LogOperationDTO,
-    LogOperationVO
+    LogOperationVO, LogLoginDTO, LogLoginVO
 } from '@/types';
 import { RolesType } from '@/types';
 
@@ -323,14 +323,36 @@ export const logApi = {
     /**
      * 获取操作日志状态码列表
      */
-    getCodes() {
+    getLogOperationCodes() {
         return http.get<number[]>('/log/operation/codes');
     },
 
     /**
      * 获取操作日志模块列表
      */
-    getModules() {
+    getLogOperationModules() {
         return http.get<string[]>('/log/operation/modules');
-    }
+    },
+
+    /**
+     * 获取登录日志列表
+     * @param request 登录日志查询参数
+     */
+    getLogLoginList(request: PageQueryDTO<LogLoginDTO>) {
+        return http.post<PageResponse<LogLoginVO>>('/log/login/list', { data: request });
+    },
+
+    /**
+     * 获取登录日志浏览器列表
+     */
+    getLogLoginBrowsers() {
+        return http.get<string[]>('/log/login/browsers');
+    },
+
+     /**
+     * 获取登录日志操作系统列表
+     */
+    getLogLoginOperatingSystems() {
+        return http.get<string[]>('/log/login/operating-systems');
+    },
 }

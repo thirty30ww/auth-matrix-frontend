@@ -6,3 +6,8 @@ export enum SortDirection {
     DESC = 'desc',
     NONE = ''
 }
+
+export enum Status {
+    SUCCESS = '成功',
+    FAILED = '失败',
+}

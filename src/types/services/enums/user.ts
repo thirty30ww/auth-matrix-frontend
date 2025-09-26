@@ -50,3 +50,12 @@ export enum MethodType {
     DELETE = "DELETE",
     PATCH = "PATCH"
 }
+
+/**
+ * 登录类型枚举
+ */
+export enum LoginType {
+    LOGIN = "登录",
+    LOGOUT = "退出登录",
+    REFRESH = "刷新token"
+}
