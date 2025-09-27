@@ -59,6 +59,19 @@
     background-color: var(--pp-input-bg-color);
 }
 
+/* el-input-number 圆角溢出修复 - 关键是建立正确的定位上下文 */
+.el-input-number {
+    /* 应用圆角 */
+    border-radius: var(--radius-input);
+    /* 隐藏溢出的内容 */
+    overflow: hidden;
+}
+
+.el-input-number__increase,
+.el-input-number__decrease {
+    background: transparent;
+}
+
 .el-select__wrapper {
     border-radius: var(--radius-input);
     background-color: var(--pp-input-bg-color);

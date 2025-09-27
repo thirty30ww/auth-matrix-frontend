@@ -48,6 +48,6 @@ export const settingApi = {
      * @param settingDTOS 系统设置值对象
      */
     modifySettings(settingDTOS: SettingDTO[]) {
-        return http.post('/setting/modify', { data: settingDTOS, showSuccess: true });
+        return http.post<any>('/setting/modify', { data: settingDTOS, showSuccess: true });
     }
 }
