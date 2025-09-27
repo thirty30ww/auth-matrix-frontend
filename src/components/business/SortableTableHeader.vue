@@ -20,7 +20,7 @@ import TableHeaderIcon from '@/components/basic/TableHeaderIcon.vue'
 interface Props {
   label: string
   field: string
-  currentSort: SortType
+  currentSort?: SortType
 }
 
 interface Emits {
@@ -32,18 +32,18 @@ const emit = defineEmits<Emits>()
 
 // 是否为当前排序字段且有排序方向
 const isActive = computed(() => 
-  props.currentSort.field === props.field && props.currentSort.direction !== SortDirection.NONE
+  props.currentSort?.field === props.field && props.currentSort?.direction !== SortDirection.NONE
 )
 
 // 当前排序方向
-const currentDirection = computed(() => props.currentSort.direction)
+const currentDirection = computed(() => props.currentSort?.direction || SortDirection.NONE)
 
 // 处理排序点击
 const handleSort = () => {
   let newField = props.field
   let newDirection: string
 
-  if (props.currentSort.field === props.field) {
+  if (props.currentSort?.field === props.field) {
     // 如果点击的是当前排序字段，按照 '' -> 'asc' -> 'desc' -> '' 的顺序切换
     if (props.currentSort.direction === SortDirection.NONE) {
       newDirection = SortDirection.ASC

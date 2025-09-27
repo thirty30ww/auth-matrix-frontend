@@ -87,9 +87,12 @@ const getLogList = async () => {
         startTime: searchForm.value.createTimeStart,
         endTime: searchForm.value.createTimeEnd
       } : undefined,
-      sort: {
+      sort: searchForm.value.sort ? {
         field: searchForm.value.sort.field,
         direction: searchForm.value.sort.direction
+      } : {
+        field: '',
+        direction: SortDirection.NONE
       }
     }
   }

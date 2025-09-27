@@ -125,12 +125,12 @@ export const useAuthStore = defineStore('auth', {
                 getUserStore().clearUserInfo()
                 // 清空所有标签页
                 getTabsStore().clearAllTabs()
-                // 清除视图数据（路由和菜单）
-                getPermissionStore().clearViewData()
                 // 重置路由加载状态
                 resetRoutesLoadedState()
                 // 跳转到登录页
                 await router.push('/login')
+                // 清除视图数据（路由和菜单）
+                getPermissionStore().clearViewData()
             }
         },
 

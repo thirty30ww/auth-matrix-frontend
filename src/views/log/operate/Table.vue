@@ -6,6 +6,8 @@ import { getStatusCodeType, getOperationTypeColor, getMethodTypeColor } from '@/
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
 import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
+import { computed } from 'vue'
+import { usePermissionStore } from '@/stores/permission.ts'
 
 // 定义 props
 interface Props {
@@ -40,6 +42,13 @@ interface Emits {
 
 defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const permissionStore = usePermissionStore()
+
+// 检查是否有日志详情查看权限
+const hasLogDetailPermission = computed(() => {
+  return permissionStore.hasPermission('log:detail')
+})
 
 // 操作类型筛选选项
 const operationTypeFilterOptions = getValues(OperationType).map(value => ({
@@ -80,13 +89,18 @@ const handleViewDetail = (log: LogOperationVO) => {
 
 // 获取操作按钮配置
 const getActionLinks = (log: LogOperationVO) => {
-  return [
-    {
+  const actions = []
+  
+  // 详情按钮 - 需要 log:detail 权限
+  if (permissionStore.hasPermission('log:detail')) {
+    actions.push({
       label: '详情',
       onClick: () => handleViewDetail(log),
       type: 'default' as const
-    }
-  ]
+    })
+  }
+  
+  return actions
 }
 
 
@@ -167,7 +181,13 @@ const getActionLinks = (log: LogOperationVO) => {
           />
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="80px" align="center" fixed="right">
+      <el-table-column 
+        v-if="hasLogDetailPermission" 
+        label="操作" 
+        min-width="80px" 
+        align="center" 
+        fixed="right"
+      >
         <template #default="{ row }">
           <ActionLinks :actions="getActionLinks(row)" />
         </template>
