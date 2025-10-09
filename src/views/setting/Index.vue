@@ -2,7 +2,7 @@
 import {computed, onMounted, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Check, Refresh} from '@element-plus/icons-vue'
-import {settingApi} from '@/services/api/system'
+import api from '@/services'
 import {useSystemStore} from '@/stores/system'
 import type {SettingVO} from '@/types/services/vo/system'
 import type {SettingDTO} from '@/types/services/dto/system'
@@ -17,7 +17,7 @@ const formData = ref<Record<string, any>>({})
 // 获取设置数据
 const loadSettings = async () => {
   // 调用 getSettingVOS 接口获取数据
-  settings.value = await settingApi.getSettingVOS()
+  settings.value = await api.setting.getSettingVOS()
 
   // 初始化表单数据
   formData.value = {}
@@ -36,14 +36,14 @@ const getSettingType = (value: any): string => {
 
 // 保存设置
 const saveSettings = async () => {
-  await ElMessageBox.confirm(
-    '确定要保存这些设置吗？',
-    '确认保存',
-    {
-      confirmButtonText: '保存',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
+  ElMessageBox.confirm(
+      '确定要保存这些设置吗？',
+      '确认保存',
+      {
+        confirmButtonText: '保存',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
   )
 
   // 准备修改的设置数据
@@ -56,7 +56,7 @@ const saveSettings = async () => {
 
   // 如果有修改的设置，调用修改接口
   if (modifiedSettings.length > 0) {
-    await settingApi.modifySettings(modifiedSettings)
+    await api.setting.modifySettings(modifiedSettings)
   }
 
   // 重新加载设置数据以确保数据同步

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { userApi } from '@/services/api/user'
+import api from '@/services'
 import type { Preference } from '@/types'
 import { PREFERENCE_FIELDS, DEFAULT_THEME_CONFIG, type LogoPosition } from '@/constant/theme'
 import { getThemeConfig, generateThemeColorVariants, applyThemeColorsToCSS } from '@/utils/color.ts'
@@ -43,7 +43,7 @@ export const useThemeStore = defineStore('theme', {
     actions: {
         // 从后端初始化用户偏好设置
         async initializeFromBackend() {
-            const preferences = await userApi.getPreferences() || []
+            const preferences = await api.user.getPreferences() || []
 
             // 处理偏好设置数据
             preferences.forEach((pref: Preference) => {
@@ -73,7 +73,7 @@ export const useThemeStore = defineStore('theme', {
             this.themeColor = themeId
             this.applyThemeColors()
             // 异步同步到后端，不阻塞UI
-            userApi.savePreferences(PREFERENCE_FIELDS.THEME_COLOR, themeId)
+            api.user.savePreferences(PREFERENCE_FIELDS.THEME_COLOR, themeId)
         },
 
         // 设置自定义颜色
@@ -83,14 +83,14 @@ export const useThemeStore = defineStore('theme', {
                 this.applyThemeColors()
             }
             // 异步同步到后端，不阻塞UI
-            userApi.savePreferences(PREFERENCE_FIELDS.CUSTOM_THEME_COLOR, color)
+            api.user.savePreferences(PREFERENCE_FIELDS.CUSTOM_THEME_COLOR, color)
         },
 
         // 设置Logo位置
         setLogoPosition(position: LogoPosition) {
             this.logoPosition = position
             // 异步同步到后端，不阻塞UI
-            userApi.savePreferences(PREFERENCE_FIELDS.LOGO_POSITION, position)
+            api.user.savePreferences(PREFERENCE_FIELDS.LOGO_POSITION, position)
         },
 
         // 切换暗色模式
@@ -100,7 +100,7 @@ export const useThemeStore = defineStore('theme', {
                 this.applyDarkMode()
                 this.applyThemeColors()
                 // 异步同步到后端，不阻塞动画
-                userApi.savePreferences(PREFERENCE_FIELDS.THEME_DARK, this.isDark.toString())
+                api.user.savePreferences(PREFERENCE_FIELDS.THEME_DARK, this.isDark.toString())
             }, event)
         },
 
