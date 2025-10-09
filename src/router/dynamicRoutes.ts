@@ -4,13 +4,19 @@ import { usePermissionStore } from '@/stores';
 
 // 组件映射表
 const viewsModules = import.meta.glob('@/views/**/*.vue');
+// 全局路径格式化函数
+let globalPathFormatter = (component: string) => `/src/views${component}.vue`;
 
 let routesLoaded = false;
 let routesLoading = false;
 let loadingPromise: Promise<boolean> | null = null;
 
+// 配置路径格式化函数
+export function setPathFormatter(formatter: (component: string) => string) {
+    globalPathFormatter = formatter;
+}
 
-
+// 确保路由已加载（如果未加载则加载）
 export async function ensureRoutesLoaded(router: Router) {
     // 如果已经加载过，直接返回
     if (routesLoaded) {
@@ -95,11 +101,15 @@ async function loadRoutesFromBackend(router: Router) {
     return false;
 }
 
-// 生成并添加路由
+/**
+ * 生成并添加路由
+ * @param viewNodes 视图节点列表
+ * @param router 路由实例
+ */
 function generateAndAddRoutes(viewNodes: PermissionVO[], router: Router) {
     viewNodes.forEach(item => {
         // 创建路由对象
-        const componentPath = `/src/views${item.node.component}.vue`;
+        const componentPath = globalPathFormatter(item.node.component);
 
         const route = {
             path: item.node.path,
