@@ -138,9 +138,10 @@
     margin-left: calc(-1 * var(--margin-size-item));
 }
 
-/* 选中菜单项的字体加粗 */
+/* 选中菜单项的字体加粗和背景色 */
 .el-menu-vertical .el-menu-item.is-active {
     font-weight: bold;
+    background-color: var(--el-menu-hover-bg-color);
 }
 
 /* 统一子菜单激活状态样式 */
@@ -152,6 +153,15 @@
 .el-menu-vertical .el-menu-item:hover,
 .el-menu-vertical .el-sub-menu__title:hover {
     background-color: var(--el-menu-hover-bg-color);
+}
+
+/* 确保当有具体菜单项被hover时，其他active状态的背景色被移除 */
+.el-menu-vertical:has(.el-menu-item:hover, .el-sub-menu__title:hover) .el-menu-item.is-active:not(:hover) {
+    background-color: transparent;
+}
+
+.el-menu-vertical:has(.el-menu-item:hover, .el-sub-menu__title:hover) .el-sub-menu.is-active:not(:hover)>.el-sub-menu__title {
+    background-color: transparent;
 }
 
 /* 侧边栏子菜单弹出框样式 */
@@ -172,6 +182,24 @@
 /* 子菜单弹出框中的活动菜单项样式 */
 .el-menu--popup .el-menu-item.is-active {
     font-weight: bold;
+    background-color: var(--el-menu-hover-bg-color);
+}
+
+/* 子菜单弹出框中的hover样式 */
+.el-menu--popup .el-menu-item:hover {
+    background-color: var(--el-menu-hover-bg-color);
+}
+
+/* 确保弹出菜单中当有具体菜单项被hover时，其他active状态的背景色被移除 */
+.el-menu--popup .el-menu-item:hover~.el-menu-item.is-active,
+.el-menu--popup:has(.el-menu-item:hover) .el-menu-item.is-active:not(:hover) {
+    background-color: transparent;
+}
+
+/* 当弹出菜单中有具体菜单项被hover时，主菜单中的active状态背景色也应该消失 */
+body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-menu-item.is-active,
+body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-active>.el-sub-menu__title {
+    background-color: transparent !important;
 }
 
 /* 所有弹出菜单框通用样式 */

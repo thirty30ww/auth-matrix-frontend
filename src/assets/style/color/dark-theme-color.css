@@ -3,7 +3,7 @@ html.dark {
     /* 背景色 */
     --pp-bg-color: #040404;
     --pp-bg-color-medium: #0b0b0b;
-    --pp-bg-color-overlay: #111111;
+    --pp-bg-color-overlay: #131313;
     --pp-bg-color-hover: var(--pp-bg-color-medium);
     --pp-bg-color-active: var(--pp-bg-color);
     --pp-input-bg-color: var(--pp-bg-color-overlay);

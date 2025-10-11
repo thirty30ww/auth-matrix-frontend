@@ -57,19 +57,12 @@
     
     <!-- 用户信息区域 -->
     <div class="user-profile" v-if="authStore.userLoggedIn">
-      <el-avatar>
-        <UserAvatar :imageUrl="userInfo?.avatarUrl || undefined" />
-      </el-avatar>
-      <div class="user-info" v-if="!isCollapsed">
-        <div class="user-name">{{ userInfo?.name || '未知用户' }}</div>
-        <div class="user-username">{{ userInfo?.username }}</div>
-      </div>
-      <!-- 用户操作下拉菜单 -->
-      <div class="user-actions" v-if="!isCollapsed">
-        <el-dropdown trigger="click" @command="handleCommand">
-          <IconButton>
-            <el-icon class="user-menu-icon"><More /></el-icon>
-          </IconButton>
+      <!-- 折叠状态下：头像可点击显示下拉菜单 -->
+      <template v-if="isCollapsed">
+        <el-dropdown trigger="click" @command="handleCommand" placement="top" popper-class="sidebar-collapsed-dropdown">
+          <el-avatar class="clickable-avatar">
+            <UserAvatar :imageUrl="userInfo?.avatarUrl || undefined" />
+          </el-avatar>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="profile">
@@ -83,7 +76,38 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </div>
+      </template>
+      
+      <!-- 未折叠状态：原有的布局 -->
+      <template v-else>
+        <el-avatar>
+          <UserAvatar :imageUrl="userInfo?.avatarUrl || undefined" />
+        </el-avatar>
+        <div class="user-info">
+          <div class="user-name">{{ userInfo?.name || '未知用户' }}</div>
+          <div class="user-username">{{ userInfo?.username }}</div>
+        </div>
+        <!-- 用户操作下拉菜单 -->
+        <div class="user-actions">
+          <el-dropdown trigger="click" @command="handleCommand">
+            <IconButton>
+              <el-icon class="user-menu-icon"><More /></el-icon>
+            </IconButton>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="profile">
+                  <el-icon><UserFilled /></el-icon>
+                  个人中心
+                </el-dropdown-item>
+                <el-dropdown-item command="logout">
+                  <el-icon><SwitchButton /></el-icon>
+                  退出登录
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -224,5 +248,22 @@ const handleSelect = (key: string) => {
 
 .icon-button:hover .user-menu-icon {
   color: var(--el-text-color-primary);
+}
+
+/* 可点击头像样式 */
+.clickable-avatar {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clickable-avatar:hover {
+  transform: scale(1.05);
+}
+</style>
+
+<!-- 全局样式，用于控制下拉菜单位置 -->
+<style>
+.sidebar-collapsed-dropdown {
+  margin-left: var(--margin-size-spacing-2);
 }
 </style> 

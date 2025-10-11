@@ -64,7 +64,7 @@ export function generateThemeColorVariants(
             light5: tinycolor.mix(baseColor, black, 30).toHexString(), // 轻微变亮
             light7: tinycolor.mix(baseColor, black, 50).toHexString(), // 混合15%黑色
             light8: tinycolor.mix(baseColor, black, 70).toHexString(), // 混合50%黑色
-            light9: tinycolor.mix(baseColor, black, 85).toHexString(), // 混合85%黑色，接近黑色但保留原色
+            light9: tinycolor.mix(baseColor, black, 80).toHexString(), // 混合85%黑色，接近黑色但保留原色
             dark2: baseColor.darken(5).toHexString()
         }
     } else {
