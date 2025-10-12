@@ -1,6 +1,6 @@
-import type {Router} from 'vue-router';
-import type {PermissionVO} from '@/types';
-import {usePermissionStore} from '@/stores';
+import type { Router } from 'vue-router';
+import type { PermissionVO } from '@/types';
+import { usePermissionStore } from '@/stores';
 
 // 基础项目的组件映射表（固定）
 const baseProjectModules = import.meta.glob('@/views/**/*.vue'); // 基础项目的views
@@ -11,15 +11,15 @@ let currentProjectModules: Record<string, any> = {};
 // 配置当前项目的组件映射
 export function setCurrentProjectModules(modules: Record<string, any>) {
     currentProjectModules = modules;
-    // 重新合并模块
+    // 重新合并模块，当前项目优先
     Object.assign(viewsModules, baseProjectModules, currentProjectModules);
 }
 
 // 合并模块，当前项目优先
 const viewsModules = { ...baseProjectModules, ...currentProjectModules };
 
-// 自定义路径格式化函数（用于外部覆盖）
-let customPathFormatter: ((component: string) => string) | null = null;
+// 自定义路径格式化函数（可以外部覆盖）
+let customPathFormatter: ((component: string) => string) = (component) => `/src/views${component}.vue`;
 
 // 全局路径格式化函数 - 优先查找当前项目的组件
 let globalPathFormatter = (component: string) => {
@@ -32,7 +32,7 @@ let globalPathFormatter = (component: string) => {
 
     // 当前项目没有，使用自定义格式化函数（如果有的话）来覆盖基础路径
     // 没有自定义函数，回退到默认基础项目路径
-    return customPathFormatter ? customPathFormatter(component) : `@/views${component}.vue`;
+    return customPathFormatter(component);
 };
 
 let routesLoaded = false;
