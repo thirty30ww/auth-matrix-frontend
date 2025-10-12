@@ -1,11 +1,39 @@
-import type { Router } from 'vue-router';
-import type { PermissionVO } from '@/types';
-import { usePermissionStore } from '@/stores';
+import type {Router} from 'vue-router';
+import type {PermissionVO} from '@/types';
+import {usePermissionStore} from '@/stores';
 
-// 组件映射表
-const viewsModules = import.meta.glob('@/views/**/*.vue');
-// 全局路径格式化函数
-let globalPathFormatter = (component: string) => `/src/views${component}.vue`;
+// 基础项目的组件映射表（固定）
+const baseProjectModules = import.meta.glob('@/views/**/*.vue'); // 基础项目的views
+
+// 当前项目的组件映射表（动态配置）
+let currentProjectModules: Record<string, any> = {};
+
+// 配置当前项目的组件映射
+export function setCurrentProjectModules(modules: Record<string, any>) {
+    currentProjectModules = modules;
+    // 重新合并模块
+    Object.assign(viewsModules, baseProjectModules, currentProjectModules);
+}
+
+// 合并模块，当前项目优先
+const viewsModules = { ...baseProjectModules, ...currentProjectModules };
+
+// 自定义路径格式化函数（用于外部覆盖）
+let customPathFormatter: ((component: string) => string) | null = null;
+
+// 全局路径格式化函数 - 优先查找当前项目的组件
+let globalPathFormatter = (component: string) => {
+    // 遍历当前项目模块，查找匹配的组件
+    for (const modulePath of Object.keys(currentProjectModules)) {
+        if (modulePath.endsWith(`${component}.vue`)) {
+            return modulePath;
+        }
+    }
+
+    // 当前项目没有，使用自定义格式化函数（如果有的话）来覆盖基础路径
+    // 没有自定义函数，回退到默认基础项目路径
+    return customPathFormatter ? customPathFormatter(component) : `@/views${component}.vue`;
+};
 
 let routesLoaded = false;
 let routesLoading = false;
@@ -13,7 +41,7 @@ let loadingPromise: Promise<boolean> | null = null;
 
 // 配置路径格式化函数
 export function setPathFormatter(formatter: (component: string) => string) {
-    globalPathFormatter = formatter;
+    customPathFormatter = formatter;
 }
 
 // 确保路由已加载（如果未加载则加载）
@@ -119,7 +147,8 @@ function generateAndAddRoutes(viewNodes: PermissionVO[], router: Router) {
                 icon: item.node.icon,
                 title: item.node.name, // 使用name作为标签页标题
                 hasPermission: item.hasPermission, // 保存权限信息
-                isValid: item.node.isValid
+                isValid: item.node.isValid,
+                componentSource: currentProjectModules[componentPath] ? 'current' : 'base' // 标记组件来源
             }
         };
 
