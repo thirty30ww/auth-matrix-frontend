@@ -26,7 +26,7 @@
               <el-tag
                   v-for="role in userInfo.roles"
                   :key="role.id"
-                  :type="getValue(LevelTagType, role.level, 'primary')"
+                  :type="getValue(LevelTagType, role.level, elType.PRIMARY)"
                   style="margin-right: var(--margin-size-spacing-1);"
               >
                 {{ role.name }}
@@ -44,6 +44,22 @@
               <span class="info-label">创建时间</span>
               <span class="info-value">{{ formatDate(userInfo?.createTime) }}</span>
             </div>
+
+            <!-- 在用户信息展示部分添加 -->
+            <template v-for="(item, index) in extraFields" :key="`extra-${index}`">
+              <div class="info-item" v-if="(userInfo as any)?.[item.key]">
+                <el-icon v-if="item.icon" class="info-icon">
+                  <component :is="item.icon" />
+                </el-icon>
+                <span class="info-label">{{ item.label }}</span>
+                <span class="info-value">
+                  {{ item.formatter ? item.formatter((userInfo as any)[item.key]) : (userInfo as any)[item.key] }}
+                </span>
+              </div>
+            </template>
+            
+            <!-- 添加扩展信息显示插槽 -->
+            <slot name="extended-info" :userInfo="userInfo"></slot>
           </div>
         </div>
       </div>
@@ -96,7 +112,22 @@ import AvatarCropDialog from '@/components/business/AvatarCropDialog.vue';
 import { useUserStore } from '@/stores';
 import api from '@/services';
 import {formatDate, getValue} from '@/utils';
-import {LevelTagType} from "@/constant";
+import {elType, LevelTagType} from "@/constant";
+
+// 添加 props 接收扩展字段配置
+const props = defineProps<{
+  extraFields?: Array<{
+    key: string
+    label: string
+    icon?: any
+    formatter?: (value: any) => string
+  }>
+}>()
+
+// 添加插槽定义
+defineSlots<{
+  'extended-info'(slotProps: { userInfo: any }): any  // 扩展信息显示插槽
+}>()
 
 // 路由
 const route = useRoute();
@@ -106,6 +137,8 @@ const activeTab = ref('info');
 const userStore = useUserStore();
 // 用户信息（使用计算属性）
 const userInfo = computed(() => userStore.userInfo);
+// 扩展字段计算属性
+const extraFields = computed(() => props.extraFields || []);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 
 // 头像裁剪相关

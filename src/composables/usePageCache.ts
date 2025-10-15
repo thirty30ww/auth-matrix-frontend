@@ -1,7 +1,7 @@
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { usePageCacheStore } from '@/stores/pageCache'
-import { useTabsStore } from '@/stores/tabs'
+import {ref, watch} from 'vue'
+import {useRoute} from 'vue-router'
+import {usePageCacheStore} from '@/stores/pageCache'
+import {useTabsStore} from '@/stores/tabs'
 
 /**
  * 页面缓存组合式函数
@@ -182,8 +182,7 @@ export function useTreeTableCache(tableKey: string) {
      */
     const getExpandedKeys = (): number[] => {
         const cached = cache.restoreFromCache()
-        const keys = cached?.[expandedKeysField] as number[] || []
-        return keys
+        return cached?.[expandedKeysField] as number[] || []
     }
 
     /**
