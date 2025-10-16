@@ -46,6 +46,20 @@
           clearable
         />
       </el-form-item>
+
+      <!-- 扩展字段渲染 -->
+      <template v-for="field in extraFields" :key="field.key">
+        <el-form-item v-if="!isEdit">
+          <template #label>
+            <RequiredLabel :required="field.required">{{ field.label }}</RequiredLabel>
+          </template>
+          <el-input
+            v-model="(formData as any)[field.key]"
+            :placeholder="field.placeholder || `请输入${field.label}`"
+            clearable
+          />
+        </el-form-item>
+      </template>
       
       <el-form-item>
         <template #label>
@@ -102,20 +116,25 @@ import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import api from '@/services'
-import {type UserVO, type RoleVO, type AddUserDTO, type ModifyUserDTO, RolesType} from '@/types'
+import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType} from '@/types'
 import { UserSex } from '@/types'
 import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
+import type { FormExtraField } from '@/types/views';
 
 // Props
 interface Props {
   visible: boolean
   userData?: UserVO | null
+  extraFields?: FormExtraField[]
+  customAddUser?: (data: any) => Promise<void>
 }
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
-  userData: null
+  userData: null,
+  extraFields: () => [],
+  customAddUser: undefined
 })
 
 // Emits
@@ -138,14 +157,26 @@ const dialogVisible = computed({
 // 是否为编辑模式
 const isEdit = computed(() => !!props.userData && props.userData.id > 0)
 
+// 动态创建表单数据，包含扩展字段
+const createFormData = () => {
+  const baseData: any = {
+    username: '',
+    name: '',
+    password: '',
+    sex: '' as UserSex,
+    roleIds: [] as number[]
+  }
+  
+  // 添加扩展字段的默认值
+  props.extraFields?.forEach(field => {
+    baseData[field.key] = ''
+  })
+  
+  return baseData
+}
+
 // 表单数据
-const formData = reactive({
-  username: '',
-  name: '',
-  password: '',
-  sex: '' as UserSex,
-  roleIds: [] as number[]
-})
+const formData = reactive(createFormData())
 
 // 性别选项
 const sexOptions = getValues(UserSex).map(value => ({
@@ -173,11 +204,7 @@ const getRoleTreeData = async () => {
 
 // 重置表单
 const resetForm = () => {
-  formData.username = ''
-  formData.name = ''
-  formData.password = ''
-  formData.sex = '' as UserSex
-  formData.roleIds = []
+  Object.assign(formData, createFormData())
 }
 
 // 填充表单数据（编辑模式）
@@ -186,6 +213,11 @@ const fillFormData = (userData: UserVO) => {
   formData.name = userData.name
   formData.sex = userData.sex
   formData.roleIds = userData.roles.map(role => role.id)
+  
+  // 填充扩展字段数据
+  props.extraFields?.forEach(field => {
+    formData[field.key] = (userData as any)[field.key] || ''
+  })
 }
 
 // 监听用户数据变化
@@ -237,15 +269,22 @@ const handleSubmit = async () => {
     handleClose()
   } else {
     // 添加用户
-    const userData: AddUserDTO = {
+    const userData: any = {
       username: formData.username,
       name: formData.name,
       password: formData.password,
       sex: formData.sex,
       roleIds: formData.roleIds
     }
+    
+    // 添加扩展字段数据
+    props.extraFields?.forEach(field => {
+      userData[field.key] = formData[field.key]
+    })
 
-    await api.user.addUser(userData)
+    // 使用默认的api.user.addUser，会自动使用覆盖的接口
+    await api.user.addUser(userData as any)
+    
     emit('success')
     handleClose()
   }

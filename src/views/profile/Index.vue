@@ -63,9 +63,6 @@
           </div>
         </div>
       </div>
-      <div v-else class="loading-card">
-        <el-skeleton :rows="6" animated />
-      </div>
     </div>
     
     <div class="profile-form">
@@ -113,15 +110,11 @@ import { useUserStore } from '@/stores';
 import api from '@/services';
 import {formatDate, getValue} from '@/utils';
 import {elType, LevelTagType} from "@/constant";
+import type { ExtraField } from '@/types/views';
 
 // 添加 props 接收扩展字段配置
 const props = defineProps<{
-  extraFields?: Array<{
-    key: string
-    label: string
-    icon?: any
-    formatter?: (value: any) => string
-  }>
+  extraFields?: ExtraField[]
 }>()
 
 // 添加插槽定义

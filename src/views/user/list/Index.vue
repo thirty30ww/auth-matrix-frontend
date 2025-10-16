@@ -272,12 +272,21 @@ onMounted(() => {
       />
     </el-card>
 
-    <!-- 用户对话框 -->
-    <UserDialog
+    <!-- 用户对话框插槽 -->
+    <slot 
+      name="user-dialog" 
+      :visible="userDialogVisible"
+      :user-data="currentEditUser"
+      :on-update-visible="(val: boolean) => userDialogVisible = val"
+      :on-success="handleUserDialogSuccess"
+    >
+      <!-- 默认的UserDialog -->
+      <UserDialog
         v-model:visible="userDialogVisible"
         :user-data="currentEditUser"
         @success="handleUserDialogSuccess"
-    />
+      />
+    </slot>
   </div>
 </template>
 
