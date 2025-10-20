@@ -121,7 +121,6 @@ import { UserSex } from '@/types'
 import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
 import type { FormExtraField } from '@/types/views';
-import { settingApi } from '@/services/api/system';
 
 // Props
 interface Props {
@@ -205,7 +204,7 @@ const getRoleTreeData = async () => {
 
 // 获取默认角色
 const getDefaultRoles = async (): Promise<number[]> => {
-  const response = await settingApi.getSetting(SettingField.DEFAULT_ROLES)
+  const response = await api.setting.getSetting(SettingField.DEFAULT_ROLES)
   // API直接返回数组，不是包装在data字段中
   return Array.isArray(response) ? response : (response.data || [])
 }
