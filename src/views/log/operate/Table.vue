@@ -47,7 +47,7 @@ const permissionStore = usePermissionStore()
 
 // 检查是否有日志详情查看权限
 const hasLogDetailPermission = computed(() => {
-  return permissionStore.hasPermission('log:detail')
+  return permissionStore.hasPermission('log:operation:detail')
 })
 
 // 操作类型筛选选项
@@ -92,7 +92,7 @@ const getActionLinks = (log: LogOperationVO) => {
   const actions = []
   
   // 详情按钮 - 需要 log:detail 权限
-  if (permissionStore.hasPermission('log:detail')) {
+  if (permissionStore.hasPermission('log:operation:detail')) {
     actions.push({
       label: '详情',
       onClick: () => handleViewDetail(log),

@@ -116,11 +116,12 @@ import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import api from '@/services'
-import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType} from '@/types'
+import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType, SettingField} from '@/types'
 import { UserSex } from '@/types'
 import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
 import type { FormExtraField } from '@/types/views';
+import { settingApi } from '@/services/api/system';
 
 // Props
 interface Props {
@@ -202,9 +203,24 @@ const getRoleTreeData = async () => {
   }
 }
 
+// 获取默认角色
+const getDefaultRoles = async (): Promise<number[]> => {
+  const response = await settingApi.getSetting(SettingField.DEFAULT_ROLES)
+  // API直接返回数组，不是包装在data字段中
+  return Array.isArray(response) ? response : (response.data || [])
+}
+
 // 重置表单
-const resetForm = () => {
+const resetForm = async () => {
   Object.assign(formData, createFormData())
+  
+  // 如果是添加模式，填入默认角色
+  if (!isEdit.value) {
+    const defaultRoles = await getDefaultRoles()
+    if (defaultRoles.length > 0) {
+      formData.roleIds = [...defaultRoles]
+    }
+  }
 }
 
 // 填充表单数据（编辑模式）
@@ -220,26 +236,28 @@ const fillFormData = (userData: UserVO) => {
   })
 }
 
-// 监听用户数据变化
+// 监听用户数据变化（移除immediate，避免重复触发）
 watch(() => props.userData, (newData) => {
   if (newData && isEdit.value) {
     fillFormData(newData)
-  } else {
-    resetForm()
   }
-}, { immediate: true })
+})
 
 // 监听对话框显示状态
-watch(() => props.visible, (visible) => {
+watch(() => props.visible, async (visible) => {
   if (visible) {
-    // 获取角色树数据
-    getRoleTreeData()
+    // 并行获取角色树数据和处理表单数据
+    const roleTreePromise = getRoleTreeData()
     
     if (props.userData && isEdit.value) {
       fillFormData(props.userData)
     } else {
-      resetForm()
+      // 立即设置默认角色，不等待角色树数据
+      await resetForm()
     }
+    
+    // 等待角色树数据加载完成
+    await roleTreePromise
   }
 })
 
@@ -247,6 +265,8 @@ watch(() => props.visible, (visible) => {
 const handleClose = () => {
   emit('update:visible', false)
 }
+
+// 移除组件挂载时的预加载，改为按需加载
 
 // 提交表单
 const handleSubmit = async () => {

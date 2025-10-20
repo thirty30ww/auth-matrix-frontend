@@ -6,6 +6,9 @@ import api from '@/services'
 import {useSystemStore} from '@/stores/system'
 import type {SettingVO} from '@/types/services/vo/system'
 import type {SettingDTO} from '@/types/services/dto/system'
+import {getSettingConfig} from './settingConfig'
+import SettingSelect from './SettingSelect.vue'
+import {SettingField} from '@/types'
 
 // 响应式数据
 const settings = ref<SettingVO[]>([])
@@ -14,6 +17,34 @@ const systemStore = useSystemStore()
 // 表单数据，用于编辑
 const formData = ref<Record<string, any>>({})
 
+// 选项数据缓存（用于下拉选择等组件）
+const optionsCache = ref<Record<string, Array<{value: any, label: string}>>>({})
+
+// 树形数据缓存（用于树形选择组件）
+const treeDataCache = ref<Record<string, any[]>>({})
+
+/**
+ * 加载选项数据（用于下拉选择等组件）
+ * @param field 设置字段
+ */
+const loadOptions = async (field: string) => {
+  const config = getSettingConfig(field)
+  if (config.fetchOptions && !optionsCache.value[field]) {
+    optionsCache.value[field] = await config.fetchOptions()
+  }
+}
+
+/**
+ * 加载树形数据（用于树形选择组件）
+ * @param field 设置字段
+ */
+const loadTreeData = async (field: string) => {
+  const config = getSettingConfig(field)
+  if (config.fetchTreeData && !treeDataCache.value[field]) {
+    treeDataCache.value[field] = await config.fetchTreeData()
+  }
+}
+
 // 获取设置数据
 const loadSettings = async () => {
   // 调用 getSettingVOS 接口获取数据
@@ -21,22 +52,18 @@ const loadSettings = async () => {
 
   // 初始化表单数据
   formData.value = {}
-  settings.value.forEach(setting => {
+  for (const setting of settings.value) {
     formData.value[setting.field] = setting.value
-  })
+    // 加载需要的选项数据和树形数据
+    await loadOptions(setting.field)
+    await loadTreeData(setting.field)
+  }
 }
 
-// 判断设置值的类型
-const getSettingType = (value: any): string => {
-  if (typeof value === 'boolean') return 'boolean'
-  if (typeof value === 'number') return 'number'
-  if (typeof value === 'string' && value.length > 50) return 'textarea'
-  return 'string'
-}
 
 // 保存设置
 const saveSettings = async () => {
-  ElMessageBox.confirm(
+  await ElMessageBox.confirm(
       '确定要保存这些设置吗？',
       '确认保存',
       {
@@ -48,7 +75,7 @@ const saveSettings = async () => {
 
   // 准备修改的设置数据
   const modifiedSettings: SettingDTO[] = settings.value
-    .filter(setting => formData.value[setting.field] !== setting.value)
+    .filter(setting => !deepEqual(formData.value[setting.field], setting.value))
     .map(setting => ({
       id: setting.id,
       value: formData.value[setting.field]
@@ -75,10 +102,49 @@ const resetForm = () => {
   ElMessage.info('已重置到原始值')
 }
 
+/**
+ * 深度比较两个值是否相等（支持数组和对象）
+ * @param a 值A
+ * @param b 值B
+ * @returns 是否相等
+ */
+const deepEqual = (a: any, b: any): boolean => {
+  if (a === b) return true
+  
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false
+    return a.every((item, index) => deepEqual(item, b[index]))
+  }
+  
+  if (typeof a === 'object' && typeof b === 'object' && a !== null && b !== null) {
+    const keysA = Object.keys(a)
+    const keysB = Object.keys(b)
+    if (keysA.length !== keysB.length) return false
+    return keysA.every(key => deepEqual(a[key], b[key]))
+  }
+  
+  return false
+}
+
+/**
+ * 获取树形选择的占位符文本
+ * @param field 设置字段
+ * @returns 占位符文本
+ */
+const getTreeSelectPlaceholder = (field: string): string => {
+  // 可以根据不同的字段返回不同的占位符
+  switch (field) {
+    case SettingField.DEFAULT_ROLES:
+      return '请选择默认角色'
+    default:
+      return '请选择'
+  }
+}
+
 // 检查是否有修改
 const hasChanges = computed(() => {
   return settings.value.some(setting => 
-    formData.value[setting.field] !== setting.value
+    !deepEqual(formData.value[setting.field], setting.value)
   )
 })
 
@@ -120,31 +186,52 @@ onMounted(() => {
           </div>
           
           <div class="setting-control">
-            <!-- 布尔值开关 -->
+            <!-- 根据配置动态渲染不同的组件 -->
+            
+            <!-- 开关组件 -->
             <el-switch
-              v-if="getSettingType(setting.value) === 'boolean'"
+              v-if="getSettingConfig(setting.field).component === 'switch'"
               v-model="formData[setting.field]"
               size="large"
             />
             
-            <!-- 数字输入 -->
+            <!-- 数字输入组件 -->
             <el-input-number
-              v-else-if="getSettingType(setting.value) === 'number'"
+              v-else-if="getSettingConfig(setting.field).component === 'number'"
               v-model="formData[setting.field]"
               :min="0"
               :max="999999"
               controls-position="right"
             />
             
-            <!-- 多行文本 -->
+            <!-- 多行文本组件 -->
             <el-input
-              v-else-if="getSettingType(setting.value) === 'textarea'"
+              v-else-if="getSettingConfig(setting.field).component === 'textarea'"
               v-model="formData[setting.field]"
               type="textarea"
               :rows="3"
             />
             
-            <!-- 普通文本输入 -->
+            <!-- 下拉选择组件 -->
+            <SettingSelect
+              v-else-if="getSettingConfig(setting.field).component === 'select'"
+              v-model="formData[setting.field]"
+              type="select"
+              :options="optionsCache[setting.field] || []"
+              placeholder="请选择"
+            />
+            
+            <!-- 树形选择组件 -->
+            <SettingSelect
+              v-else-if="getSettingConfig(setting.field).component === 'tree-select'"
+              v-model="formData[setting.field]"
+              type="tree-select"
+              :tree-data="treeDataCache[setting.field] || []"
+              :multiple="getSettingConfig(setting.field).multiple"
+              :placeholder="getTreeSelectPlaceholder(setting.field)"
+            />
+            
+            <!-- 默认文本输入组件 -->
             <el-input
               v-else
               v-model="formData[setting.field]"

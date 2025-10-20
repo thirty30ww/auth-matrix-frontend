@@ -1,4 +1,4 @@
-import http from "../http.ts";
+import http from "../http";
 import { SettingField } from "@/types";
 import type { SettingVO } from "@/types/services/vo/system.ts";
 import type { SettingDTO } from "@/types/services/dto/system.ts";
