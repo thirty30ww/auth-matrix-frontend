@@ -50,7 +50,8 @@ export function getMethodTypeColor(method: string): string {
  */
 export const LoginTypeColor = {
     LOGIN: elType.SUCCESS,
-    LOGOUT: elType.WARNING,
+    REGISTER: elType.WARNING,
+    LOGOUT: elType.DANGER,
     REFRESH: elType.PRIMARY
 } as const
 

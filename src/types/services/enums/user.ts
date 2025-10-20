@@ -56,6 +56,7 @@ export enum MethodType {
  */
 export enum LoginType {
     LOGIN = "登录",
+    REGISTER = "注册",
     LOGOUT = "退出登录",
     REFRESH = "刷新token"
 }
