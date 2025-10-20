@@ -15,43 +15,9 @@
       router
       :unique-opened="true"
     >
-      <!-- 动态渲染菜单 - 处理数组类型的菜单数据 -->
+      <!-- 动态渲染菜单 - 使用递归组件处理多级菜单 -->
       <template v-if="Array.isArray(menuTree) && menuTree.length > 0">
-        <template v-for="menu in menuTree" :key="menu.node.id">
-          <!-- 一级菜单项 -->
-          <el-menu-item 
-            v-if="(!menu.children || menu.children.length === 0)"
-            :index="menu.node.path"
-          >
-            <el-icon><component :is="menu.node.icon" /></el-icon>
-            <template #title>{{ menu.node.name }}</template>
-          </el-menu-item>
-          
-          <!-- 二级菜单 -->
-          <el-sub-menu
-            v-else
-            :index="String(menu.node.id)"
-          >
-            <template #title>
-              <el-icon v-if="menu.node.icon">
-                <component :is="menu.node.icon" />
-              </el-icon>
-              <span>{{ menu.node.name }}</span>
-            </template>
-            
-            <!-- 子菜单项 -->
-            <template v-for="subMenu in menu.children" :key="subMenu.node.id">
-              <el-menu-item 
-                :index="subMenu.node.path"
-              >
-                <el-icon v-if="subMenu.node.icon">
-                  <component :is="subMenu.node.icon" />
-                </el-icon>
-                <span>{{ subMenu.node.name }}</span>
-              </el-menu-item>
-            </template>
-          </el-sub-menu>
-        </template>
+        <MenuTreeItem :menu-data="menuTree" />
       </template>
     </el-menu>
     
@@ -120,6 +86,7 @@ import {computed, onMounted} from 'vue'
 import IconButton from '@/components/basic/IconButton.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import LogoIcon from '@/components/business/LogoIcon.vue'
+import MenuTreeItem from '@/components/basic/MenuTreeItem.vue'
 
 defineProps({
   isCollapsed: {

@@ -137,6 +137,7 @@ watch(() => props.modelValue, (newValue) => {
 .icon-grid-container {
   padding: var(--padding-size-md); /* 使用现有padding变量 */
   /* 移除高度限制，让Element Plus下拉框本身处理滚动 */
+  cursor: default !important; /* 强制覆盖禁用光标，显示普通光标 */
 }
 
 /* 图标网格容器 */

@@ -417,9 +417,10 @@ watch(() => formData.type, (newType, oldType) => {
   }
 })
 
-// 监听父节点变化，重置类型选择
+// 监听父节点变化，重置类型选择（仅在添加模式下）
 watch(() => formData.parentNodeId, (newParentId, oldParentId) => {
-  if (newParentId !== oldParentId) {
+  if (newParentId !== oldParentId && !isEdit.value) {
+    // 只在添加模式下自动设置类型，编辑模式下保持用户选择的类型
     const selectedParent = getSelectedParentNode()
     
     if (selectedParent) {
