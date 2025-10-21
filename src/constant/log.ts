@@ -6,6 +6,7 @@ import { elType } from "@/constant/common.ts";
 export const OperationTypeColor = {
     SELECT: elType.PRIMARY,
     INSERT: elType.SUCCESS,
+    SEND: elType.WARNING,
     UPDATE: elType.WARNING,
     DELETE: elType.DANGER,
     UPLOAD: elType.INFO

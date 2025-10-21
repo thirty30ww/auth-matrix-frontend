@@ -37,7 +37,8 @@ export enum OperationType{
     INSERT = "INSERT",
     DELETE = "DELETE",
     UPDATE = "UPDATE",
-    UPLOAD = "UPLOAD"
+    UPLOAD = "UPLOAD",
+    SEND = "SEND"
 }
 
 /**
