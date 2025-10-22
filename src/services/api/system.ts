@@ -1,7 +1,7 @@
 import http from "../http";
-import { SettingField } from "@/types";
-import type { SettingVO } from "@/types/services/vo/system.ts";
-import type { SettingDTO } from "@/types/services/dto/system.ts";
+import { SettingField } from "@/services";
+import type { SettingVO } from "@/services/type/vo/system.ts";
+import type { SettingDTO } from "@/services/type/dto/system.ts";
 
 /**
  * 文件上传 API

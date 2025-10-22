@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { useAuthStore, usePermissionStore } from '@/stores';
-import type { ApiResponse, BaseRequest } from '@/types';
+import type { ApiResponse, BaseRequest } from '@/services';
 
 // 创建axios实例
 const http = axios.create({

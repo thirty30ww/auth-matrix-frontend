@@ -1,5 +1,5 @@
 import type { Router } from 'vue-router';
-import type { PermissionVO } from '@/types';
+import type { PermissionVO } from '@/services';
 import { usePermissionStore } from '@/stores';
 
 // 基础项目的组件映射表（固定）

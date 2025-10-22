@@ -116,11 +116,11 @@ import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import api from '@/services'
-import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType, SettingField} from '@/types'
-import { UserSex } from '@/types'
+import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType, SettingField} from '@/services'
+import { UserSex } from '@/services'
 import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
-import type { FormExtraField } from '@/types/views';
+import type { FormExtraField } from '@/services';
 
 // Props
 interface Props {

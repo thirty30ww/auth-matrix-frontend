@@ -13,8 +13,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { CaretTop, CaretBottom, Sort } from '@element-plus/icons-vue'
-import { SortDirection } from '@/types'
-import type { SortDTO as SortType } from '@/types'
+import { SortDirection } from '@/services'
+import type { SortDTO as SortType } from '@/services'
 import TableHeaderIcon from '@/components/basic/TableHeaderIcon.vue'
 
 interface Props {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { LogOperationVO, SortDTO } from '@/types'
-import { OperationType, MethodType } from '@/types'
+import type { LogOperationVO, SortDTO } from '@/services'
+import { OperationType, MethodType } from '@/services'
 import { getValues } from '@/utils'
 import { getStatusCodeType, getOperationTypeColor, getMethodTypeColor } from '@/constant'
 import ActionLinks from '@/components/basic/ActionLinks.vue'

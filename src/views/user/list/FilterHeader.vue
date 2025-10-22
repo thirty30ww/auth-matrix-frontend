@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { Search, Refresh } from '@element-plus/icons-vue'
 import api from '@/services'
-import {type Role, type RoleVO, RolesType} from '@/types'
+import {type Role, type RoleVO, RolesType} from '@/services'
 import DateRangeFilter from '@/components/basic/DateRangeFilter.vue'
 
 // 定义 props

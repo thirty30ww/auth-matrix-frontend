@@ -1,5 +1,5 @@
 // 基础列表查询接口
-import {SortDirection} from "@/types";
+import {SortDirection} from "@/services";
 
 // 基础列表查询接口
 export interface BaseListDTO {

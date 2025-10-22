@@ -145,7 +145,7 @@ import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import TypeSelector from '@/components/basic/TypeSelector.vue'
 import IconSelector from '@/components/basic/IconSelector.vue'
 import api from '@/services'
-import { type PermissionVO, type PermissionDTO, PermissionType } from '@/types'
+import { type PermissionVO, type PermissionDTO, PermissionType } from '@/services'
 import { getValues } from '@/utils'
 
 // Props

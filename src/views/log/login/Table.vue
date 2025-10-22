@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { LogLoginVO, SortDTO } from '@/types'
-import { LoginType, Status } from '@/types'
+import type { LogLoginVO, SortDTO } from '@/services'
+import { LoginType, Status } from '@/services'
 import { getKeys, getValue, getMappings } from '@/utils'
 import { LoginTypeColor, StatusColor, elType } from '@/constant'
 import SortableTableHeader from '@/components/business/SortableTableHeader.vue'

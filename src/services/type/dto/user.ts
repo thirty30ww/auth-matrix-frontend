@@ -1,6 +1,6 @@
 // 密码修改请求接口
-import {type BaseListDTO, LoginType, MethodType, OperationType, Status} from "@/types";
-import { UserSex, PermissionType } from "@/types";
+import {type BaseListDTO, LoginType, MethodType, OperationType, Status} from "@/services";
+import { UserSex, PermissionType } from "@/services";
 
 /**
  * 用户添加请求接口

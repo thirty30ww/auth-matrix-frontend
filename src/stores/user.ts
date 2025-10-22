@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import api from '@/services'
-import type { UserVO, UpdateUserDTO } from '@/types/index.ts'
+import type { UserVO, UpdateUserDTO } from '@/services'
 
 export const useUserStore = defineStore('user', {
     state: () => ({

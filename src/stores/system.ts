@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import api from '@/services'
-import {SettingField} from '@/types'
+import {SettingField} from '@/services'
 
 export const useSystemStore = defineStore('system', {
     state: () => ({

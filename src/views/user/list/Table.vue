@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { UserVO, SortDTO } from '@/types'
+import type { UserVO, SortDTO } from '@/services'
 import { LevelTagType, UserStatus } from '@/constant'
-import { UserSex } from '@/types'
+import { UserSex } from '@/services'
 import { getValue, getValues } from '@/utils'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import StatusDot from '@/components/basic/StatusDot.vue'

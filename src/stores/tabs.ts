@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { TabItem } from "@/types";
+import type { TabItem } from "@/services";
 import { HOME } from '@/constant';
 import { usePageCacheStore } from './pageCache';
 

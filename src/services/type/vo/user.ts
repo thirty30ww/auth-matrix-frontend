@@ -1,5 +1,5 @@
 // 用户基础信息接口
-import { UserSex, PermissionType, MethodType, OperationType, Status, LoginType } from "@/types";
+import { UserSex, PermissionType, MethodType, OperationType, Status, LoginType } from "@/services";
 
 /**
  * 角色接口

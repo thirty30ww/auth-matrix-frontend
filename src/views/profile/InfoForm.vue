@@ -47,11 +47,11 @@
 
 <script setup lang="ts">
 import { reactive, watch } from 'vue';
-import type { UserVO } from '@/types/index.ts';
+import type { UserVO } from '@/services/index.ts';
 import { useUserStore } from '@/stores';
 import RequiredLabel from '@/components/basic/RequiredLabel.vue';
 import {getValues} from "@/utils";
-import { UserSex } from '@/types';
+import { UserSex } from '@/services';
 
 // 获取 user store
 const userStore = useUserStore();

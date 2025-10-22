@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
 import {ElMessageBox} from 'element-plus'
-import type {Role, RoleVO, PermissionVO} from '@/types'
+import type {Role, RoleVO, PermissionVO} from '@/services'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'

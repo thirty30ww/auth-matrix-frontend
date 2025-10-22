@@ -4,11 +4,11 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 import {Check, Refresh} from '@element-plus/icons-vue'
 import api from '@/services'
 import {useSystemStore} from '@/stores/system'
-import type {SettingVO} from '@/types/services/vo/system'
-import type {SettingDTO} from '@/types/services/dto/system'
+import type {SettingVO} from '@/services/type/vo/system'
+import type {SettingDTO} from '@/services/type/dto/system'
 import {getSettingConfig} from './settingConfig'
 import SettingSelect from './SettingSelect.vue'
-import {SettingField} from '@/types'
+import {SettingField} from '@/services'
 
 // 响应式数据
 const settings = ref<SettingVO[]>([])

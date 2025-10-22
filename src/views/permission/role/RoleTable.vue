@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
-import type { RoleVO } from '@/types'
+import type { RoleVO } from '@/services'
 import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import api from '@/services'
-import { type PageQueryDTO, type PageResponse, type SortDTO, type LogOperationVO, type LogOperationDTO } from '@/types'
-import { SortDirection } from '@/types'
+import { type PageQueryDTO, type PageResponse, type SortDTO, type LogOperationVO, type LogOperationDTO } from '@/services'
+import { SortDirection } from '@/services'
 import { useListPageCache } from '@/composables/usePageCache'
 import LogOperateTable from './Table.vue'
 import LogOperateDetailDrawer from './DetailDrawer.vue'

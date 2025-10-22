@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { PermissionVO } from '@/types'
+import type { PermissionVO } from '@/services'
 import api from "@/services";
 
 export const usePermissionStore = defineStore('view', {

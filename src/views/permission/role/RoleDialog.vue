@@ -84,7 +84,7 @@ import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import TypeSelector from '@/components/basic/TypeSelector.vue'
 import api from '@/services'
-import {type Role, type RoleDTO, RolesType, type RoleVO} from '@/types'
+import {type Role, type RoleDTO, RolesType, type RoleVO} from '@/services'
 import {RoleConstants, RoleTypeOptions, isGlobalRole, getRoleType} from '@/constant'
 
 // Props

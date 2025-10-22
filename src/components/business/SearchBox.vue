@@ -30,7 +30,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
-import type { PermissionVO } from '@/types'
+import type { PermissionVO } from '@/services'
 import api from "@/services";
 
 const router = useRouter()

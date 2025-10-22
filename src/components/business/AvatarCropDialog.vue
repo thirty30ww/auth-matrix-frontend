@@ -80,7 +80,7 @@ import {computed, nextTick, ref, watch} from 'vue';
 import {RefreshLeft, RefreshRight} from '@element-plus/icons-vue';
 import {VueCropper} from 'vue-cropper';
 import 'vue-cropper/dist/index.css';
-import type {Emits, Props} from "@/types";
+import type {Emits, Props} from "@/services";
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: false

@@ -19,7 +19,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/stores'
-import type {TabItem, PermissionVO} from "@/types";
+import type {TabItem, PermissionVO} from "@/services";
 import { HOME } from '@/constant';
 
 const route = useRoute()

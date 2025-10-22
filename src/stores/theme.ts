@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import api from '@/services'
-import type { Preference } from '@/types'
+import type { Preference } from '@/services'
 import { PREFERENCE_FIELDS, DEFAULT_THEME_CONFIG, type LogoPosition } from '@/constant/theme'
 import { getThemeConfig, generateThemeColorVariants, applyThemeColorsToCSS } from '@/utils/color.ts'
 import { executeThemeTransition } from '@/assets/style/animations/theme-transition.ts'

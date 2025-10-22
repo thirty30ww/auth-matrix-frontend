@@ -17,8 +17,8 @@ import type {
     Preference,
     LogOperationDTO,
     LogOperationVO, LogLoginDTO, LogLoginVO
-} from '@/types';
-import { RolesType } from '@/types';
+} from '@/services';
+import { RolesType } from '@/services';
 
 /**
  * 权限校验 API

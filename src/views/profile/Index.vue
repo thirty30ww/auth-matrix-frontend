@@ -110,7 +110,7 @@ import { useUserStore } from '@/stores';
 import api from '@/services';
 import {formatDate, getValue} from '@/utils';
 import {elType, LevelTagType} from "@/constant";
-import type { ExtraField } from '@/types/views';
+import type { ExtraField } from '@/services';
 
 // 添加 props 接收扩展字段配置
 const props = defineProps<{

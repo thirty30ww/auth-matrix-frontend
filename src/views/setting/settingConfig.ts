@@ -1,4 +1,4 @@
-import { SettingField } from '@/types'
+import { SettingField } from '@/services'
 import api from '@/services'
 
 /**

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import api from '@/services'
-import type { LogOperationVO } from '@/types'
+import type { LogOperationVO } from '@/services'
 import { getStatusCodeType, getOperationTypeColor, getMethodTypeColor } from '@/constant'
 
 // 定义 props

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
-import type { PermissionVO } from '@/types'
+import type { PermissionVO } from '@/services'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import { PermissionStatus } from "@/constant"
 import ClickableTag from '@/components/basic/ClickableTag.vue'

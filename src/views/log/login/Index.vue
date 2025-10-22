@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import api from '@/services'
-import { type PageQueryDTO, type PageResponse, type SortDTO, type LogLoginVO, type LogLoginDTO, LoginType, Status } from '@/types'
-import { SortDirection } from '@/types'
+import { type PageQueryDTO, type PageResponse, type SortDTO, type LogLoginVO, type LogLoginDTO, LoginType, Status } from '@/services'
+import { SortDirection } from '@/services'
 import { useListPageCache } from '@/composables/usePageCache'
 import LogLoginTable from './Table.vue'
 import FilterHeader from './FilterHeader.vue'
