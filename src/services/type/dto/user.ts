@@ -3,6 +3,15 @@ import {type BaseListDTO, LoginType, MethodType, OperationType, Status} from "@/
 import { UserSex, PermissionType } from "@/services";
 
 /**
+ * 用户注册请求接口
+ */
+export interface RegisterDTO {
+    username: string;
+    password: string;
+    confirmPassword: string;
+}
+
+/**
  * 用户添加请求接口
  */
 export interface AddUserDTO {
