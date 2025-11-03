@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { PermissionVO } from '@/services'
 import api from "@/services";
 
-export const usePermissionStore = defineStore('view', {
+export const usePermissionStore = defineStore('permission', {
     state: () => ({
         viewTree: [] as PermissionVO[],           // 用于路由生成的完整页面树
         menuTree: [] as PermissionVO[],           // 用于侧边栏显示的菜单树
