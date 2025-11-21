@@ -4,9 +4,9 @@ import type { RoleVO } from '@/services'
 import StatusDot from '@/components/basic/StatusDot.vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
-import {PermissionStatus} from "../../../constant"
+import {PermissionStatus} from "@/constant"
 import { useUserStore } from '@/stores'
-import { usePermissionStore } from '@/stores/permission.ts'
+import { usePermissionStore } from '@/stores/permission'
 import { useTreeTableExpandState } from '@/utils/treeTable'
 
 // Props

@@ -7,7 +7,7 @@
  */
 
 import type { Directive, DirectiveBinding } from 'vue'
-import { usePermissionStore } from '@/stores/permission.ts'
+import { usePermissionStore } from '@/stores/permission'
 
 interface PermissionConfig {
     codes: string | string[]

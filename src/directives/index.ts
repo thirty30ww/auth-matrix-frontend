@@ -3,8 +3,8 @@
  */
 
 import type { App } from 'vue'
-import { loading } from './loading.ts'
-import { permission } from './permission.ts'
+import { loading } from './loading'
+import { permission } from './permission'
 
 export function setupDirectives(app: App) {
     // 注册表格加载指令

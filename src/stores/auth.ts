@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import api from '@/services'
 import router from '@/router'
-import { useUserStore } from "@/stores/user.ts";
-import { useTabsStore } from "@/stores/tabs.ts";
-import { usePermissionStore } from "@/stores/permission.ts";
-import { reloadRoutes, resetRoutesLoadedState } from "@/router/dynamicRoutes.ts";
+import { useUserStore } from "@/stores/user";
+import { useTabsStore } from "@/stores/tabs";
+import { usePermissionStore } from "@/stores/permission";
+import { reloadRoutes, resetRoutesLoadedState } from "@/router/dynamicRoutes";
 
 // 使用函数形式延迟获取store
 const getUserStore = () => useUserStore();

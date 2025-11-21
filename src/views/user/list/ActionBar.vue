@@ -4,7 +4,7 @@ import { Plus } from '@element-plus/icons-vue'
 import BatchOperations, { type BatchOperation } from '@/components/basic/BatchOperations.vue'
 import type { UserVO } from '@/services'
 import api from '@/services'
-import { usePermissionStore } from '@/stores/permission.ts'
+import { usePermissionStore } from '@/stores/permission'
 
 // 定义 props
 interface Props {

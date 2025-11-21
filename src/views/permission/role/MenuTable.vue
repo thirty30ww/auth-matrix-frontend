@@ -4,7 +4,7 @@ import type { PermissionVO } from '@/services'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import { PermissionStatus } from "@/constant"
 import ClickableTag from '@/components/basic/ClickableTag.vue'
-import { usePermissionStore } from '@/stores/permission.ts'
+import { usePermissionStore } from '@/stores/permission'
 import { useTreeTableExpandState } from '@/utils/treeTable'
 
 // Props

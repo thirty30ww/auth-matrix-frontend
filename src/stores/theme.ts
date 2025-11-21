@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import api from '@/services'
 import type { Preference } from '@/services'
 import { PREFERENCE_FIELDS, DEFAULT_THEME_CONFIG, type LogoPosition } from '@/constant/theme'
-import { getThemeConfig, generateThemeColorVariants, applyThemeColorsToCSS } from '@/utils/color.ts'
-import { executeThemeTransition } from '@/assets/style/animations/theme-transition.ts'
+import { getThemeConfig, generateThemeColorVariants, applyThemeColorsToCSS } from '@/utils/color'
+import { executeThemeTransition } from '@/assets/style/animations/theme-transition'
 
 // 重新导出类型和常量，保持向后兼容
 export type { ThemeColor, LogoPosition } from '@/constant/theme'

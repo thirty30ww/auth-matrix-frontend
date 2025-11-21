@@ -6,8 +6,8 @@
 export * from './date';
 
 // 映射工具
-export * from './constant.ts';
+export * from './constant';
 
 export * from './treeTable';
 
-export * from './color.ts';
+export * from './color';

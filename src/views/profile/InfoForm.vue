@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { reactive, watch } from 'vue';
-import type { UserVO } from '@/services/index.ts';
+import type { UserVO } from '@/services';
 import { useUserStore } from '@/stores';
 import RequiredLabel from '@/components/basic/RequiredLabel.vue';
 import {getValues} from "@/utils";

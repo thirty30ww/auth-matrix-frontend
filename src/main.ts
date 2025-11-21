@@ -14,7 +14,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 导入 stores
 import { useAuthStore, useThemeStore } from '@/stores'
-import { ensureRoutesLoaded } from "@/router/dynamicRoutes.ts"
+import { ensureRoutesLoaded } from "@/router/dynamicRoutes"
 import { setupDirectives } from '@/directives'
 
 const app = createApp(App)

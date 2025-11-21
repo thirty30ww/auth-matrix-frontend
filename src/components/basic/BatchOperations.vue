@@ -34,7 +34,7 @@
 import { computed } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { usePermissionStore } from '@/stores/permission.ts'
+import { usePermissionStore } from '@/stores/permission'
 
 // 批量操作配置接口
 export interface BatchOperation<T = any> {

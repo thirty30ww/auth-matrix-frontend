@@ -1,4 +1,4 @@
-import {elType} from "@/constant/common.ts";
+import {elType} from "@/constant/common";
 
 /**
  * 用户状态枚举类

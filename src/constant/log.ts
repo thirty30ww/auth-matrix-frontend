@@ -1,4 +1,4 @@
-import { elType } from "@/constant/common.ts";
+import { elType } from "@/constant/common";
 
 /**
  * 操作类型颜色映射

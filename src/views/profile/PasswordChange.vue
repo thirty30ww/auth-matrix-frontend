@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
 import api from '@/services'
-import type { ChangePassWordDTO } from '@/services/index.ts';
+import type { ChangePassWordDTO } from '@/services';
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
 
 // 密码表单数据

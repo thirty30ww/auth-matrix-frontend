@@ -7,7 +7,7 @@ import ActionLinks from '@/components/basic/ActionLinks.vue'
 import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
 import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
 import { computed } from 'vue'
-import { usePermissionStore } from '@/stores/permission.ts'
+import { usePermissionStore } from '@/stores/permission'
 
 // 定义 props
 interface Props {
