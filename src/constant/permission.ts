@@ -2,7 +2,7 @@ import { PermissionType } from '@/services'
 import { elType } from "@/constant/common";
 
 // 菜单类型对应的标签类型映射
-export const VIEW_TYPE_TAG_MAP = {
+export const PERMISSION_TYPE_MAP = {
     [PermissionType.DIRECTORY]: elType.WARNING,
     [PermissionType.MENU]: elType.SUCCESS,
     [PermissionType.PAGE]: elType.PRIMARY,

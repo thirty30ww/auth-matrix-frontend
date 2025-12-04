@@ -22,7 +22,9 @@ export const PermissionStatus = {
 export const LevelTagType = {
     0: elType.DANGER,   // level 0 - 红色
     1: elType.WARNING,  // level 1 - 橙色
-    2: elType.SUCCESS   // level 2 - 绿色
+    2: elType.SUCCESS,  // level 2 - 绿色
+    3: elType.PRIMARY,  // level 3 - 主题色
+    default: elType.PRIMARY // 默认主题色
 }
 
 /**

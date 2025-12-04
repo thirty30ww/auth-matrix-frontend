@@ -1,5 +1,5 @@
 import type { Router } from 'vue-router';
-import type { PermissionVO } from '@/services';
+import type { PermissionBkVO } from '@/services';
 import { usePermissionStore } from '@/stores';
 
 // 基础项目的组件映射表（固定）
@@ -134,7 +134,7 @@ async function loadRoutesFromBackend(router: Router) {
  * @param viewNodes 视图节点列表
  * @param router 路由实例
  */
-function generateAndAddRoutes(viewNodes: PermissionVO[], router: Router) {
+function generateAndAddRoutes(viewNodes: PermissionBkVO[], router: Router) {
     viewNodes.forEach(item => {
         // 创建路由对象
         const componentPath = globalPathFormatter(item.node.component);

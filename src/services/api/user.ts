@@ -3,7 +3,7 @@ import type {
     UserVO,
     JwtVO,
     UpdateUserDTO,
-    PermissionVO,
+    PermissionBkVO,
     ChangePassWordDTO,
     PageQueryDTO,
     PageResponse,
@@ -13,7 +13,7 @@ import type {
     ModifyUserDTO,
     RoleVO,
     RoleDTO,
-    PermissionDTO,
+    PermissionBkDTO,
     Preference,
     LogOperationDTO,
     LogOperationVO, LogLoginDTO, LogLoginVO
@@ -228,19 +228,19 @@ export const roleApi = {
 /**
  * 页面 API
  */
-export const permissionApi = {
+export const permissionBkApi = {
     /**
      * 获取页面树
      */
     getViewTree() {
-        return http.get<PermissionVO[]>('/permission/tree');
+        return http.get<PermissionBkVO[]>('/permission/bk/tree');
     },
 
     /**
      * 获取菜单树
      */
     getMenuTree() {
-        return http.get<PermissionVO[]>('/permission/menu/tree');
+        return http.get<PermissionBkVO[]>('/permission/bk/menu/tree');
     },
 
     /**
@@ -248,7 +248,7 @@ export const permissionApi = {
      * @param targetRoleId 目标角色ID
      */
     getMenuAndButtonTree(targetRoleId?: number) {
-        return http.get<PermissionVO[]>('/permission/menu/button/tree', { params: { targetRoleId } });
+        return http.get<PermissionBkVO[]>('/permission/bk/menu/button/tree', { params: { targetRoleId } });
     },
 
     /**
@@ -256,30 +256,30 @@ export const permissionApi = {
      * @param keyword 搜索关键词，可选参数
      */
     getViewList(keyword: string) {
-        return http.get<PermissionVO[]>('/permission/list', { params: { keyword } });
+        return http.get<PermissionBkVO[]>('/permission/bk/list', { params: { keyword } });
     },
 
     /**
      * 获取权限码列表
      */
     getPermissionCode() {
-        return http.get<string[]>('/permission/permission/code');
+        return http.get<string[]>('/permission/bk/code');
     },
 
     /**
      * 添加页面
      * @param permissionDTO 页面添加请求参数
      */
-    addPermission(permissionDTO: PermissionDTO) {
-        return http.post<void>('/permission/add', { data: permissionDTO, showSuccess: true });
+    addPermission(permissionDTO: PermissionBkDTO) {
+        return http.post<void>('/permission/bk/add', { data: permissionDTO, showSuccess: true });
     },
 
     /**
      * 修改页面
      * @param permissionDTO 页面修改请求参数
      */
-    modifyPermission(permissionDTO: PermissionDTO) {
-        return http.post<void>('/permission/modify', { data: permissionDTO, showSuccess: true });
+    modifyPermission(permissionDTO: PermissionBkDTO) {
+        return http.post<void>('/permission/bk/modify', { data: permissionDTO, showSuccess: true });
     },
 
     /**
@@ -287,7 +287,7 @@ export const permissionApi = {
      * @param permissionId 页面ID
      */
     deletePermission(permissionId: number) {
-        return http.get<void>('/permission/delete', { params: { permissionId }, showSuccess: true });
+        return http.get<void>('/permission/bk/delete', { params: { permissionId }, showSuccess: true });
     },
 
     /**
@@ -296,7 +296,7 @@ export const permissionApi = {
      * @param isUp 是否向上移动
      */
     movePermission(permissionId: number, isUp: boolean) {
-        return http.get<void>('/permission/move', { params: { permissionId, isUp } });
+        return http.get<void>('/permission/bk/move', { params: { permissionId, isUp } });
     }
 }
 

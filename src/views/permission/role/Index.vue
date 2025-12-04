@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
 import {ElMessageBox} from 'element-plus'
-import type {Role, RoleVO, PermissionVO} from '@/services'
+import type {Role, RoleVO, PermissionBkVO} from '@/services'
 import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
@@ -12,7 +12,7 @@ import { isGlobalRole, getRoleTypeLabel } from '@/constant'
 
 // 响应式数据
 const roleTableData = ref<RoleVO[]>([])
-const menuTableData = ref<PermissionVO[]>([])
+const menuTableData = ref<PermissionBkVO[]>([])
 const selectedRole = ref<RoleVO | null>(null)
 const roleTableRef = ref()
 const menuPermissionRef = ref()
@@ -71,7 +71,7 @@ const getRoleTree = async () => {
 const getMenuTree = async (roleId?: number) => {
   isLoadingMenus.value = true
   try {
-    const data = await api.permission.getMenuAndButtonTree(roleId)
+    const data = await api.permission_bk.getMenuAndButtonTree(roleId)
     if (data) {
       menuTableData.value = data
     }
@@ -289,7 +289,7 @@ onMounted(async () => {
     <RoleDialog
       v-model:visible="roleDialogVisible"
       :role-data="currentRoleData"
-      :parent-node-id="currentParentNodeId"
+      :parent-id="currentParentNodeId"
       :show-parent-select="showParentSelect"
       :show-role-type-select="showRoleTypeSelect"
       @success="handleRoleDialogSuccess"

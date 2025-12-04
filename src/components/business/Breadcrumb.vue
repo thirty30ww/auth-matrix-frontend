@@ -19,7 +19,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/stores'
-import type {TabItem, PermissionVO} from "@/services";
+import type {TabItem, PermissionBkVO} from "@/services";
 import { HOME } from '@/constant';
 
 const route = useRoute()
@@ -44,7 +44,7 @@ const breadcrumbItems = computed(() => {
   }
 
   // 递归查找当前路径的所有父级路径
-  const findPathInViewTree = (nodes: PermissionVO[], path: string, parents: TabItem[] = []): TabItem[] | null => {
+  const findPathInViewTree = (nodes: PermissionBkVO[], path: string, parents: TabItem[] = []): TabItem[] | null => {
     for (const item of nodes) {
       // 当前路径匹配
       if (item.node.path === path) {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UserVO, SortDTO } from '@/services'
-import { LevelTagType, UserStatus } from '@/constant'
+import {elType, LevelTagType, UserStatus} from '@/constant'
 import { UserSex } from '@/services'
 import { getValue, getValues } from '@/utils'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
@@ -180,7 +180,7 @@ const getActionLinks = (user: UserVO) => {
           <el-tag
              v-for="role in row.roles"
              :key="role.id"
-             :type="getValue(LevelTagType, role.level, 'primary')"
+             :type="getValue(LevelTagType, role.level, elType.PRIMARY)"
              style="margin-right: var(--margin-size-spacing-1);"
            >
             {{ role.name }}

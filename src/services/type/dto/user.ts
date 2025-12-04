@@ -76,16 +76,16 @@ export interface RoleDTO {
 /**
  * 权限DTO
  */
-export interface PermissionDTO {
+export interface PermissionBkDTO {
     id?: number;
     name: string;
     path?: string;
     component?: string;
     type: PermissionType;
     permissionCode?: string;
-    parentNodeId: number;
-    frontNodeId?: number;
-    behindNodeId?: number;
+    parentId: number;
+    frontId?: number;
+    behindId?: number;
     icon?: string;
     isValid: boolean;
 }

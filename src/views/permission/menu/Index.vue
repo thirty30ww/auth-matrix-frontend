@@ -3,12 +3,12 @@ import { onMounted, ref, computed, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { usePermissionStore } from '@/stores'
-import { VIEW_TYPE_TAG_MAP } from '@/constant'
+import { PERMISSION_TYPE_MAP } from '@/constant'
 import { getValue } from '@/utils'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import ActionLinks from '@/components/basic/ActionLinks.vue'
 import MenuDialog from '@/views/permission/menu/MenuDialog.vue'
-import type { PermissionVO } from '@/services'
+import type { PermissionBkVO } from '@/services'
 import { PermissionType } from '@/services'
 import api from '@/services'
 import { reloadRoutes } from '@/router/dynamicRoutes'
@@ -18,11 +18,11 @@ const router = useRouter()
 const permissionStore = usePermissionStore()
 const menuTableRef = ref()
 const isLoading = ref(false)
-const menuAndButtonTreeData = ref<PermissionVO[]>([])
+const menuAndButtonTreeData = ref<PermissionBkVO[]>([])
 
 // MenuDialog 相关状态
 const menuDialogVisible = ref(false)
-const currentMenuData = ref<PermissionVO | null>(null)
+const currentMenuData = ref<PermissionBkVO | null>(null)
 
 // 树型表格展开状态管理
 const {
@@ -58,7 +58,7 @@ const handleCollapseAll = () => collapseAll(menuTableRef, menuAndButtonTreeData)
 const loadMenuData = async () => {
   isLoading.value = true
   try {
-    const data = await api.permission.getMenuAndButtonTree()
+    const data = await api.permission_bk.getMenuAndButtonTree()
     if (data) {
       menuAndButtonTreeData.value = data
     }
@@ -89,7 +89,7 @@ const handleAddMenu = () => {
 }
 
 // 菜单行操作方法
-const handleAddChildMenu = (row: PermissionVO) => {
+const handleAddChildMenu = (row: PermissionBkVO) => {
   // 根据父节点类型设置默认的子节点类型
   let defaultType = PermissionType.DIRECTORY
   if (row.node.type === PermissionType.MENU) {
@@ -108,9 +108,9 @@ const handleAddChildMenu = (row: PermissionVO) => {
       path: '',
       component: '',
       type: defaultType,
-      parentNodeId: row.node.id, // 设置父节点ID为当前行的ID
-      frontNodeId: 0,
-      behindNodeId: 0,
+      parentId: row.node.id, // 设置父节点ID为当前行的ID
+      frontId: 0,
+      behindId: 0,
       icon: '',
       permissionCode: '',
       isValid: true
@@ -120,12 +120,12 @@ const handleAddChildMenu = (row: PermissionVO) => {
   menuDialogVisible.value = true
 }
 
-const handleEditMenu = (row: PermissionVO) => {
+const handleEditMenu = (row: PermissionBkVO) => {
   currentMenuData.value = row
   menuDialogVisible.value = true
 }
 
-const handleDeleteMenu = async (row: PermissionVO) => {
+const handleDeleteMenu = async (row: PermissionBkVO) => {
   // 确认删除操作
   const confirmed = await ElMessageBox.confirm(
     '确定要删除该菜单吗？删除后不可恢复。',
@@ -148,16 +148,16 @@ const handleDeleteMenu = async (row: PermissionVO) => {
 }
 
 // 上移菜单
-const handleMoveUp = async (row: PermissionVO) => {
-  await api.permission.movePermission(row.node.id, true)
+const handleMoveUp = async (row: PermissionBkVO) => {
+  await api.permission_bk.movePermission(row.node.id, true)
   await loadMenuData()
   // 同步更新侧边栏菜单数据
   await permissionStore.getMenuTree()
 }
 
 // 下移菜单
-const handleMoveDown = async (row: PermissionVO) => {
-  await api.permission.movePermission(row.node.id, false)
+const handleMoveDown = async (row: PermissionBkVO) => {
+  await api.permission_bk.movePermission(row.node.id, false)
   await loadMenuData()
   // 同步更新侧边栏菜单数据
   await permissionStore.getMenuTree()
@@ -174,7 +174,7 @@ const handleMenuDialogSuccess = async () => {
 }
 
 // 获取菜单行操作配置
-const getMenuActions = (row: PermissionVO) => {
+const getMenuActions = (row: PermissionBkVO) => {
   // 检查当前行是否不允许修改（hasChange为false）
   const isNotChangeable = row.hasChange === false
   
@@ -197,8 +197,8 @@ const getMenuActions = (row: PermissionVO) => {
   allActions.push({
     label: '上移',
     onClick: () => handleMoveUp(row),
-    // frontNodeId === 0 表示是第一个时禁用
-    disabled: row.node.frontNodeId === 0,
+    // frontId === 0 表示是第一个时禁用
+    disabled: row.node.frontId === 0,
     type: 'default' as const,
     permission: canMoveMenu.value
   })
@@ -207,8 +207,8 @@ const getMenuActions = (row: PermissionVO) => {
   allActions.push({
     label: '下移',
     onClick: () => handleMoveDown(row),
-    // behindNodeId === 0 表示是最后一个时禁用
-    disabled: row.node.behindNodeId === 0,
+    // behindId === 0 表示是最后一个时禁用
+    disabled: row.node.behindId === 0,
     type: 'default' as const,
     permission: canMoveMenu.value
   })
@@ -293,7 +293,7 @@ const getMenuActions = (row: PermissionVO) => {
       </el-table-column>
       <el-table-column label="类型" min-width="100">
         <template #default="{ row }">
-          <el-tag :type="getValue(VIEW_TYPE_TAG_MAP, row.node.type, 'primary')">{{ row.node.type }}</el-tag>
+          <el-tag :type="getValue(PERMISSION_TYPE_MAP, row.node.type, 'primary')">{{ row.node.type }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="hasAnyMenuOperationPermission" label="操作" width="280" align="center" fixed="right">

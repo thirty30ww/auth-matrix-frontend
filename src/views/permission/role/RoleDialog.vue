@@ -91,7 +91,7 @@ import {RoleConstants, RoleTypeOptions, isGlobalRole, getRoleType} from '@/const
 interface Props {
   visible: boolean
   roleData?: Role | null
-  parentNodeId?: number // 固定的父节点ID（用于行内添加）
+  parentId?: number // 固定的父节点ID（用于行内添加）
   showParentSelect?: boolean // 是否显示父节点选择器
   showRoleTypeSelect?: boolean // 是否显示角色类型选择器（仅在顶部添加时显示）
 }
@@ -99,7 +99,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
   roleData: null,
-  parentNodeId: undefined,
+  parentId: undefined,
   showParentSelect: true,
   showRoleTypeSelect: false
 })

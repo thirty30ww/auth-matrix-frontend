@@ -43,7 +43,7 @@
                 <RequiredLabel required>父节点</RequiredLabel>
               </template>
             <el-tree-select
-              v-model="formData.parentNodeId"
+              v-model="formData.parentId"
               :data="menuTreeOptions"
               :props="{ 
                 value: 'id', 
@@ -129,11 +129,12 @@
     </el-form>
     
     <template #footer>
-      <el-button @click="handleClose">取消</el-button>
-      <el-button type="primary" @click="handleSubmit">
-        {{ isEdit ? '保存' : '添加' }}
-      </el-button>
-    </template>
+        <el-button @click="handleClose">取消</el-button>
+        <el-button v-if="isEdit" @click="handleReset" :disabled="!isFormModified">重置</el-button>
+        <el-button type="primary" @click="handleSubmit">
+          {{ isEdit ? '保存' : '添加' }}
+        </el-button>
+      </template>
   </PaddedDialog>
 </template>
 
@@ -145,13 +146,13 @@ import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import TypeSelector from '@/components/basic/TypeSelector.vue'
 import IconSelector from '@/components/basic/IconSelector.vue'
 import api from '@/services'
-import { type PermissionVO, type PermissionDTO, PermissionType } from '@/services'
+import { type PermissionBkVO, type PermissionBkDTO, PermissionType } from '@/services'
 import { getValues } from '@/utils'
 
 // Props
 interface Props {
   visible: boolean
-  menuData?: PermissionVO | null
+  menuData?: PermissionBkVO | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -187,12 +188,12 @@ const formData = reactive({
   component: '',
   icon: '',
   permissionCode: '',
-  parentNodeId: 0,
+  parentId: 0,
   isValid: true
 })
 
 // 递归获取节点及其所有子节点的ID
-const getAllNodeIds = (node: PermissionVO): number[] => {
+const getAllNodeIds = (node: PermissionBkVO): number[] => {
   const ids = [node.node.id]
   if (node.children && node.children.length > 0) {
     node.children.forEach(child => {
@@ -203,7 +204,7 @@ const getAllNodeIds = (node: PermissionVO): number[] => {
 }
 
 // 递归过滤节点，排除指定的ID列表
-const filterNodes = (nodes: PermissionVO[], excludeIds: number[]): PermissionVO[] => {
+const filterNodes = (nodes: PermissionBkVO[], excludeIds: number[]): PermissionBkVO[] => {
   return nodes
     .filter(node => !excludeIds.includes(node.node.id))
     .map(node => ({
@@ -214,7 +215,7 @@ const filterNodes = (nodes: PermissionVO[], excludeIds: number[]): PermissionVO[
 
 // 获取菜单树数据
 const getMenuTreeData = async () => {
-  const data = await api.permission.getMenuTree()
+  const data = await api.permission_bk.getMenuTree()
   if (data) {
     let filteredData = data
     
@@ -225,7 +226,7 @@ const getMenuTreeData = async () => {
     }
     
     // 转换数据格式以适配tree-select，包含节点类型信息
-    const convertToTreeData = (nodes: PermissionVO[]): any[] => {
+    const convertToTreeData = (nodes: PermissionBkVO[]): any[] => {
       return nodes.map(node => ({
         id: node.node.id,
         name: node.node.name,
@@ -248,7 +249,7 @@ const getMenuTreeData = async () => {
 
 // 获取当前选择的父节点信息
 const getSelectedParentNode = () => {
-  if (formData.parentNodeId === 0) {
+  if (formData.parentId === 0) {
     return { type: PermissionType.DIRECTORY } // 根节点视为目录类型
   }
   
@@ -266,7 +267,7 @@ const getSelectedParentNode = () => {
     return null
   }
   
-  return findNode(menuTreeOptions.value, formData.parentNodeId)
+  return findNode(menuTreeOptions.value, formData.parentId)
 }
 
 // 动态类型选项
@@ -318,7 +319,7 @@ const isDirectoryType = computed(() => formData.type === PermissionType.DIRECTOR
 const isButtonType = computed(() => formData.type === PermissionType.BUTTON)
 
 // 检查所有子级是否都有hasChange权限
-const checkChildrenHasChange = (node: PermissionVO): boolean => {
+const checkChildrenHasChange = (node: PermissionBkVO): boolean => {
   // 如果没有子节点，返回true（叶子节点不影响父节点的修改权限）
   if (!node.children || node.children.length === 0) {
     return true
@@ -356,6 +357,23 @@ const canModifyValid = computed(() => {
   return true
 })
 
+// 计算表单是否被修改（仅编辑模式）
+const isFormModified = computed(() => {
+  if (!isEdit.value || !props.menuData) return false
+  
+  const originalData = props.menuData.node
+  return (
+    formData.name !== originalData.name ||
+    formData.type !== originalData.type ||
+    formData.parentId !== originalData.parentId ||
+    formData.isValid !== originalData.isValid ||
+    formData.path !== (originalData.path || '') ||
+    formData.component !== (originalData.component || '') ||
+    formData.icon !== (originalData.icon || '') ||
+    formData.permissionCode !== (originalData.permissionCode || '')
+  )
+})
+
 // 重置表单
 const resetForm = () => {
   formData.name = ''
@@ -364,19 +382,19 @@ const resetForm = () => {
   formData.component = ''
   formData.icon = ''
   formData.permissionCode = ''
-  formData.parentNodeId = 0
+  formData.parentId = 0
   formData.isValid = true
 }
 
 // 填充表单数据（编辑模式）
-const fillFormData = (menuData: PermissionVO) => {
+const fillFormData = (menuData: PermissionBkVO) => {
   formData.name = menuData.node.name
   formData.type = menuData.node.type
   formData.path = menuData.node.path || ''
   formData.component = menuData.node.component || ''
   formData.icon = menuData.node.icon || ''
   formData.permissionCode = menuData.node.permissionCode || ''
-  formData.parentNodeId = menuData.node.parentNodeId
+  formData.parentId = menuData.node.parentId
   formData.isValid = menuData.node.isValid
 }
 
@@ -388,7 +406,7 @@ watch(() => props.menuData, (newData) => {
   } else if (newData && !isEdit.value) {
     // 添加子菜单模式：重置表单但保留预设的父节点ID和类型
     resetForm()
-    formData.parentNodeId = newData.node.parentNodeId
+    formData.parentId = newData.node.parentId
     formData.type = newData.node.type // 使用传入的类型，不要重置为默认值
   } else {
     // 添加根菜单模式：完全重置
@@ -417,22 +435,55 @@ watch(() => formData.type, (newType, oldType) => {
   }
 })
 
-// 监听父节点变化，重置类型选择（仅在添加模式下）
-watch(() => formData.parentNodeId, (newParentId, oldParentId) => {
-  if (newParentId !== oldParentId && !isEdit.value) {
-    // 只在添加模式下自动设置类型，编辑模式下保持用户选择的类型
+// 监听父节点变化，重置类型选择（仅在添加模式下）并验证类型与父节点的兼容性
+watch(() => formData.parentId, (newParentId, oldParentId) => {
+  if (newParentId !== oldParentId) {
     const selectedParent = getSelectedParentNode()
     
     if (selectedParent) {
       const parentType = selectedParent.type
+      let needResetType = false
+      let newType = formData.type
       
-      // 根据父节点类型自动设置合适的默认类型
+      // 检查当前类型是否与新父节点兼容
       if (parentType === PermissionType.DIRECTORY) {
-        // 目录节点下，默认选择目录类型
-        formData.type = PermissionType.DIRECTORY
+        // 目录下只能是目录或菜单
+        if (formData.type === PermissionType.BUTTON) {
+          needResetType = true
+          newType = PermissionType.DIRECTORY
+        }
       } else if (parentType === PermissionType.MENU) {
-        // 菜单节点下，默认选择按钮类型
-        formData.type = PermissionType.BUTTON
+        // 菜单下只能是按钮
+        if (formData.type !== PermissionType.BUTTON) {
+          needResetType = true
+          newType = PermissionType.BUTTON
+        }
+      }
+      
+      // 如果类型需要重置，则清空相关字段并设置新类型
+      if (needResetType) {
+        // 清空旧类型相关的字段
+        if (formData.type === PermissionType.BUTTON) {
+          // 从按钮切换到其他类型，清空权限码
+          formData.permissionCode = ''
+        } else {
+          // 从非按钮类型切换到按钮，清空路径、组件和图标
+          formData.path = ''
+          formData.component = ''
+          formData.icon = ''
+        }
+        
+        // 设置新类型
+        formData.type = newType
+      }
+      
+      // 在添加模式下，根据父节点类型设置默认类型
+      if (!isEdit.value && !needResetType) {
+        if (parentType === PermissionType.DIRECTORY) {
+          formData.type = PermissionType.DIRECTORY
+        } else if (parentType === PermissionType.MENU) {
+          formData.type = PermissionType.BUTTON
+        }
       }
     }
   }
@@ -452,7 +503,7 @@ watch(() => props.visible, async (visible) => {
       fillFormData(props.menuData)
     } else if (props.menuData && !isEdit.value) {
       // 添加子菜单模式：保留预设的父节点ID和类型
-      formData.parentNodeId = props.menuData.node.parentNodeId
+      formData.parentId = props.menuData.node.parentId
       formData.type = props.menuData.node.type // 使用传入的类型
     }
     // 添加根菜单模式：已经在开头重置了，无需额外处理
@@ -463,6 +514,17 @@ watch(() => props.visible, async (visible) => {
 // 关闭对话框
 const handleClose = () => {
   emit('update:visible', false)
+}
+
+// 重置表单
+const handleReset = () => {
+  if (isEdit.value && props.menuData) {
+    // 编辑模式：恢复到原始数据
+    fillFormData(props.menuData)
+  } else {
+    // 添加模式：重置为默认值
+    resetForm()
+  }
 }
 
 // 字段处理规则配置
@@ -477,8 +539,8 @@ const fieldRules = {
 }
 
 // 根据类型构建提交数据的辅助函数
-const buildSubmitData = (baseData: Partial<PermissionDTO>): PermissionDTO => {
-  const result = { ...baseData } as PermissionDTO
+const buildSubmitData = (baseData: Partial<PermissionBkDTO>): PermissionBkDTO => {
+  const result = { ...baseData } as PermissionBkDTO
   
   // 使用配置规则处理字段
   result.path = fieldRules.path(formData.type)
@@ -494,7 +556,7 @@ const handleSubmit = async () => {
   const baseData = {
     name: formData.name,
     type: formData.type,
-    parentNodeId: formData.parentNodeId,
+    parentId: formData.parentId,
     isValid: formData.isValid
   }
 
@@ -510,14 +572,14 @@ const handleSubmit = async () => {
       id: props.menuData.node.id
     })
 
-    await api.permission.modifyPermission(modifyData)
+    await api.permission_bk.modifyPermission(modifyData)
     emit('success')
     handleClose()
   } else {
     // 添加菜单
     const addData = buildSubmitData(baseData)
 
-    await api.permission.addPermission(addData)
+    await api.permission_bk.addPermission(addData)
     emit('success')
     handleClose()
   }

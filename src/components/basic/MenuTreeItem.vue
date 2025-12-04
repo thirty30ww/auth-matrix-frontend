@@ -30,10 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import type { PermissionVO } from '@/services'
+import type { PermissionBkVO } from '@/services'
 import { PermissionType } from '@/services'
 
 defineProps<{
-  menuData: PermissionVO[]
+  menuData: PermissionBkVO[]
 }>()
 </script>

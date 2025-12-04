@@ -30,18 +30,18 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
-import type { PermissionVO } from '@/services'
+import type { PermissionBkVO } from '@/services'
 import api from "@/services";
 
 const router = useRouter()
 const searchKeyword = ref('')
 
 // 缓存上一次的搜索结果
-let lastResults: PermissionVO[] = []
+let lastResults: PermissionBkVO[] = []
 let currentQuery = ''
 
 // el-autocomplete 的查询函数 - 静默更新搜索结果
-const querySearch = async (queryString: string, cb: (results: PermissionVO[]) => void) => {
+const querySearch = async (queryString: string, cb: (results: PermissionBkVO[]) => void) => {
   if (!queryString.trim()) {
     lastResults = []
     cb([])
@@ -56,7 +56,7 @@ const querySearch = async (queryString: string, cb: (results: PermissionVO[]) =>
   
   currentQuery = queryString
 
-  const viewVOs = await api.permission.getViewList(queryString)
+  const viewVOs = await api.permission_bk.getViewList(queryString)
   if (currentQuery === queryString) {
     const newResults = viewVOs.slice(0, 6)
     lastResults = newResults
@@ -65,7 +65,7 @@ const querySearch = async (queryString: string, cb: (results: PermissionVO[]) =>
 }
 
 // 处理选择
-const handleSelect = (item: PermissionVO) => {
+const handleSelect = (item: PermissionBkVO) => {
   router.push(item.node.path)
   searchKeyword.value = ''
   // 清空缓存

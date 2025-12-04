@@ -52,15 +52,15 @@ export interface JwtVO {
 /**
  * 权限接口
  */
-export interface Permission {
+export interface PermissionBk {
     id: number;
     name: string;
     path: string;
     component: string;
     type: PermissionType;
-    parentNodeId: number;
-    frontNodeId: number;
-    behindNodeId: number;
+    parentId: number;
+    frontId: number;
+    behindId: number;
     icon: string;
     permissionCode?: string;
     isValid: boolean;
@@ -69,11 +69,11 @@ export interface Permission {
 /**
  * 权限树节点接口
  */
-export interface PermissionVO {
-    node: Permission;
+export interface PermissionBkVO {
+    node: PermissionBk;
     hasPermission?: boolean;
     hasChange?: boolean;
-    children: PermissionVO[];
+    children: PermissionBkVO[];
 }
 
 /**
