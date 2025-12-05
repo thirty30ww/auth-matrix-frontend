@@ -104,6 +104,7 @@
     
     <template #footer>
       <el-button @click="handleClose">取消</el-button>
+      <el-button v-if="isEdit" @click="handleReset" :disabled="!isFormModified">重置</el-button>
       <el-button type="primary" @click="handleSubmit">
         {{ isEdit ? '保存' : '添加' }}
       </el-button>
@@ -112,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
 import api from '@/services'
@@ -120,7 +121,8 @@ import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType, SettingField} f
 import { UserSex } from '@/services'
 import { getValues } from '@/utils'
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";
-import type { FormExtraField } from '@/services';
+import type { FormExtraField } from '@/types/extra-fields';
+import { useDialog } from '@/composables/useDialog'
 
 // Props
 interface Props {
@@ -148,15 +150,6 @@ const emit = defineEmits<Emits>()
 // 响应式数据
 const roleTreeData = ref<any[]>([])
 
-// 对话框显示状态
-const dialogVisible = computed({
-  get: () => props.visible,
-  set: (value) => emit('update:visible', value)
-})
-
-// 是否为编辑模式
-const isEdit = computed(() => !!props.userData && props.userData.id > 0)
-
 // 动态创建表单数据，包含扩展字段
 const createFormData = () => {
   const baseData: any = {
@@ -174,15 +167,6 @@ const createFormData = () => {
   
   return baseData
 }
-
-// 表单数据
-const formData = reactive(createFormData())
-
-// 性别选项
-const sexOptions = getValues(UserSex).map(value => ({
-  label: value,
-  value: value
-}))
 
 // 获取角色树数据
 const getRoleTreeData = async () => {
@@ -209,21 +193,8 @@ const getDefaultRoles = async (): Promise<number[]> => {
   return Array.isArray(response) ? response : (response.data || [])
 }
 
-// 重置表单
-const resetForm = async () => {
-  Object.assign(formData, createFormData())
-  
-  // 如果是添加模式，填入默认角色
-  if (!isEdit.value) {
-    const defaultRoles = await getDefaultRoles()
-    if (defaultRoles.length > 0) {
-      formData.roleIds = [...defaultRoles]
-    }
-  }
-}
-
 // 填充表单数据（编辑模式）
-const fillFormData = (userData: UserVO) => {
+const fillFormData = (userData: UserVO, formData: any) => {
   formData.username = userData.username
   formData.name = userData.name
   formData.sex = userData.sex
@@ -235,79 +206,86 @@ const fillFormData = (userData: UserVO) => {
   })
 }
 
-// 监听用户数据变化（移除immediate，避免重复触发）
-watch(() => props.userData, (newData) => {
-  if (newData && isEdit.value) {
-    fillFormData(newData)
-  }
-})
-
-// 监听对话框显示状态
-watch(() => props.visible, async (visible) => {
-  if (visible) {
+// 使用 useDialog composable
+const {
+  dialogVisible,
+  isEdit,
+  formData,
+  isFormModified,
+  handleClose,
+  handleSubmit,
+  handleReset
+} = useDialog({
+  visible: () => props.visible,
+  setVisible: (value) => emit('update:visible', value),
+  data: () => props.userData,
+  createDefaultFormData: createFormData,
+  fillFormData: fillFormData,
+  onOpen: async () => {
     // 并行获取角色树数据和处理表单数据
     const roleTreePromise = getRoleTreeData()
     
     if (props.userData && isEdit.value) {
-      fillFormData(props.userData)
+      fillFormData(props.userData, formData)
     } else {
-      // 立即设置默认角色，不等待角色树数据
-      await resetForm()
+      // 添加模式：获取默认角色
+      const defaultRoles = await getDefaultRoles()
+      if (defaultRoles.length > 0) {
+        formData.roleIds = [...defaultRoles]
+      }
     }
     
     // 等待角色树数据加载完成
     await roleTreePromise
-  }
+  },
+  beforeSubmit: async (_formData, isEdit) => {
+    if (isEdit && !props.userData?.id) {
+      ElMessage.error('用户ID不存在')
+      return false
+    }
+    return true
+  },
+  onSubmit: async (formData, isEdit) => {
+    if (isEdit) {
+      // 编辑用户逻辑
+      const modifyData: ModifyUserDTO = {
+        id: props.userData!.id,
+        name: formData.name,
+        sex: formData.sex,
+        roleIds: formData.roleIds
+      }
+
+      await api.user.modifyUser(modifyData)
+    } else {
+      // 添加用户
+      const userData: any = {
+        username: formData.username,
+        name: formData.name,
+        password: formData.password,
+        sex: formData.sex,
+        roleIds: formData.roleIds
+      }
+      
+      // 添加扩展字段数据
+      props.extraFields?.forEach(field => {
+        userData[field.key] = formData[field.key]
+      })
+
+      // 使用默认的api.user.addUser，会自动使用覆盖的接口
+      await api.user.addUser(userData as any)
+    }
+  },
+  onSuccess: () => {
+    emit('success')
+  },
+  autoResetOnOpen: true
 })
 
-// 关闭对话框
-const handleClose = () => {
-  emit('update:visible', false)
-}
-
-// 移除组件挂载时的预加载，改为按需加载
-
-// 提交表单
-const handleSubmit = async () => {
-  if (isEdit.value) {
-    // 编辑用户逻辑
-    if (!props.userData?.id) {
-      ElMessage.error('用户ID不存在')
-      return
-    }
-
-    const modifyData: ModifyUserDTO = {
-      id: props.userData.id,
-      name: formData.name,
-      sex: formData.sex,
-      roleIds: formData.roleIds
-    }
-
-    await api.user.modifyUser(modifyData)
-    emit('success')
-    handleClose()
-  } else {
-    // 添加用户
-    const userData: any = {
-      username: formData.username,
-      name: formData.name,
-      password: formData.password,
-      sex: formData.sex,
-      roleIds: formData.roleIds
-    }
-    
-    // 添加扩展字段数据
-    props.extraFields?.forEach(field => {
-      userData[field.key] = formData[field.key]
-    })
-
-    // 使用默认的api.user.addUser，会自动使用覆盖的接口
-    await api.user.addUser(userData as any)
-    
-    emit('success')
-    handleClose()
-  }
-}
+// 性别选项
+const sexOptions = getValues(UserSex).map(value => ({
+  label: value,
+  value: value
+}))
 </script>
 
 <style scoped>
