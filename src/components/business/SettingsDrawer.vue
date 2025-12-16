@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useThemeStore } from '@/stores'
 import { LOGO_POSITIONS, THEME_COLORS, type LogoPosition } from '@/stores/theme'
-import LayoutPreview from '@/components/basic/LayoutPreview.vue'
+import LayoutPreview from '@/components/business/LayoutPreview.vue'
 
 // 定义 props
 interface Props {
@@ -154,7 +154,6 @@ const logoPositionOptions = [
   display: flex;
   flex-direction: column;
   gap: var(--margin-size-spacing-2);
-  padding: var(--padding-size-spacing-3);
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: var(--radius-lg);

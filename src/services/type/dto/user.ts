@@ -84,8 +84,6 @@ export interface PermissionBkDTO {
     type: PermissionType;
     permissionCode?: string;
     parentId: number;
-    frontId?: number;
-    behindId?: number;
     icon?: string;
     isValid: boolean;
 }

@@ -17,7 +17,7 @@ onMounted(async () => {
     await userStore.getUserInfo()
     // 获取权限码
     await permissionStore.getPermissionCodes()
-    await tabsStore.initializeTabs()
+    tabsStore.initializeTabs()
   }
 })
 </script>

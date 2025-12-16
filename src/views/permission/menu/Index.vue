@@ -109,8 +109,7 @@ const handleAddChildMenu = (row: PermissionBkVO) => {
       component: '',
       type: defaultType,
       parentId: row.node.id, // 设置父节点ID为当前行的ID
-      frontId: 0,
-      behindId: 0,
+      order: 0, // 添加order属性，初始值为0
       icon: '',
       permissionCode: '',
       isValid: true
@@ -164,6 +163,25 @@ const handleMoveDown = async (row: PermissionBkVO) => {
 }
 
 
+// 获取同级节点
+const getSiblings = (nodes: PermissionBkVO[], targetParentId: number): PermissionBkVO[] => {
+  let siblings: PermissionBkVO[] = [];
+  
+  for (const node of nodes) {
+    // 如果当前节点的parentId匹配，添加到同级节点列表
+    if (node.node.parentId === targetParentId) {
+      siblings.push(node);
+    }
+    
+    // 递归检查子节点
+    if (node.children && node.children.length > 0) {
+      siblings = [...siblings, ...getSiblings(node.children, targetParentId)];
+    }
+  }
+  
+  return siblings;
+}
+
 // 处理MenuDialog成功事件
 const handleMenuDialogSuccess = async () => {
   await loadMenuData()
@@ -197,8 +215,8 @@ const getMenuActions = (row: PermissionBkVO) => {
   allActions.push({
     label: '上移',
     onClick: () => handleMoveUp(row),
-    // frontId === 0 表示是第一个时禁用
-    disabled: row.node.frontId === 0,
+    // order === 1 表示是第一个时禁用
+    disabled: row.node.order === 1,
     type: 'default' as const,
     permission: canMoveMenu.value
   })
@@ -207,8 +225,11 @@ const getMenuActions = (row: PermissionBkVO) => {
   allActions.push({
     label: '下移',
     onClick: () => handleMoveDown(row),
-    // behindId === 0 表示是最后一个时禁用
-    disabled: row.node.behindId === 0,
+    // 简单判断：如果当前节点是根节点且order最大，或者是其父节点的最后一个子节点，则禁用下移
+    disabled: (() => {
+      const siblings = getSiblings(menuAndButtonTreeData.value, row.node.parentId);
+      return row.node.order === Math.max(...siblings.map(n => n.node.order));
+    })(),
     type: 'default' as const,
     permission: canMoveMenu.value
   })

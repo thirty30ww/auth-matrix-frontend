@@ -83,11 +83,9 @@ const canModifyMenuItem = (row: PermissionBkVO) => {
   }
   
   // 最后检查菜单项的hasChange字段
-  if (row.hasChange === false) {
-    return false
-  }
+  return row.hasChange !== false;
   
-  return true
+
 }
 
 // 切换菜单权限

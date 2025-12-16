@@ -139,7 +139,6 @@ defineProps<Props>()
 .preview-logo {
   width: 12px;
   height: 8px;
-  background-color: var(--el-color-info-light-6);
   margin: 3px;
   border-radius: var(--radius-sm);
 }

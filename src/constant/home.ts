@@ -5,7 +5,7 @@
 // 首页配置
 export const HOME = {
     // 标题
-    TITLE: '首页',
+    TITLE: '仪表盘',
 
     // 图标
     ICON: 'HomeFilled',

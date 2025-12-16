@@ -59,8 +59,7 @@ export interface PermissionBk {
     component: string;
     type: PermissionType;
     parentId: number;
-    frontId: number;
-    behindId: number;
+    order: number;
     icon: string;
     permissionCode?: string;
     isValid: boolean;
