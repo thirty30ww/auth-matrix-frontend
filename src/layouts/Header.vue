@@ -138,7 +138,7 @@ const sidebarIcon = computed(() => {
 
 <style scoped>
 .header {
-  background-color: var(--pp-bg-color-overlay);
+  background-color: var(--am-bg-color-overlay);
   height: 100%;
   display: flex;
   align-items: center;

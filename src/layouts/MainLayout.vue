@@ -105,7 +105,7 @@ onMounted(() => {
   transition: width 0.3s;
   overflow: hidden;
   border-radius: var(--radius-none) var(--radius-sidebar) var(--radius-sidebar) var(--radius-none);
-  box-shadow: 2px 0 8px var(--pp-shadow-medium); /* 统一的阴影分隔 */
+  box-shadow: 2px 0 8px var(--am-shadow-medium); /* 统一的阴影分隔 */
   position: relative;
   z-index: 1;
 }
@@ -131,7 +131,7 @@ onMounted(() => {
 
 .content-container {
   margin: 0 var(--margin-size-spacing-1) var(--margin-size-spacing-1) var(--margin-size-spacing-1);
-  background-color: var(--pp-bg-color);
+  background-color: var(--am-bg-color);
   border-radius: var(--radius-card);
   padding: 0;
   overflow: hidden;

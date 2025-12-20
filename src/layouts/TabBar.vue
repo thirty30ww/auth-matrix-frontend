@@ -134,7 +134,7 @@ watch(() => route.path, () => {
 <style scoped>
 .tab-bar {
   height: 100%;
-  background-color: var(--pp-bg-color-overlay);
+  background-color: var(--am-bg-color-overlay);
   padding: var(--padding-size-none) var(--padding-size-tab-bar);
   display: flex;
   align-items: flex-end; /* 恢复底部对齐，保持 tab 外圆角效果 */
@@ -155,7 +155,7 @@ watch(() => route.path, () => {
   padding: 0 15px;
   height: 100%;
   line-height: 100%;
-  background-color: var(--pp-bg-color-overlay);
+  background-color: var(--am-bg-color-overlay);
   border-radius: var(--radius-item) var(--radius-item) 0 0; /* 只在上方圆角 */
   display: flex;
   align-items: center;
@@ -169,12 +169,12 @@ watch(() => route.path, () => {
 }
 
 .tab-item:hover {
-  background-color: var(--pp-bg-color-medium);
+  background-color: var(--am-bg-color-medium);
   z-index: 2;
 }
 
 .tab-item.active {
-  background-color: var(--pp-bg-color);
+  background-color: var(--am-bg-color);
   color: var(--el-color-primary);
   margin-bottom: calc(-1 * var(--margin-size-spacing-1));
   border-bottom: none;
@@ -198,22 +198,22 @@ watch(() => route.path, () => {
 .tab-item.active::before,
 .tab-item:hover::before {
   left: calc(-1 * var(--radius-item));
-  background: radial-gradient(circle at 0 0, transparent var(--radius-item), var(--pp-bg-color) var(--radius-item));
+  background: radial-gradient(circle at 0 0, transparent var(--radius-item), var(--am-bg-color) var(--radius-item));
 }
 
 .tab-item.active::after,
 .tab-item:hover::after {
   right: calc(-1 * var(--radius-item));
-  background: radial-gradient(circle at var(--radius-item) 0, transparent var(--radius-item), var(--pp-bg-color) var(--radius-item));
+  background: radial-gradient(circle at var(--radius-item) 0, transparent var(--radius-item), var(--am-bg-color) var(--radius-item));
 }
 
 /* 悬浮时的外圆角使用悬浮背景色 */
 .tab-item:hover:not(.active)::before {
-  background: radial-gradient(circle at 0 0, transparent var(--radius-item), var(--pp-bg-color-medium) var(--radius-item));
+  background: radial-gradient(circle at 0 0, transparent var(--radius-item), var(--am-bg-color-medium) var(--radius-item));
 }
 
 .tab-item:hover:not(.active)::after {
-  background: radial-gradient(circle at var(--radius-item) 0, transparent var(--radius-item), var(--pp-bg-color-medium) var(--radius-item));
+  background: radial-gradient(circle at var(--radius-item) 0, transparent var(--radius-item), var(--am-bg-color-medium) var(--radius-item));
 }
 
 
@@ -236,7 +236,7 @@ watch(() => route.path, () => {
   transform: translateY(-50%);
   width: 1px;
   height: 20px;
-  background-color: var(--pp-border-color-light);
+  background-color: var(--am-border-color-light);
 }
 
 .tab-icon {

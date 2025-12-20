@@ -1,38 +1,38 @@
 html.dark {
 
     /* 背景色 */
-    --pp-bg-color: #040404;
-    --pp-bg-color-medium: #0b0b0b;
-    --pp-bg-color-overlay: #131313;
-    --pp-bg-color-hover: var(--pp-bg-color-medium);
-    --pp-bg-color-active: var(--pp-bg-color);
-    --pp-input-bg-color: var(--pp-bg-color-overlay);
+    --am-bg-color: #040404;
+    --am-bg-color-medium: #0b0b0b;
+    --am-bg-color-overlay: #131313;
+    --am-bg-color-hover: var(--am-bg-color-medium);
+    --am-bg-color-active: var(--am-bg-color);
+    --am-input-bg-color: var(--am-bg-color-overlay);
 
     /* 边框色 */
-    --pp-border-color: #2f2f2f;
-    --pp-border-color-light: #404040;
-    --pp-border-color-dark: #1a1a1a;
+    --am-border-color: #2f2f2f;
+    --am-border-color-light: #404040;
+    --am-border-color-dark: #1a1a1a;
 
     /* Logo色 */
-    --pp-logo-primary: #ffd54b;
-    --pp-logo-secondary: #ffffff;
+    --am-logo-primary: #ffd54b;
+    --am-logo-secondary: #ffffff;
 
     /* 滚动条色 */
-    --pp-scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
-    --pp-scrollbar-thumb-color-hover: rgba(255, 255, 255, 0.4);
-    --pp-scrollbar-thumb-color-active: rgba(255, 255, 255, 0.6);
+    --am-scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+    --am-scrollbar-thumb-color-hover: rgba(255, 255, 255, 0.4);
+    --am-scrollbar-thumb-color-active: rgba(255, 255, 255, 0.6);
 
     /* 分隔阴影色 */
-    --pp-shadow-light: rgba(0, 0, 0, 0.4);
-    --pp-shadow-medium: rgba(0, 0, 0, 0.6);
-    --pp-shadow-strong: rgba(0, 0, 0, 0.8);
+    --am-shadow-light: rgba(0, 0, 0, 0.4);
+    --am-shadow-medium: rgba(0, 0, 0, 0.6);
+    --am-shadow-strong: rgba(0, 0, 0, 0.8);
 
     /* 主题色系列 - 暗色模式默认值（会被JavaScript动态覆盖） */
-    --pp-primary: #7B2CBF;
-    --pp-primary-light-3: #8C3FD6;
-    --pp-primary-light-5: #7A3BC4;
-    --pp-primary-light-7: #5E2E96;
-    --pp-primary-light-8: #3D1E61;
-    --pp-primary-light-9: #1F0F31;
-    --pp-primary-dark-2: #6B25A8;
+    --am-primary: #7B2CBF;
+    --am-primary-light-3: #8C3FD6;
+    --am-primary-light-5: #7A3BC4;
+    --am-primary-light-7: #5E2E96;
+    --am-primary-light-8: #3D1E61;
+    --am-primary-light-9: #1F0F31;
+    --am-primary-dark-2: #6B25A8;
 }

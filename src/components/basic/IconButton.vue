@@ -45,11 +45,11 @@ const handleClick = (event: MouseEvent) => {
 }
 
 .icon-button:hover {
-  background-color: var(--pp-bg-color-hover);
+  background-color: var(--am-bg-color-hover);
 }
 
 .icon-button:active {
-  background-color: var(--pp-bg-color-active);
+  background-color: var(--am-bg-color-active);
 }
 
 .icon-button.disabled {

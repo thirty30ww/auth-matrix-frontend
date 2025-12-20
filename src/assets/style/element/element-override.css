@@ -24,11 +24,11 @@
 /* 表格单元格背景色 */
 .el-table td.el-table__cell,
 .el-table th.el-table__cell {
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
 }
 
 .el-table {
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
 }
 
 .el-table__inner-wrapper::before {
@@ -37,26 +37,26 @@
 
 /* 表格空状态背景色 */
 .el-table__empty-block {
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
 }
 
 /* 分页组件背景色 */
 .el-pagination .el-pager li {
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
 }
 
 /* 分页组件按钮背景色（包括禁用状态） */
 .el-pagination button {
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
 }
 
 .el-pagination button:disabled {
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
 }
 
 .el-input__wrapper {
     border-radius: var(--radius-input);
-    background-color: var(--pp-input-bg-color);
+    background-color: var(--am-input-bg-color);
 }
 
 /* el-input-number 圆角溢出修复 - 关键是建立正确的定位上下文 */
@@ -74,12 +74,12 @@
 
 .el-select__wrapper {
     border-radius: var(--radius-input);
-    background-color: var(--pp-input-bg-color);
+    background-color: var(--am-input-bg-color);
 }
 
 .el-select__popper {
     border-radius: var(--radius-input);
-    background-color: var(--pp-input-bg-color);
+    background-color: var(--am-input-bg-color);
 }
 
 /* el-select下拉项样式 */
@@ -254,7 +254,7 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
 
 .el-textarea__inner {
     border-radius: var(--radius-input);
-    background-color: var(--pp-input-bg-color);
+    background-color: var(--am-input-bg-color);
     resize: none;
     /* 禁止拖拽调整大小 */
     overflow: auto;
@@ -278,7 +278,7 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
 /* 对话框样式 */
 .el-dialog {
     border-radius: var(--radius-dialog);
-    background-color: var(--pp-bg-color-overlay);
+    background-color: var(--am-bg-color-overlay);
     box-shadow: var(--el-box-shadow-light);
     padding: var(--padding-size-none);
 }

@@ -89,11 +89,11 @@ export function applyThemeColorsToCSS(variants: ThemeColorVariants): void {
     const root = document.documentElement
 
     // 更新 CSS 变量 - 使用 primary 命名与 CSS 保持一致
-    root.style.setProperty('--pp-primary', variants.primary)
-    root.style.setProperty('--pp-primary-light-3', variants.light3)
-    root.style.setProperty('--pp-primary-light-5', variants.light5)
-    root.style.setProperty('--pp-primary-light-7', variants.light7)
-    root.style.setProperty('--pp-primary-light-8', variants.light8)
-    root.style.setProperty('--pp-primary-light-9', variants.light9)
-    root.style.setProperty('--pp-primary-dark-2', variants.dark2)
+    root.style.setProperty('--am-primary', variants.primary)
+    root.style.setProperty('--am-primary-light-3', variants.light3)
+    root.style.setProperty('--am-primary-light-5', variants.light5)
+    root.style.setProperty('--am-primary-light-7', variants.light7)
+    root.style.setProperty('--am-primary-light-8', variants.light8)
+    root.style.setProperty('--am-primary-light-9', variants.light9)
+    root.style.setProperty('--am-primary-dark-2', variants.dark2)
 }

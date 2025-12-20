@@ -211,7 +211,7 @@ onMounted(() => {
 }
 
 .user-info-card {
-  background-color: var(--pp-bg-color-overlay);
+  background-color: var(--am-bg-color-overlay);
   border-radius: var(--radius-card);
   padding: 25px;
   box-shadow: var(--el-box-shadow-light);
@@ -321,7 +321,7 @@ onMounted(() => {
 
 .profile-form {
   flex: 2;
-  background-color: var(--pp-bg-color-overlay);
+  background-color: var(--am-bg-color-overlay);
   border-radius: var(--radius-card);
   box-shadow: var(--el-box-shadow-light);
   padding: 0;
@@ -341,7 +341,7 @@ onMounted(() => {
 /* 加载状态样式 */
 .loading-card, .loading-container {
   padding: 25px;
-  background-color: var(--pp-bg-color-overlay);
+  background-color: var(--am-bg-color-overlay);
   border-radius: var(--radius-card);
 }
 

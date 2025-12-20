@@ -291,9 +291,9 @@ const imageFileSize = computed(() => {
 
 .sidebar {
   flex: 1;
-  background-color: var(--pp-bg-color);
+  background-color: var(--am-bg-color);
   border-radius: var(--radius-dialog);
-  border: 1px solid var(--pp-border-color-light);
+  border: 1px solid var(--am-border-color-light);
 }
 
 .sidebar-content {

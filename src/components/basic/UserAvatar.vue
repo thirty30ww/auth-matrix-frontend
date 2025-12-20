@@ -29,7 +29,7 @@ defineProps({
   justify-content: center;
   border-radius: var(--radius-half);
   overflow: hidden;
-  background-color: var(--pp-bg-color);
+  background-color: var(--am-bg-color);
 }
 
 .user-avatar-img {

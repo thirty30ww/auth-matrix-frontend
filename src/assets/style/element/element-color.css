@@ -1,34 +1,34 @@
 /* Element Plus 变量映射 */
 :root {
     /* 主色 */
-    --el-color-primary: var(--pp-primary);
-    --el-color-primary-light-3: var(--pp-primary-light-3);
-    --el-color-primary-light-5: var(--pp-primary-light-5);
-    --el-color-primary-light-7: var(--pp-primary-light-7);
-    --el-color-primary-light-8: var(--pp-primary-light-8);
-    --el-color-primary-light-9: var(--pp-primary-light-9);
-    --el-color-primary-dark-2: var(--pp-primary-dark-2);
+    --el-color-primary: var(--am-primary);
+    --el-color-primary-light-3: var(--am-primary-light-3);
+    --el-color-primary-light-5: var(--am-primary-light-5);
+    --el-color-primary-light-7: var(--am-primary-light-7);
+    --el-color-primary-light-8: var(--am-primary-light-8);
+    --el-color-primary-light-9: var(--am-primary-light-9);
+    --el-color-primary-dark-2: var(--am-primary-dark-2);
 
     /* 背景色 */
-    --el-fill-color-blank: var(--pp-bg-color-overlay);
+    --el-fill-color-blank: var(--am-bg-color-overlay);
 
-    --el-box-shadow-light: 0 0px 12px var(--pp-shadow-medium);
+    --el-box-shadow-light: 0 0px 12px var(--am-shadow-medium);
 }
 
 html.dark {
     /* 主色 */
-    --el-color-primary: var(--pp-primary);
-    --el-color-primary-light-3: var(--pp-primary-light-3);
-    --el-color-primary-light-5: var(--pp-primary-light-5);
-    --el-color-primary-light-7: var(--pp-primary-light-7);
-    --el-color-primary-light-8: var(--pp-primary-light-8);
-    --el-color-primary-light-9: var(--pp-primary-light-9);
-    --el-color-primary-dark-2: var(--pp-primary-dark-2);
+    --el-color-primary: var(--am-primary);
+    --el-color-primary-light-3: var(--am-primary-light-3);
+    --el-color-primary-light-5: var(--am-primary-light-5);
+    --el-color-primary-light-7: var(--am-primary-light-7);
+    --el-color-primary-light-8: var(--am-primary-light-8);
+    --el-color-primary-light-9: var(--am-primary-light-9);
+    --el-color-primary-dark-2: var(--am-primary-dark-2);
 
     /* 背景色 */
-    --el-bg-color-overlay: var(--pp-bg-color-overlay);
-    --el-fill-color-blank: var(--pp-bg-color-overlay);
-    --el-menu-bg-color: var(--pp-bg-color-overlay);
+    --el-bg-color-overlay: var(--am-bg-color-overlay);
+    --el-fill-color-blank: var(--am-bg-color-overlay);
+    --el-menu-bg-color: var(--am-bg-color-overlay);
 
-    --el-box-shadow-light: 0 0px 12px var(--pp-shadow-medium);
+    --el-box-shadow-light: 0 0px 12px var(--am-shadow-medium);
 }

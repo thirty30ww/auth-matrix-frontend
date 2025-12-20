@@ -79,7 +79,7 @@ onUnmounted(() => {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: var(--pp-bg-color);
+  background-color: var(--am-bg-color);
   overflow: hidden; /* 防止动画过程中出现滚动条 */
 }
 
@@ -90,7 +90,7 @@ onUnmounted(() => {
 
 .login-container {
   width: 100%;
-  box-shadow: 2px 0 8px var(--pp-shadow-medium); /* 统一的阴影分隔 */
+  box-shadow: 2px 0 8px var(--am-shadow-medium); /* 统一的阴影分隔 */
 }
 
 .login-from {

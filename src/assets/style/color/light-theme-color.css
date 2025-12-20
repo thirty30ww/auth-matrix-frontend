@@ -1,37 +1,37 @@
 :root {
     /* 背景色 */
-    --pp-bg-color: #ededed;
-    --pp-bg-color-medium: #f5f5f5;
-    --pp-bg-color-overlay: #ffffff;
-    --pp-bg-color-hover: var(--pp-bg-color-medium);
-    --pp-bg-color-active: var(--pp-bg-color);
-    --pp-input-bg-color: var(--pp-bg-color-overlay);
+    --am-bg-color: #ededed;
+    --am-bg-color-medium: #f5f5f5;
+    --am-bg-color-overlay: #ffffff;
+    --am-bg-color-hover: var(--am-bg-color-medium);
+    --am-bg-color-active: var(--am-bg-color);
+    --am-input-bg-color: var(--am-bg-color-overlay);
 
     /* 边框色 */
-    --pp-border-color: #777777;
-    --pp-border-color-light: #c4c4c4;
-    --pp-border-color-dark: #313131;
+    --am-border-color: #777777;
+    --am-border-color-light: #c4c4c4;
+    --am-border-color-dark: #313131;
 
     /* Logo色 */
-    --pp-logo-primary: #F4CB3E;
-    --pp-logo-secondary: #000000;
+    --am-logo-primary: #F4CB3E;
+    --am-logo-secondary: #000000;
 
     /* 滚动条色 */
-    --pp-scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
-    --pp-scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.4);
-    --pp-scrollbar-thumb-color-active: rgba(0, 0, 0, 0.6);
+    --am-scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+    --am-scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.4);
+    --am-scrollbar-thumb-color-active: rgba(0, 0, 0, 0.6);
 
     /* 分隔阴影色 */
-    --pp-shadow-light: rgba(0, 0, 0, 0.06);
-    --pp-shadow-medium: rgba(0, 0, 0, 0.1);
-    --pp-shadow-strong: rgba(0, 0, 0, 0.15);
+    --am-shadow-light: rgba(0, 0, 0, 0.06);
+    --am-shadow-medium: rgba(0, 0, 0, 0.1);
+    --am-shadow-strong: rgba(0, 0, 0, 0.15);
 
     /* 主题色系列 - 默认值（会被JavaScript动态覆盖） */
-    --pp-primary: #7B2CBF;
-    --pp-primary-light-3: #9B4AD6;
-    --pp-primary-light-5: #B968E3;
-    --pp-primary-light-7: #D586F0;
-    --pp-primary-light-8: #E8A4F7;
-    --pp-primary-light-9: #F4D2FB;
-    --pp-primary-dark-2: #6B25A8;
+    --am-primary: #7B2CBF;
+    --am-primary-light-3: #9B4AD6;
+    --am-primary-light-5: #B968E3;
+    --am-primary-light-7: #D586F0;
+    --am-primary-light-8: #E8A4F7;
+    --am-primary-light-9: #F4D2FB;
+    --am-primary-dark-2: #6B25A8;
 }
