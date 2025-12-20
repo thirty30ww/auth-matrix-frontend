@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore, useThemeStore } from '@/stores'
 import FloatingLabelInput from '@/components/basic/FloatingLabelInput.vue'
+import AmButton from '@/components/basic/AmButton.vue'
 import { HOME } from '@/constant'
 
 const username = ref('')
@@ -61,7 +62,7 @@ onUnmounted(() => {
         <h2>Login</h2>
         <FloatingLabelInput v-model="username" label="username" />
         <FloatingLabelInput v-model="password" label="password" type="password" />
-        <el-button type="primary" @click="login" class="login-button">登录</el-button>
+        <am-button type="primary" @click="login" class="login-button" auto-loading>登录</am-button>
       </div>
     </el-card>
   </div>

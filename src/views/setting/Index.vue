@@ -2,6 +2,7 @@
 import {computed, onMounted, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Check, Refresh} from '@element-plus/icons-vue'
+import AmButton from '@/components/basic/AmButton.vue'
 import api from '@/services'
 import {useSystemStore} from '@/stores/system'
 import type {SettingVO} from '@/services/type/vo/system'
@@ -164,14 +165,15 @@ onMounted(() => {
            <el-icon class="el-icon--left"><Refresh /></el-icon>
            重置
          </el-button>
-         <el-button 
+         <am-button 
            type="primary" 
            :disabled="!hasChanges"
+           auto-loading
            @click="saveSettings"
          >
            <el-icon class="el-icon--left"><Check /></el-icon>
            保存
-         </el-button>
+         </am-button>
        </div>
 
       <div class="setting-form">

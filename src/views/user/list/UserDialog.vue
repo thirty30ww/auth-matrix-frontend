@@ -105,9 +105,9 @@
     <template #footer>
       <el-button @click="handleClose">取消</el-button>
       <el-button v-if="isEdit" @click="handleReset" :disabled="!isFormModified">重置</el-button>
-      <el-button type="primary" @click="handleSubmit">
+      <am-button type="primary" auto-loading @click="handleSubmit">
         {{ isEdit ? '保存' : '添加' }}
-      </el-button>
+      </am-button>
     </template>
   </PaddedDialog>
 </template>
@@ -116,6 +116,7 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import PaddedDialog from '@/components/basic/PaddedDialog.vue'
+import AmButton from '@/components/basic/AmButton.vue'
 import api from '@/services'
 import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType, SettingField} from '@/services'
 import { UserSex } from '@/services'

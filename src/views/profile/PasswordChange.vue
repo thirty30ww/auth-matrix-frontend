@@ -21,7 +21,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitPasswordForm">修改密码</el-button>
+        <am-button type="primary" auto-loading @click="submitPasswordForm">修改密码</am-button>
         <el-button @click="resetPasswordForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
+import AmButton from '@/components/basic/AmButton.vue'
 import api from '@/services'
 import type { ChangePassWordDTO } from '@/services';
 import RequiredLabel from "@/components/basic/RequiredLabel.vue";

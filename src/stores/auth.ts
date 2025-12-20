@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', {
 
                 await reloadRoutes(router);
 
-                await getTabsStore().initializeTabs();
+                getTabsStore().initializeTabs();
                 return true
             } catch (error) {
                 return false

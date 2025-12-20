@@ -38,7 +38,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm">保存修改</el-button>
+        <am-button type="primary" auto-loading @click="submitForm">保存修改</am-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -47,6 +47,7 @@
 
 <script setup lang="ts">
 import { reactive, watch } from 'vue';
+import AmButton from '@/components/basic/AmButton.vue'
 import type { UserVO } from '@/services';
 import { useUserStore } from '@/stores';
 import RequiredLabel from '@/components/basic/RequiredLabel.vue';
