@@ -168,7 +168,6 @@ onMounted(() => {
          <am-button 
            type="primary" 
            :disabled="!hasChanges"
-           auto-loading
            @click="saveSettings"
          >
            <el-icon class="el-icon--left"><Check /></el-icon>

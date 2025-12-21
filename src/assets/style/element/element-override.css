@@ -144,6 +144,39 @@
     background-color: var(--el-menu-hover-bg-color);
 }
 
+/* ========== 菜单收缩展开动画优化 ========== */
+/* 菜单项和子菜单标题的过渡效果 */
+.el-menu-vertical .el-menu-item,
+.el-menu-vertical .el-sub-menu__title {
+    transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 子菜单展开/收缩箭头动画 */
+.el-menu-vertical .el-sub-menu__icon-arrow {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 文字淡入淡出效果 */
+.el-menu-vertical .el-menu-item span,
+.el-menu-vertical .el-sub-menu__title span {
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 折叠状态：文字淡出 */
+.el-menu-vertical.el-menu--collapse .el-menu-item span,
+.el-menu-vertical.el-menu--collapse .el-sub-menu__title span {
+    opacity: 0;
+}
+
+/* 展开状态：文字延迟淡入 */
+.el-menu-vertical:not(.el-menu--collapse) .el-menu-item span,
+.el-menu-vertical:not(.el-menu--collapse) .el-sub-menu__title span {
+    opacity: 1;
+    transition-delay: 0.15s;
+}
+
 /* 统一子菜单激活状态样式 */
 .el-menu-vertical .el-sub-menu.is-active>.el-sub-menu__title {
     color: var(--el-menu-active-color);

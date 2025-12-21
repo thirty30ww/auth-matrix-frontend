@@ -14,6 +14,7 @@
       @select="handleSelect"
       router
       :unique-opened="true"
+      :collapse-transition="false"
     >
       <!-- 动态渲染菜单 - 使用递归组件处理多级菜单 -->
       <template v-if="Array.isArray(menuTree) && menuTree.length > 0">

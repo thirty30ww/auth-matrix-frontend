@@ -46,7 +46,7 @@ onMounted(() => {
   if (loginCardWrapper.value) {
     loginCardWrapper.value.classList.add('login-page-enter')
   }
-})
+})            
 
 // 组件卸载时恢复滚动
 onUnmounted(() => {
