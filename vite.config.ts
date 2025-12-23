@@ -15,6 +15,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src')
     }
   },
+  define: {
+    // 修复 SockJS 的 global is not defined 错误
+    global: 'globalThis'
+  },
   server: {
     host: '0.0.0.0',
     proxy: {

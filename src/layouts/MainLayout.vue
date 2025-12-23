@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import Header from './Header.vue'
 import Sidebar from './SideBar.vue'
 import Main from './Main.vue'
@@ -7,6 +7,7 @@ import TabBar from '@/layouts/TabBar.vue'
 import SettingsDrawer from '@/components/business/SettingsDrawer.vue'
 import { useThemeStore } from '@/stores'
 import { LOGO_POSITIONS } from '@/stores/theme'
+import { websocketService } from '@/services/websocket.ts'
 
 const isCollapse = ref(false)
 const layoutContainer = ref()
@@ -30,7 +31,13 @@ const handleRefreshMain = () => {
 }
 
 onMounted(() => {
-  // 组件挂载完成
+  // 连接 WebSocket
+  websocketService.connect()
+})
+
+onUnmounted(() => {
+  // 断开 WebSocket
+  websocketService.disconnect()
 })
 </script>
 
