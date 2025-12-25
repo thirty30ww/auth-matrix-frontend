@@ -61,3 +61,13 @@ export enum LoginType {
     LOGOUT = "退出登录",
     REFRESH = "刷新token"
 }
+
+/**
+ * 日期范围类型枚举
+ */
+export enum DateRangeType {
+    TODAY = 1,
+    THIS_WEEK = 2,
+    THIS_MONTH = 3,
+    THIS_YEAR = 4,
+}

@@ -26,8 +26,7 @@ export function getThemeConfig(themeId: string, customColor: string): ThemeColor
         return {
             id: 'custom',
             name: '自定义色彩',
-            color: customColor,
-            description: '您的专属色彩'
+            color: customColor
         }
     }
     return THEME_COLORS.find(theme => theme.id === themeId) || THEME_COLORS[0]

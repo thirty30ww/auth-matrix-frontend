@@ -1,4 +1,4 @@
-import {authApi, roleApi, userApi, permissionBkApi, logApi} from './api/user';
+import {authApi, roleApi, userApi, permissionBkApi, logApi, statisticApi} from './api/user';
 import {fileApi, settingApi} from "./api/system";
 
 // 统一导出所有API
@@ -10,6 +10,7 @@ const api = {
     file: fileApi,
     setting: settingApi,
     log: logApi,
+    statistic: statisticApi,
 };
 
 export default api;

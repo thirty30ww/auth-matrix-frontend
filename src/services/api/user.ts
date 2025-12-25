@@ -1,5 +1,5 @@
 import http from '../http';
-import type {
+import {
     UserVO,
     JwtVO,
     UpdateUserDTO,
@@ -16,7 +16,7 @@ import type {
     PermissionBkDTO,
     Preference,
     LogOperationDTO,
-    LogOperationVO, LogLoginDTO, LogLoginVO
+    LogOperationVO, LogLoginDTO, LogLoginVO, DateRangeType, BaseChartVO
 } from '@/services';
 import { RolesType } from '@/services';
 
@@ -354,5 +354,38 @@ export const logApi = {
      */
     getLogLoginOperatingSystems() {
         return http.get<string[]>('/log/login/operating-systems');
+    },
+}
+
+export const statisticApi = {
+    /**
+     * 获取在线用户列表
+     */
+    getOnlineUsers() {
+        return http.get<UserVO[]>('/statistic/online-users');
+    },
+
+    /**
+     * 获取创建用户数量
+     * @param type 日期范围类型
+     */
+    getCreateUserCountChart(type: DateRangeType) {
+        return http.get<BaseChartVO<number, number>>('/statistic/create-user-count-chart', { params: { type } });
+    },
+
+    /**
+     * 获取最近2天创建用户数量
+     * @returns 最近2天创建用户数量映射，键为today和yesterday，值为创建用户数量
+     */
+    getLastTwoDayCreatedUserCount() {
+        return http.get<Map<string, number>>('/statistic/created-user-count/day');
+    },
+
+    /**
+     * 获取最近2天异常操作次数
+     * @returns 最近2天异常操作次数映射，键为today和yesterday，值为异常操作次数
+     */
+    getLastTwoDayAbnormalOperationCount() {
+        return http.get<Map<string, number>>('/statistic/abnormal-operation-count/day');
     },
 }
