@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import api from '@/services'
 import type { Preference } from '@/services'
 import { PREFERENCE_FIELDS, DEFAULT_THEME_CONFIG, type LogoPosition } from '@/constant/theme'
-import { getThemeConfig, generateThemeColorVariants, applyThemeColorsToCSS } from '@/utils/color'
+import { getThemeConfig, generateThemeColorVariants, applyThemeColorsToCSS, applyAllThemeColorsToCSS } from '@/utils/color'
 import { executeThemeTransition } from '@/assets/style/animations/theme-transition'
 
 // 重新导出类型和常量，保持向后兼容
@@ -118,6 +118,8 @@ export const useThemeStore = defineStore('theme', {
         applyThemeColors() {
             const variants = this.getThemeColorVariants
             applyThemeColorsToCSS(variants)
+            // 同时应用所有预设主题色到 CSS 变量
+            applyAllThemeColorsToCSS(this.isDark)
         },
 
         // 初始化主题色

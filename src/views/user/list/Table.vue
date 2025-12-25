@@ -181,7 +181,7 @@ const getActionLinks = (user: UserVO) => {
              v-for="role in row.roles"
              :key="role.id"
              :type="getValue(LevelTagType, role.level, elType.PRIMARY)"
-             style="margin-right: var(--margin-size-spacing-1);"
+             style="margin-right: var(--gap-size-xs);"
            >
             {{ role.name }}
           </el-tag>

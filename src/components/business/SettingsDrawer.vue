@@ -112,7 +112,7 @@ const logoPositionOptions = [
 
 .section-title {
   color: var(--el-text-color-secondary);
-  margin-bottom: var(--margin-size-spacing-2);
+  margin-bottom: var(--gap-size-sm);
 }
 
 .color-palette {
@@ -140,20 +140,20 @@ const logoPositionOptions = [
 }
 
 .setting-section {
-  margin-bottom: var(--margin-size-spacing-4);
+  margin-bottom: var(--gap-size-lg);
 }
 
 /* 布局选项样式 */
 .layout-options {
   display: flex;
-  gap: var(--margin-size-spacing-3);
+  gap: var(--gap-size-md);
 }
 
 .layout-option {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--margin-size-spacing-2);
+  gap: var(--gap-size-sm);
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: var(--radius-lg);

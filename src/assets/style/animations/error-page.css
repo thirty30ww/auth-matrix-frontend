@@ -17,7 +17,7 @@
     font-size: var(--font-size-error-number);
     font-weight: 900;
     line-height: 1;
-    margin-bottom: var(--margin-size-spacing-3);
+    margin-bottom: var(--gap-size-md);
 
     /* 字母间距增加厚重感 */
     letter-spacing: 4px;
@@ -89,12 +89,12 @@
     font-size: var(--font-size-error-message);
     font-weight: 600;
     color: var(--el-text-color-primary);
-    margin-bottom: var(--margin-size-spacing-2);
+    margin-bottom: var(--gap-size-sm);
 }
 
 .error-description {
     color: var(--el-text-color-regular);
-    margin-bottom: var(--margin-size-spacing-4);
+    margin-bottom: var(--gap-size-lg);
     line-height: 1.5;
 }
 

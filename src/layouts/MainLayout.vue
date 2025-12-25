@@ -137,7 +137,7 @@ onUnmounted(() => {
 }
 
 .content-container {
-  margin: 0 var(--margin-size-spacing-1) var(--margin-size-spacing-1) var(--margin-size-spacing-1);
+  margin: 0 var(--gap-size-xs) var(--gap-size-xs) var(--gap-size-xs);
   background-color: var(--am-bg-color);
   border-radius: var(--radius-card);
   padding: 0;

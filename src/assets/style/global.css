@@ -1,6 +1,6 @@
 html,
 body {
-    margin: var(--margin-size-none);
+    margin: var(--gap-size-none);
     background-color: var(--am-bg-color-overlay);
 }
 

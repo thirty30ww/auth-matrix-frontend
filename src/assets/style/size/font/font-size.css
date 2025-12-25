@@ -6,6 +6,7 @@
     --font-size-lg: 18px;
     --font-size-xl: 20px;
     --font-size-2xl: 24px;
+    --font-size-3xl: 32px;
 
     /* 正文字体大小 */
     --font-size-body: var(--font-size-sm);

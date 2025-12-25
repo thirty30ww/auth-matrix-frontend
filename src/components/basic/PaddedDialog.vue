@@ -91,11 +91,11 @@ const handleConfirm = () => {
 
 <style scoped>
 .padded-dialog-content {
-  padding: var(--padding-size-dialog);
+  padding: var(--gap-size-xl);
 }
 
 .dialog-title {
-  margin: 0 0 var(--margin-size-lg) 0;
+  margin: 0 0 var(--gap-size-lg) 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
 }

@@ -232,6 +232,6 @@ const handleSelect = (key: string) => {
 <!-- 全局样式，用于控制下拉菜单位置 -->
 <style>
 .sidebar-collapsed-dropdown {
-  margin-left: var(--margin-size-spacing-2);
+  margin-left: var(--gap-size-sm);
 }
 </style> 

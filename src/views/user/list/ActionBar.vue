@@ -85,7 +85,7 @@ const handleBatchSuccess = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--margin-size-lg);
+  margin-bottom: var(--gap-size-lg);
 }
 
 .left-actions {

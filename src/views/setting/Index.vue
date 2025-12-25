@@ -259,7 +259,7 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: var(--padding-size-lg) 0;
+  padding: var(--gap-size-lg) 0;
 }
 
 .setting-info {
@@ -269,7 +269,7 @@ onMounted(() => {
 .setting-label {
   font-weight: 600;
   color: var(--el-text-color-primary);
-  margin-bottom: var(--margin-size-spacing-1);
+  margin-bottom: var(--gap-size-xs);
 }
 
 .setting-description {

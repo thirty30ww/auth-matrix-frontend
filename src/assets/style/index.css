@@ -19,8 +19,7 @@
 @import 'size/icon/icon-size.css';
 
 /* 间距 */
-@import 'size/spacing/margin-size.css';
-@import 'size/spacing/padding-size.css';
+@import 'size/spacing/gap-size.css';
 @import 'size/global-size.css';
 
 /* 尺寸 */

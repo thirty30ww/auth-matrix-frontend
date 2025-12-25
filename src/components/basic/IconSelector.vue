@@ -135,7 +135,7 @@ watch(() => props.modelValue, (newValue) => {
 
 /* 图标网格容器的外层包装 */
 .icon-grid-container {
-  padding: var(--padding-size-md); /* 使用现有padding变量 */
+  padding: var(--gap-size-md); /* 使用现有padding变量 */
   /* 移除高度限制，让Element Plus下拉框本身处理滚动 */
   cursor: default !important; /* 强制覆盖禁用光标，显示普通光标 */
 }
@@ -144,7 +144,7 @@ watch(() => props.modelValue, (newValue) => {
 .icon-grid {
   display: grid; /* 使用CSS Grid布局 */
   grid-template-columns: repeat(10, var(--width-size-icon-item)); /* 使用宽度变量设置10列 */
-  gap: var(--margin-size-spacing-2); /* 使用spacing变量设置间距 */
+  gap: var(--gap-size-sm); /* 使用spacing变量设置间距 */
   justify-content: center; /* 网格整体居中 */
 }
 
@@ -192,7 +192,7 @@ watch(() => props.modelValue, (newValue) => {
 
 /* 无图标时的空状态容器 */
 .no-icons {
-  padding: var(--padding-size-xl); /* 使用现有的xl padding变量 */
+  padding: var(--gap-size-xl); /* 使用现有的xl padding变量 */
   text-align: center; /* 文本居中 */
 }
 </style>

@@ -102,10 +102,10 @@ onUnmounted(() => {
 
 h2 {
   text-align: center;
-  margin-bottom: var(--margin-size-xl);
+  margin-bottom: var(--gap-size-xl);
 }
 
 .login-button {
-  margin-top: var(--margin-size-lg);
+  margin-top: var(--gap-size-lg);
 }
 </style>

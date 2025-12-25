@@ -135,7 +135,7 @@ watch(() => route.path, () => {
 .tab-bar {
   height: 100%;
   background-color: var(--am-bg-color-overlay);
-  padding: var(--padding-size-none) var(--padding-size-tab-bar);
+  padding: var(--gap-size-none) var(--gap-size-xl);
   display: flex;
   align-items: flex-end; /* 恢复底部对齐，保持 tab 外圆角效果 */
   justify-content: space-between; /* 两端对齐 */
@@ -176,7 +176,7 @@ watch(() => route.path, () => {
 .tab-item.active {
   background-color: var(--am-bg-color);
   color: var(--el-color-primary);
-  margin-bottom: calc(-1 * var(--margin-size-spacing-1));
+  margin-bottom: calc(-1 * var(--gap-size-xs));
   border-bottom: none;
   z-index: 3;
   border-top: 2px solid var(--el-color-primary);
@@ -221,11 +221,11 @@ watch(() => route.path, () => {
   min-width: 36px;
   max-width: 36px;
   justify-content: center;
-  padding: var(--padding-size-none);
+  padding: var(--gap-size-none);
 }
 
 .tab-item.home-tab .tab-icon {
-  margin-right: var(--margin-size-none);
+  margin-right: var(--gap-size-none);
 }
 
 .tab-item.show-right-border::after {
@@ -240,7 +240,7 @@ watch(() => route.path, () => {
 }
 
 .tab-icon {
-  margin-right: var(--margin-size-spacing-1);
+  margin-right: var(--gap-size-xs);
 }
 
 .tab-title {
@@ -248,7 +248,7 @@ watch(() => route.path, () => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-right: var(--margin-size-spacing-1);
+  margin-right: var(--gap-size-xs);
   flex: 1;
 }
 
@@ -269,7 +269,7 @@ watch(() => route.path, () => {
   align-items: center;
   justify-content: center;
   opacity: 0.6;
-  margin-left: var(--margin-size-spacing-1);
+  margin-left: var(--gap-size-xs);
 }
 
 .tab-close:hover {

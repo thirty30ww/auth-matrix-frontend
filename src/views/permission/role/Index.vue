@@ -304,7 +304,7 @@ onMounted(async () => {
 
 .role-content :deep(.el-card__body) {
   display: flex;
-  height: calc(100% - 2 * var(--padding-size-card));
+  height: calc(100% - 2 * var(--gap-size-xl));
   gap: 12px;
 }
 </style>

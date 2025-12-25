@@ -343,14 +343,14 @@ const getMenuActions = (row: PermissionBkVO) => {
 }
 
 .menu-icon {
-  margin-right: var(--margin-size-spacing-2);
+  margin-right: var(--gap-size-sm);
 }
 
 .menu-action-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--margin-size-lg);
+  margin-bottom: var(--gap-size-lg);
 }
 
 .left-actions {

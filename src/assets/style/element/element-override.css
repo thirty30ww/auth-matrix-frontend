@@ -85,20 +85,20 @@
 /* el-select下拉项样式 */
 .el-select-dropdown__item {
     border-radius: var(--radius-item);
-    margin: var(--margin-size-item);
+    margin: var(--gap-size-xs);
     display: flex;
     align-items: center;
 }
 
 /* el-tree-select下拉框样式 */
 .el-tree-select__popper {
-    padding: var(--padding-size-popup);
+    padding: var(--gap-size-xs);
 }
 
 .el-tree-select__popper .el-tree-node__content {
     border-radius: var(--radius-item);
-    padding: var(--padding-size-popup);
-    margin: var(--margin-size-none);
+    padding: var(--gap-size-xs);
+    margin: var(--gap-size-none);
 }
 
 /* 卡片组件样式 */
@@ -110,7 +110,7 @@
 }
 
 .el-card__body {
-    padding: var(--padding-size-card);
+    padding: var(--gap-size-xl);
 }
 
 /* 侧边栏样式 */
@@ -122,20 +122,20 @@
 .el-menu-vertical .el-menu-item {
     border-radius: var(--radius-item);
     max-height: 40px;
-    margin: var(--margin-size-item);
+    margin: var(--gap-size-xs);
 }
 
 /* 调整子菜单标题样式，与主菜单保持一致 */
 .el-menu-vertical .el-sub-menu .el-sub-menu__title {
     border-radius: var(--radius-item);
     max-height: 40px;
-    margin: var(--margin-size-none) var(--margin-size-item);
+    margin: var(--gap-size-none) var(--gap-size-xs);
 }
 
 /* 调整图标位置 */
 .el-menu-vertical .el-menu-item .el-icon,
 .el-menu-vertical .el-sub-menu .el-sub-menu__title .el-icon {
-    margin-left: calc(-1 * var(--margin-size-item));
+    margin-left: calc(-1 * var(--gap-size-xs));
 }
 
 /* 选中菜单项的字体加粗和背景色 */
@@ -201,14 +201,14 @@
 .el-menu--popup {
     border-radius: var(--radius-popup);
     overflow: hidden;
-    padding: var(--padding-size-popup);
+    padding: var(--gap-size-xs);
     box-shadow: var(--el-box-shadow-light);
 }
 
 /* 子菜单弹出框中的菜单项样式 */
 .el-menu--popup .el-menu-item {
     border-radius: var(--radius-item);
-    margin: var(--margin-size-item) var(--margin-size-none);
+    margin: var(--gap-size-xs) var(--gap-size-none);
     height: 40px;
 }
 
@@ -252,13 +252,13 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
 .el-dropdown-menu__item {
     height: 25px;
     border-radius: var(--radius-item);
-    margin: var(--margin-size-item) var(--margin-size-none);
+    margin: var(--gap-size-xs) var(--gap-size-none);
     display: flex;
     align-items: center;
 }
 
 .el-dropdown-menu__item .el-icon {
-    margin-right: var(--margin-size-spacing-2);
+    margin-right: var(--gap-size-sm);
 }
 
 /* 移除下拉菜单的箭头 */
@@ -313,21 +313,21 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
     border-radius: var(--radius-dialog);
     background-color: var(--am-bg-color-overlay);
     box-shadow: var(--el-box-shadow-light);
-    padding: var(--padding-size-none);
+    padding: var(--gap-size-none);
 }
 
 .el-dialog__header {
-    padding: var(--padding-size-none);
+    padding: var(--gap-size-none);
 }
 
 /* el-autocomplete 下拉容器样式 */
 .el-autocomplete-suggestion {
-    padding: var(--padding-size-popup);
+    padding: var(--gap-size-xs);
 }
 
 /* 移除默认的上下边距 */
 .el-autocomplete-suggestion__wrap {
-    padding: var(--padding-size-none);
+    padding: var(--gap-size-none);
 }
 
 /* el-autocomplete 下拉项基础样式 */
@@ -335,7 +335,7 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
     border-radius: var(--radius-item);
     height: 40px;
     line-height: 40px;
-    margin: var(--margin-size-item) var(--margin-size-none);
+    margin: var(--gap-size-xs) var(--gap-size-none);
     transition: 0.2s;
 }
 
@@ -397,14 +397,14 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
 }
 
 .el-drawer__header {
-    padding: var(--padding-size-drawer);
+    padding: var(--gap-size-md);
     margin-bottom: 0;
     border-bottom: 1px solid var(--el-border-color-light);
 }
 
 .el-drawer__body {
-    padding: var(--padding-size-drawer);
-    padding-bottom: var(--padding-size-3xl);
+    padding: var(--gap-size-md);
+    padding-bottom: var(--gap-size-3xl);
     scrollbar-gutter: stable;
 }
 

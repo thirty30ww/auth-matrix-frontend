@@ -143,7 +143,7 @@ const sidebarIcon = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--padding-size-none) var(--padding-size-header);
+  padding: var(--gap-size-none) var(--gap-size-xl);
   box-sizing: border-box; /* 确保盒模型一致 */
 }
 
@@ -169,7 +169,7 @@ const sidebarIcon = computed(() => {
   box-sizing: border-box;
   flex-shrink: 0; /* 防止被压缩 */
   /* 抵消header的左内边距，让logo位置与侧边栏完全一致 */
-  margin-left: calc(-1 * var(--padding-size-header));
+  margin-left: calc(-1 * var(--gap-size-xl));
 }
 
 .logo-text {
@@ -177,7 +177,7 @@ const sidebarIcon = computed(() => {
 }
 
 .breadcrumb-container {
-  margin-left: var(--margin-size-spacing-3);
+  margin-left: var(--gap-size-md);
 }
 
 .header-actions {
