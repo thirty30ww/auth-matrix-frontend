@@ -4,7 +4,7 @@ import { ArrowUp, ArrowDown, User, Plus, Warning } from '@element-plus/icons-vue
 import AmAvatar from '@/components/basic/AmAvatar.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import ThemeIconBox from './ThemeIconBox.vue'
-import { useCountUp } from '@/composables/useCountUp'
+import { useCountUp } from '@/composables/useCountUp.ts'
 
 interface Props {
   title: string
@@ -119,10 +119,6 @@ watch(() => props.mainValue, (newVal) => {
 
 .card-header {
   margin-bottom: var(--gap-size-md);
-}
-
-.card-title {
-  color: var(--el-text-color-regular);
 }
 
 .card-body {

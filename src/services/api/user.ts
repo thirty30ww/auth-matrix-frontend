@@ -370,7 +370,7 @@ export const statisticApi = {
      * @param type 日期范围类型
      */
     getCreateUserCountChart(type: DateRangeType) {
-        return http.get<BaseChartVO<number, number>>('/statistic/create-user-count-chart', { params: { type } });
+        return http.get<BaseChartVO<number, number>>('/statistic/created-user-count-chart', { params: { type } });
     },
 
     /**

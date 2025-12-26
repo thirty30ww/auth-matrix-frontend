@@ -2,10 +2,12 @@
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
-import StatisticCard from '@/components/business/StatisticCard.vue'
+import StatisticCard from '@/views/home/StatisticCard.vue'
+import UserStatisticsChart from '@/views/home/UserStatisticsChart.vue'
 import api from '@/services'
-import type { UserVO } from '@/services'
-import { websocketService } from '@/services/websocket'
+import type { UserVO, BaseChartVO } from '@/services'
+import { DateRangeType } from '@/services'
+import { websocketService } from '@/services/websocket.ts'
 
 const userStore = useUserStore()
 
@@ -27,8 +29,15 @@ const yesterdayNewUsers = ref(0)
 const todayAbnormalLogs = ref(0)
 const yesterdayAbnormalLogs = ref(0)
 
+// 图表数据
+const chartData = ref<BaseChartVO<number | string, number>>({
+  x: [],
+  y: []
+})
+
 // 加载状态
 const loading = ref(true)
+const chartLoading = ref(false)
 
 // 计算新增用户对比
 const newUserCompare = computed(() => {
@@ -76,6 +85,22 @@ const loadStatistics = async () => {
   yesterdayAbnormalLogs.value = (abnormalLogsRes as any).yesterday || 0
 }
 
+// 加载图表数据
+const loadChartData = async (type: DateRangeType) => {
+  chartLoading.value = true
+  try {
+    const data = await api.statistic.getCreateUserCountChart(type)
+    chartData.value = data
+  } finally {
+    chartLoading.value = false
+  }
+}
+
+// 处理图表类型变化
+const handleChartTypeChange = (type: DateRangeType) => {
+  loadChartData(type)
+}
+
 onMounted(async () => {
   loading.value = true
   
@@ -84,6 +109,9 @@ onMounted(async () => {
   
   // 加载统计数据
   await loadStatistics()
+  
+  // 加载默认图表数据（本周）
+  await loadChartData(DateRangeType.THIS_WEEK)
   
   loading.value = false
 })
@@ -105,52 +133,72 @@ onMounted(async () => {
       </div>
     </el-card>
 
-    <!-- 统计卡片和公告区域 -->
+    <!-- 主要内容区域 -->
     <div class="content-layout">
-      <!-- 左侧：统计卡片区域 -->
-      <div class="statistics-container">
-        <!-- 在线用户卡片 -->
-        <StatisticCard
-          title="在线用户"
-          icon="User"
-          theme-color="emerald-forest"
-          type="avatars"
-          :loading="loading"
-          :main-value="onlineUserCount"
-          :avatars="onlineUsers"
-          :max-avatars="5"
-        />
+      <!-- 左侧：统计卡片和图表 -->
+      <div class="left-section">
+        <!-- 统计卡片区域 -->
+        <div class="statistics-container">
+          <!-- 在线用户卡片 -->
+          <StatisticCard
+            title="在线用户"
+            icon="User"
+            theme-color="emerald-forest"
+            type="avatars"
+            :loading="loading"
+            :main-value="onlineUserCount"
+            :avatars="onlineUsers"
+            :max-avatars="5"
+          />
 
-        <!-- 今日新增用户卡片 -->
-        <StatisticCard
-          title="今日新增用户"
-          icon="Plus"
-          theme-color="ocean-blue"
-          type="compare"
-          :loading="loading"
-          :main-value="todayNewUsers"
-          compare-label="较昨日"
-          :compare-value="newUserCompare"
-          :compare-trend="newUserTrend"
-        />
+          <!-- 今日新增用户卡片 -->
+          <StatisticCard
+            title="今日新增用户"
+            icon="Plus"
+            theme-color="ocean-blue"
+            type="compare"
+            :loading="loading"
+            :main-value="todayNewUsers"
+            compare-label="较昨日"
+            :compare-value="newUserCompare"
+            :compare-trend="newUserTrend"
+          />
 
-        <!-- 异常日志卡片 -->
-        <StatisticCard
-          title="今日异常日志"
-          icon="Warning"
-          theme-color="rose-bloom"
-          type="compare"
-          :loading="loading"
-          :main-value="todayAbnormalLogs"
-          compare-label="较昨日"
-          :compare-value="abnormalLogCompare"
-          :compare-trend="abnormalLogTrend"
-        />
+          <!-- 异常日志卡片 -->
+          <StatisticCard
+            title="今日异常日志"
+            icon="Warning"
+            theme-color="rose-bloom"
+            type="compare"
+            :loading="loading"
+            :main-value="todayAbnormalLogs"
+            compare-label="较昨日"
+            :compare-value="abnormalLogCompare"
+            :compare-trend="abnormalLogTrend"
+          />
+        </div>
+
+        <!-- 用户统计图表 -->
+        <div class="chart-container">
+          <UserStatisticsChart
+            :x-data="chartData.x"
+            :y-data="chartData.y"
+            :loading="chartLoading"
+            @type-change="handleChartTypeChange"
+          />
+        </div>
       </div>
 
-      <!-- 右侧：预留位置 -->
-      <div class="announcement-container">
-        <!-- 预留给系统公告 -->
+      <!-- 右侧：系统公告 -->
+      <div class="right-section">
+        <el-card shadow="never" class="announcement-card">
+          <template #header>
+            <span class="card-title">系统公告</span>
+          </template>
+          <div class="announcement-placeholder">
+            <el-empty description="暂无公告" :image-size="100" />
+          </div>
+        </el-card>
       </div>
     </div>
   </div>
@@ -187,10 +235,17 @@ onMounted(async () => {
   margin: 0;
 }
 
-/* 内容布局 */
+/* 主要内容布局 */
 .content-layout {
   display: grid;
   grid-template-columns: 3fr 1fr;
+  gap: 20px;
+}
+
+/* 左侧区域 */
+.left-section {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -199,5 +254,30 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+/* 图表容器 */
+.chart-container {
+  min-height: 400px;
+}
+
+/* 右侧区域 */
+.right-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.announcement-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.announcement-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
 }
 </style>
