@@ -5,6 +5,7 @@ import UserAvatar from '@/components/basic/UserAvatar.vue'
 import StatisticCard from '@/components/business/StatisticCard.vue'
 import api from '@/services'
 import type { UserVO } from '@/services'
+import { websocketService } from '@/services/websocket'
 
 const userStore = useUserStore()
 
@@ -27,7 +28,7 @@ const todayAbnormalLogs = ref(0)
 const yesterdayAbnormalLogs = ref(0)
 
 // 加载状态
-const loading = ref(false)
+const loading = ref(true)
 
 // 计算新增用户对比
 const newUserCompare = computed(() => {
@@ -75,8 +76,16 @@ const loadStatistics = async () => {
   yesterdayAbnormalLogs.value = (abnormalLogsRes as any).yesterday || 0
 }
 
-onMounted(() => {
-  loadStatistics()
+onMounted(async () => {
+  loading.value = true
+  
+  // 等待 500ms 确保 WebSocket 连接成功
+  await websocketService.waitForConnection(5000)
+  
+  // 加载统计数据
+  await loadStatistics()
+  
+  loading.value = false
 })
 </script>
 

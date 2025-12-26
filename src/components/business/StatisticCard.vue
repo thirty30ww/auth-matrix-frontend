@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { ArrowUp, ArrowDown, User, Plus, Warning } from '@element-plus/icons-vue'
 import AmAvatar from '@/components/basic/AmAvatar.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
@@ -93,7 +93,7 @@ watch(() => props.mainValue, (newVal) => {
               src-field="avatarUrl"
               alt-field="name"
               :animated="true"
-              :animation-delay="800"
+              :animation-delay="0"
               class="avatar-info"
             >
               <template #avatar="{ avatar }">
