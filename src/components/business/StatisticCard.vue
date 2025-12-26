@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ArrowUp, ArrowDown, User, Plus, Warning } from '@element-plus/icons-vue'
 import AmAvatar from '@/components/basic/AmAvatar.vue'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import ThemeIconBox from './ThemeIconBox.vue'
+import { useCountUp } from '@/composables/useCountUp'
 
 interface Props {
   title: string
@@ -41,6 +42,16 @@ const iconMap = {
 const formattedCompareValue = computed(() => {
   return Math.abs(props.compareValue).toFixed(1)
 })
+
+// 使用数字滚动动画
+const { displayValue, animateToNumber } = useCountUp(800)
+
+// 监听 mainValue 变化
+watch(() => props.mainValue, (newVal) => {
+  if (typeof newVal === 'number') {
+    animateToNumber(newVal)
+  }
+}, { immediate: true })
 </script>
 
 <template>
@@ -53,12 +64,12 @@ const formattedCompareValue = computed(() => {
       <div class="card-content">
         <!-- 数字类型 -->
         <template v-if="type === 'number'">
-          <div class="main-number">{{ mainValue }}</div>
+          <div class="main-number">{{ displayValue }}</div>
         </template>
 
         <!-- 对比类型 -->
         <template v-if="type === 'compare'">
-          <div class="main-number">{{ mainValue }}</div>
+          <div class="main-number">{{ displayValue }}</div>
           <div class="compare-info">
             <span class="compare-label">{{ compareLabel }}</span>
             <span :class="['compare-value', compareTrend]">
@@ -71,20 +82,25 @@ const formattedCompareValue = computed(() => {
 
         <!-- 头像列表类型 -->
         <template v-if="type === 'avatars'">
-          <div class="main-number">{{ mainValue }}</div>
-          <AmAvatar
-            mode="group"
-            :avatars="avatars"
-            :max="maxAvatars"
-            :size="32"
-            src-field="avatarUrl"
-            alt-field="name"
-            class="avatar-info"
-          >
-            <template #avatar="{ avatar }">
-              <UserAvatar :imageUrl="avatar.avatarUrl" :alt="avatar.name" />
-            </template>
-          </AmAvatar>
+          <div class="main-number">{{ displayValue }}</div>
+          <div class="avatar-container">
+            <AmAvatar
+              v-if="avatars.length > 0"
+              mode="group"
+              :avatars="avatars"
+              :max="maxAvatars"
+              :size="32"
+              src-field="avatarUrl"
+              alt-field="name"
+              :animated="true"
+              :animation-delay="800"
+              class="avatar-info"
+            >
+              <template #avatar="{ avatar }">
+                <UserAvatar :imageUrl="avatar.avatarUrl" :alt="avatar.name" />
+              </template>
+            </AmAvatar>
+          </div>
         </template>
       </div>
 
@@ -107,7 +123,6 @@ const formattedCompareValue = computed(() => {
 
 .card-title {
   color: var(--el-text-color-regular);
-  font-size: var(--font-size-base);
 }
 
 .card-body {
@@ -160,8 +175,14 @@ const formattedCompareValue = computed(() => {
   color: var(--am-emerald-forest);
 }
 
-.avatar-info {
+/* 头像容器 - 保持布局稳定 */
+.avatar-container {
   height: var(--gap-size-xl);
+  display: flex;
+  align-items: center;
+}
+
+.avatar-info {
   display: flex;
   align-items: center;
 }

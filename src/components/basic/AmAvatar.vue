@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import type { AvatarProps } from 'element-plus'
 
 interface AvatarItem {
@@ -21,6 +21,9 @@ interface Props {
   // 字段映射
   srcField?: string
   altField?: string
+  // 动画相关
+  animated?: boolean
+  animationDelay?: number
   // el-avatar 原生属性
   size?: number | 'large' | 'default' | 'small'
   shape?: 'circle' | 'square'
@@ -38,6 +41,8 @@ const props = withDefaults(defineProps<Props>(), {
   overlap: 8,
   showMore: true,
   moreText: '+{count}',
+  animated: false,
+  animationDelay: 0,
   size: 'default',
   srcField: 'src',
   altField: 'alt'
@@ -47,6 +52,9 @@ const emit = defineEmits<{
   avatarClick: [avatar: AvatarItem, index: number]
   moreClick: [remainingCount: number]
 }>()
+
+// 控制头像显示
+const visibleAvatars = ref<AvatarItem[]>([])
 
 // 显示的头像列表
 const displayedAvatars = computed(() => {
@@ -84,6 +92,27 @@ const handleAvatarClick = (avatar: AvatarItem, index: number) => {
 const handleMoreClick = () => {
   emit('moreClick', remainingCount.value)
 }
+
+// 监听头像列表变化，触发动画
+watch(() => props.avatars, async (newAvatars) => {
+  if (props.animated && newAvatars.length > 0) {
+    // 清空当前显示的头像
+    visibleAvatars.value = []
+    
+    await nextTick()
+    
+    // 逐个添加头像
+    const avatarsToShow = newAvatars.slice(0, props.max)
+    for (let i = 0; i < avatarsToShow.length; i++) {
+      setTimeout(() => {
+        visibleAvatars.value.push(avatarsToShow[i])
+      }, props.animationDelay + i * 50)
+    }
+  } else {
+    // 不使用动画时直接显示所有头像
+    visibleAvatars.value = newAvatars.slice(0, props.max)
+  }
+}, { immediate: true })
 </script>
 
 <template>
@@ -103,9 +132,14 @@ const handleMoreClick = () => {
   </el-avatar>
 
   <!-- 头像组模式 -->
-  <div v-else class="am-avatar-group">
+  <transition-group
+    v-else
+    name="avatar-fade"
+    tag="div"
+    class="am-avatar-group"
+  >
     <el-avatar
-      v-for="(avatar, index) in displayedAvatars"
+      v-for="(avatar, index) in visibleAvatars"
       :key="avatar.id || index"
       :size="size"
       :shape="shape"
@@ -116,7 +150,7 @@ const handleMoreClick = () => {
       class="am-avatar-item"
       :style="{
         marginLeft: index === 0 ? '0' : `-${overlap}px`,
-        zIndex: displayedAvatars.length - index
+        zIndex: visibleAvatars.length - index
       }"
       @click="handleAvatarClick(avatar, index)"
     >
@@ -125,7 +159,8 @@ const handleMoreClick = () => {
 
     <!-- 更多提示 -->
     <el-avatar
-      v-if="showMore && remainingCount > 0"
+      v-if="showMore && remainingCount > 0 && visibleAvatars.length === displayedAvatars.length"
+      key="more"
       :size="size"
       :shape="shape"
       class="am-avatar-item am-avatar-more"
@@ -139,7 +174,7 @@ const handleMoreClick = () => {
         {{ formattedMoreText }}
       </slot>
     </el-avatar>
-  </div>
+  </transition-group>
 </template>
 
 <style scoped>
@@ -169,5 +204,24 @@ const handleMoreClick = () => {
 
 .am-avatar-more:hover {
   background-color: var(--el-color-info-light-5);
+}
+
+/* 头像渐入动画 */
+.avatar-fade-enter-active {
+  transition: all 0.4s ease-out;
+}
+
+.avatar-fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.avatar-fade-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.avatar-fade-move {
+  transition: all 0.4s ease-out;
 }
 </style>
