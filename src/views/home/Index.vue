@@ -192,6 +192,9 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.home-container {
+  width: 100%;
+}
 
 .welcome-card {
   width: 100%;
@@ -252,11 +255,66 @@ onMounted(async () => {
 /* 右侧区域 */
 .right-section {
   flex: 1;
+  min-width: 280px;
   position: relative;
 }
 
 .right-section > :deep(*) {
   position: absolute;
   inset: 0;
+}
+
+/* 响应式布局 - 大屏幕 (< 1400px) */
+@media screen and (max-width: 1400px) {
+  .content-layout {
+    flex-direction: column;
+  }
+
+  .left-section {
+    flex: none;
+    width: 100%;
+  }
+
+  .right-section {
+    flex: none;
+    width: 100%;
+    min-height: 400px;
+  }
+}
+
+/* 响应式布局 - 中等屏幕 (< 992px) */
+@media screen and (max-width: 992px) {
+  .statistics-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-container {
+    min-height: 350px;
+  }
+}
+
+/* 响应式布局 - 小屏幕 (< 768px) */
+@media screen and (max-width: 768px) {
+  .welcome-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .user-avatar {
+    margin-right: 0;
+    margin-bottom: var(--gap-size-md);
+  }
+
+  .statistics-container {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-container {
+    min-height: 300px;
+  }
+
+  .right-section {
+    min-height: 350px;
+  }
 }
 </style>
