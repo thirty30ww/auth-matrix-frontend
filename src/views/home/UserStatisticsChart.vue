@@ -9,11 +9,9 @@ import AmCard from '@/components/basic/AmCard.vue'
 interface Props {
   xData: (string | number)[]
   yData: number[]
-  loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false
 })
 
 const themeStore = useThemeStore()
@@ -189,7 +187,7 @@ onBeforeUnmount(() => {
             v-for="option in typeOptions"
             :key="option.value"
             :label="option.value"
-            size="primary"
+            size="default"
           >
             {{ option.label }}
           </el-radio-button>
@@ -208,6 +206,7 @@ onBeforeUnmount(() => {
 }
 
 .card-header {
+  font-size: var(--font-size-md);
   display: flex;
   justify-content: space-between;
   align-items: center;

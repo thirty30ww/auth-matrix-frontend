@@ -119,6 +119,7 @@ watch(() => props.mainValue, (newVal) => {
 
 .card-header {
   margin-bottom: var(--gap-size-md);
+  font-size: var(--font-size-md);
 }
 
 .card-body {

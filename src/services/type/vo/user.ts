@@ -121,3 +121,17 @@ export interface LogLoginVO {
     operateTime: number;
     createTime: string;
 }
+
+/**
+ * 系统公告VO
+ */
+export interface NoticeVO {
+    id: number;
+    title: string;
+    content: string;
+    isTop: boolean;
+    publisherId: number;
+    publisherName: string;
+    createTime: string;
+    updateTime: string;
+}

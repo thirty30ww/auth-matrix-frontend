@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import StatisticCard from '@/views/home/StatisticCard.vue'
 import UserStatisticsChart from '@/views/home/UserStatisticsChart.vue'
+import NoticeBoard from '@/views/home/NoticeBoard.vue'
 import api from '@/services'
 import type { UserVO, BaseChartVO } from '@/services'
 import { DateRangeType } from '@/services'
@@ -37,7 +38,6 @@ const chartData = ref<BaseChartVO<number | string, number>>({
 
 // 加载状态
 const loading = ref(true)
-const chartLoading = ref(false)
 
 // 计算新增用户对比
 const newUserCompare = computed(() => {
@@ -87,13 +87,8 @@ const loadStatistics = async () => {
 
 // 加载图表数据
 const loadChartData = async (type: DateRangeType) => {
-  chartLoading.value = true
-  try {
-    const data = await api.statistic.getCreateUserCountChart(type)
-    chartData.value = data
-  } finally {
-    chartLoading.value = false
-  }
+  const data = await api.statistic.getCreateUserCountChart(type)
+  chartData.value = data
 }
 
 // 处理图表类型变化
@@ -107,11 +102,11 @@ onMounted(async () => {
   // 等待 500ms 确保 WebSocket 连接成功
   await websocketService.waitForConnection(5000)
   
-  // 加载统计数据
-  await loadStatistics()
-  
-  // 加载默认图表数据（本周）
-  await loadChartData(DateRangeType.THIS_WEEK)
+  // 加载统计数据和图表数据
+  await Promise.all([
+    loadStatistics(),
+    loadChartData(DateRangeType.THIS_WEEK)
+  ])
   
   loading.value = false
 })
@@ -183,7 +178,6 @@ onMounted(async () => {
           <UserStatisticsChart
             :x-data="chartData.x"
             :y-data="chartData.y"
-            :loading="chartLoading"
             @type-change="handleChartTypeChange"
           />
         </div>
@@ -191,14 +185,7 @@ onMounted(async () => {
 
       <!-- 右侧：系统公告 -->
       <div class="right-section">
-        <el-card shadow="never" class="announcement-card">
-          <template #header>
-            <span class="card-title">系统公告</span>
-          </template>
-          <div class="announcement-placeholder">
-            <el-empty description="暂无公告" :image-size="100" />
-          </div>
-        </el-card>
+        <NoticeBoard />
       </div>
     </div>
   </div>
@@ -217,7 +204,7 @@ onMounted(async () => {
 }
 
 .user-avatar {
-  margin-right: 20px;
+  margin-right: var(--gap-size-xl);
 }
 
 .welcome-text {
@@ -226,34 +213,35 @@ onMounted(async () => {
 
 .welcome-title {
   font-size: var(--font-size-title);
-  margin: 0 0 8px 0;
+  margin: 0 0 var(--gap-size-sm) 0;
   color: var(--el-text-color-primary);
 }
 
 .welcome-description {
   color: var(--el-text-color-regular);
+  font-size: var(--font-size-sm);
   margin: 0;
 }
 
 /* 主要内容布局 */
 .content-layout {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 20px;
+  display: flex;
+  gap: var(--gap-size-xl);
 }
 
 /* 左侧区域 */
 .left-section {
+  flex: 3;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--gap-size-xl);
 }
 
 /* 统计卡片样式 */
 .statistics-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: var(--gap-size-xl);
 }
 
 /* 图表容器 */
@@ -263,21 +251,12 @@ onMounted(async () => {
 
 /* 右侧区域 */
 .right-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.announcement-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.announcement-placeholder {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
+  position: relative;
+}
+
+.right-section > :deep(*) {
+  position: absolute;
+  inset: 0;
 }
 </style>

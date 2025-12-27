@@ -16,7 +16,7 @@ import {
     PermissionBkDTO,
     Preference,
     LogOperationDTO,
-    LogOperationVO, LogLoginDTO, LogLoginVO, DateRangeType, BaseChartVO
+    LogOperationVO, LogLoginDTO, LogLoginVO, DateRangeType, BaseChartVO, NoticeVO
 } from '@/services';
 import { RolesType } from '@/services';
 
@@ -387,5 +387,17 @@ export const statisticApi = {
      */
     getLastTwoDayAbnormalOperationCount() {
         return http.get<Map<string, number>>('/statistic/abnormal-operation-count/day');
+    },
+}
+
+/**
+ * 系统公告 API
+ */
+export const noticeApi = {
+    /**
+     * 获取系统公告列表
+     */
+    getNotices(dto: PageQueryDTO<void>) {
+        return http.post<PageResponse<NoticeVO>>('/notice/list', { data: dto });
     },
 }
