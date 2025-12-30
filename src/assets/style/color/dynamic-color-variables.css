@@ -1,0 +1,61 @@
+/**
+ * 动态颜色变量声明
+ * 这些变量由 TypeScript 动态生成和设置，此处仅声明以避免 IDE 报错
+ * 实际值在运行时通过 JavaScript 设置到 :root 上
+ */
+
+:root {
+    /* 主题色变量 - 动态设置 */
+    --am-primary: initial;
+    --am-primary-light-3: initial;
+    --am-primary-light-5: initial;
+    --am-primary-light-7: initial;
+    --am-primary-light-8: initial;
+    --am-primary-light-9: initial;
+    --am-primary-dark-2: initial;
+
+    /* 预设主题色 - 星紫幻境 */
+    --am-stellar-purple: initial;
+    --am-stellar-purple-light-3: initial;
+    --am-stellar-purple-light-5: initial;
+    --am-stellar-purple-light-7: initial;
+    --am-stellar-purple-light-8: initial;
+    --am-stellar-purple-light-9: initial;
+    --am-stellar-purple-dark-2: initial;
+
+    /* 预设主题色 - 海蓝秘境 */
+    --am-ocean-blue: initial;
+    --am-ocean-blue-light-3: initial;
+    --am-ocean-blue-light-5: initial;
+    --am-ocean-blue-light-7: initial;
+    --am-ocean-blue-light-8: initial;
+    --am-ocean-blue-light-9: initial;
+    --am-ocean-blue-dark-2: initial;
+
+    /* 预设主题色 - 黄金黎明 */
+    --am-golden-dawn: initial;
+    --am-golden-dawn-light-3: initial;
+    --am-golden-dawn-light-5: initial;
+    --am-golden-dawn-light-7: initial;
+    --am-golden-dawn-light-8: initial;
+    --am-golden-dawn-light-9: initial;
+    --am-golden-dawn-dark-2: initial;
+
+    /* 预设主题色 - 翡翠森林 */
+    --am-emerald-forest: initial;
+    --am-emerald-forest-light-3: initial;
+    --am-emerald-forest-light-5: initial;
+    --am-emerald-forest-light-7: initial;
+    --am-emerald-forest-light-8: initial;
+    --am-emerald-forest-light-9: initial;
+    --am-emerald-forest-dark-2: initial;
+
+    /* 预设主题色 - 玫瑰绽放 */
+    --am-rose-bloom: initial;
+    --am-rose-bloom-light-3: initial;
+    --am-rose-bloom-light-5: initial;
+    --am-rose-bloom-light-7: initial;
+    --am-rose-bloom-light-8: initial;
+    --am-rose-bloom-light-9: initial;
+    --am-rose-bloom-dark-2: initial;
+}

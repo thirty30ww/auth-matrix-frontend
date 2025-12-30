@@ -3,8 +3,8 @@ import type { LogLoginVO, SortDTO } from '@/services'
 import { LoginType, Status } from '@/services'
 import { getKeys, getValue, getMappings } from '@/utils'
 import { LoginTypeColor, StatusColor, elType } from '@/constant'
-import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
-import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
+import AmSortHeader from '@/components/basic/AmSortHeader.vue'
+import AmFilterHeader from '@/components/basic/AmFilterHeader.vue'
 
 // 定义 props
 interface Props {
@@ -97,12 +97,11 @@ const handleSizeChange = (size: number) => {
       <el-table-column prop="deviceModel" label="设备" min-width="100px" show-overflow-tooltip />
       <el-table-column prop="type" label="登录类型" min-width="100px">
         <template #header="{ column }">
-          <FilterableTableHeader 
+          <AmFilterHeader 
             :label="column.label"
-            field="type"
             :options="loginTypeFilterOptions"
-            :current-filter-value="searchForm.type ? loginTypeValueToKey[searchForm.type] : ''"
-            @filter="handleFilter"
+            :model-value="searchForm.type ? loginTypeValueToKey[searchForm.type] : ''"
+            @change="(value) => handleFilter('type', value as string)"
           />
         </template>
         <template #default="{ row }">
@@ -113,12 +112,11 @@ const handleSizeChange = (size: number) => {
       </el-table-column>
       <el-table-column prop="status" label="状态" min-width="80px">
         <template #header="{ column }">
-          <FilterableTableHeader 
+          <AmFilterHeader 
             :label="column.label"
-            field="status"
             :options="statusFilterOptions"
-            :current-filter-value="searchForm.status ? statusValueToKey[searchForm.status] : ''"
-            @filter="handleFilter"
+            :model-value="searchForm.status ? statusValueToKey[searchForm.status] : ''"
+            @change="(value) => handleFilter('status', value as string)"
           />
         </template>
         <template #default="{ row }">
@@ -136,11 +134,11 @@ const handleSizeChange = (size: number) => {
       </el-table-column>
       <el-table-column prop="operateTime" label="操作耗时" min-width="100px">
         <template #header="{ column }">
-          <SortableTableHeader 
+          <AmSortHeader 
             :label="column.label"
             field="operateTime"
-            :current-sort="searchForm.sort"
-            @sort-change="handleSortChange"
+            :sort="searchForm.sort"
+            @change="handleSortChange"
           />
         </template>
         <template #default="{ row }">
@@ -149,11 +147,11 @@ const handleSizeChange = (size: number) => {
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" min-width="180px">
         <template #header="{ column }">
-          <SortableTableHeader 
+          <AmSortHeader 
             :label="column.label"
             field="createTime"
-            :current-sort="searchForm.sort"
-            @sort-change="handleSortChange"
+            :sort="searchForm.sort"
+            @change="handleSortChange"
           />
         </template>
       </el-table-column>

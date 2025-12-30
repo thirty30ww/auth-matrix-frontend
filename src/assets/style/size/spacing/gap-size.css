@@ -7,4 +7,11 @@
     --gap-size-xl: 20px;
     --gap-size-2xl: 25px;
     --gap-size-3xl: 30px;
+
+    /* Am 组件内边距变量 - 声明但不设置默认值，由组件自行控制 */
+    --am-card-body-padding: var(--gap-size-xl);
+    --am-card-header-padding: var(--gap-size-xl);
+    --am-dialog-body-padding: var(--gap-size-xl);
+    --am-dialog-header-padding: var(--gap-size-xl);
+    --am-dialog-footer-padding: var(--gap-size-xl);
 }

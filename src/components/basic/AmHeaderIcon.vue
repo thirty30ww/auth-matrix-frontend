@@ -1,7 +1,7 @@
 <template>
   <el-icon 
-    class="header-icon" 
-    :class="getIconClass()"
+    class="am-header-icon" 
+    :class="iconClass"
     @click="handleClick"
   >
     <slot />
@@ -9,14 +9,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 
 interface Props {
   active?: boolean
   clickable?: boolean
-}
-
-interface Emits {
-  (e: 'click'): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -24,49 +21,47 @@ const props = withDefaults(defineProps<Props>(), {
   clickable: true
 })
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<{
+  click: []
+}>()
 
-// 处理点击
 const handleClick = () => {
   if (props.clickable) {
     emit('click')
   }
 }
 
-// 获取图标的CSS类
-const getIconClass = () => {
-  return {
-    'header-icon-active': props.active,
-    'header-icon-inactive': !props.active,
-    'header-icon-clickable': props.clickable
-  }
-}
+const iconClass = computed(() => ({
+  'am-header-icon--active': props.active,
+  'am-header-icon--inactive': !props.active,
+  'am-header-icon--clickable': props.clickable
+}))
 </script>
 
 <style scoped>
-.header-icon {
+.am-header-icon {
   margin-left: 4px;
   font-size: var(--icon-size-xs);
   transition: all 0.2s;
   vertical-align: middle;
 }
 
-.header-icon-clickable {
+.am-header-icon--clickable {
   cursor: pointer;
 }
 
-.header-icon-clickable:hover {
+.am-header-icon--clickable:hover {
   transform: scale(1.2);
   opacity: 1 !important;
   color: var(--el-color-primary);
 }
 
-.header-icon-active {
+.am-header-icon--active {
   color: var(--el-color-primary);
   opacity: 1;
 }
 
-.header-icon-inactive {
+.am-header-icon--inactive {
   color: var(--el-text-color-placeholder);
   opacity: 0.6;
 }

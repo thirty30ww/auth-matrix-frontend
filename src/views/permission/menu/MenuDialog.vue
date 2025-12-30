@@ -1,5 +1,5 @@
 <template>
-  <PaddedDialog
+  <AmDialog
     v-model:visible="dialogVisible"
     :title="isEdit ? '编辑菜单' : '添加菜单'"
     width="800px"
@@ -135,13 +135,13 @@
           {{ isEdit ? '保存' : '添加' }}
         </el-button>
       </template>
-  </PaddedDialog>
+  </AmDialog>
 </template>
 
 <script setup lang="ts">
 import { computed, watch, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import PaddedDialog from '@/components/basic/PaddedDialog.vue'
+import AmDialog from '@/components/basic/AmDialog.vue'
 import RequiredLabel from '@/components/basic/RequiredLabel.vue'
 import TypeSelector from '@/components/basic/TypeSelector.vue'
 import IconSelector from '@/components/basic/IconSelector.vue'

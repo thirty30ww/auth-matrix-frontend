@@ -3,9 +3,9 @@ import type { LogOperationVO, SortDTO } from '@/services'
 import { OperationType, MethodType } from '@/services'
 import { getValues } from '@/utils'
 import { getStatusCodeType, getOperationTypeColor, getMethodTypeColor } from '@/constant'
-import ActionLinks from '@/components/basic/ActionLinks.vue'
-import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
-import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
+import AmActionLinks from '@/components/basic/AmActionLinks.vue'
+import AmSortHeader from '@/components/basic/AmSortHeader.vue'
+import AmFilterHeader from '@/components/basic/AmFilterHeader.vue'
 import { computed } from 'vue'
 import { usePermissionStore } from '@/stores/permission'
 
@@ -119,12 +119,11 @@ const getActionLinks = (log: LogOperationVO) => {
       <el-table-column prop="description" label="操作描述" min-width="200px" />
       <el-table-column prop="type" label="操作类型" min-width="100px">
         <template #header="{ column }">
-          <FilterableTableHeader 
+          <AmFilterHeader 
             :label="column.label"
-            field="type"
             :options="operationTypeFilterOptions"
-            :current-filter-value="searchForm.type || ''"
-            @filter="handleFilter"
+            v-model="searchForm.type"
+            @change="(value) => handleFilter('type', value as string)"
           />
         </template>
         <template #default="{ row }">
@@ -135,12 +134,11 @@ const getActionLinks = (log: LogOperationVO) => {
       </el-table-column>
       <el-table-column prop="method" label="请求方法" min-width="100px">
         <template #header="{ column }">
-          <FilterableTableHeader 
+          <AmFilterHeader 
             :label="column.label"
-            field="method"
             :options="methodTypeFilterOptions"
-            :current-filter-value="searchForm.method || ''"
-            @filter="handleFilter"
+            v-model="searchForm.method"
+            @change="(value) => handleFilter('method', value as string)"
           />
         </template>
         <template #default="{ row }">
@@ -160,11 +158,11 @@ const getActionLinks = (log: LogOperationVO) => {
       <el-table-column prop="ip" label="IP地址" min-width="120px" />
       <el-table-column prop="operateTime" label="操作时间" min-width="100px">
         <template #header="{ column }">
-          <SortableTableHeader 
+          <AmSortHeader 
             :label="column.label"
             field="operateTime"
-            :current-sort="searchForm.sort"
-            @sort-change="handleSortChange"
+            :sort="searchForm.sort"
+            @change="handleSortChange"
           />
         </template>
         <template #default="{ row }">
@@ -173,11 +171,11 @@ const getActionLinks = (log: LogOperationVO) => {
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" min-width="180px">
         <template #header="{ column }">
-          <SortableTableHeader 
+          <AmSortHeader 
             :label="column.label"
             field="createTime"
-            :current-sort="searchForm.sort"
-            @sort-change="handleSortChange"
+            :sort="searchForm.sort"
+            @change="handleSortChange"
           />
         </template>
       </el-table-column>
@@ -189,7 +187,7 @@ const getActionLinks = (log: LogOperationVO) => {
         fixed="right"
       >
         <template #default="{ row }">
-          <ActionLinks :actions="getActionLinks(row)" />
+          <AmActionLinks :actions="getActionLinks(row)" />
         </template>
       </el-table-column>
     </el-table>

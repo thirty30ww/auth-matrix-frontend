@@ -6,7 +6,7 @@ import { usePermissionStore } from '@/stores'
 import { PERMISSION_TYPE_MAP } from '@/constant'
 import { getValue } from '@/utils'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
-import ActionLinks from '@/components/basic/ActionLinks.vue'
+import AmActionLinks from '@/components/basic/AmActionLinks.vue'
 import MenuDialog from '@/views/permission/menu/MenuDialog.vue'
 import type { PermissionBkVO } from '@/services'
 import { PermissionType } from '@/services'
@@ -319,7 +319,7 @@ const getMenuActions = (row: PermissionBkVO) => {
       </el-table-column>
       <el-table-column v-if="hasAnyMenuOperationPermission" label="操作" width="280" align="center" fixed="right">
         <template #default="{ row }">
-          <ActionLinks :actions="getMenuActions(row)" />
+          <AmActionLinks :actions="getMenuActions(row)" />
         </template>
       </el-table-column>
       <template #empty>

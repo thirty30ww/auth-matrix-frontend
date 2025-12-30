@@ -1,78 +1,77 @@
 <template>
-  <div class="filterable-header">
+  <span class="am-filter-header">
     <span>{{ label }}</span>
     <el-dropdown 
       trigger="click"
       @command="handleFilter"
       placement="bottom-start"
     >
-      <TableHeaderIcon 
-        :active="hasActiveFilter"
-      >
+      <AmHeaderIcon :active="hasActiveFilter">
         <Filter />
-      </TableHeaderIcon>
+      </AmHeaderIcon>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item 
-            :command="''"
-            :class="{ 'is-active': currentFilterValue === '' }"
+            command=""
+            :class="{ 'is-active': !modelValue }"
           >
-            全部
+            {{ allText }}
           </el-dropdown-item>
           <el-dropdown-item 
             v-for="option in options"
             :key="option.value"
             :command="option.value"
-            :class="{ 'is-active': currentFilterValue === option.value }"
+            :class="{ 'is-active': modelValue === option.value }"
           >
             {{ option.label }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-  </div>
+  </span>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Filter } from '@element-plus/icons-vue'
-import TableHeaderIcon from '@/components/basic/TableHeaderIcon.vue'
+import AmHeaderIcon from './AmHeaderIcon.vue'
 
-interface FilterOption {
+export interface FilterOption {
   label: string
-  value: string
+  value: string | number | boolean
 }
 
 interface Props {
   label: string
-  field: string
   options: FilterOption[]
-  currentFilterValue: string
+  modelValue?: string | number | boolean
+  allText?: string
 }
 
-interface Emits {
-  (e: 'filter', field: string, value: string): void
-}
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: '',
+  allText: '全部'
+})
 
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const emit = defineEmits<{
+  'update:modelValue': [value: string | number | boolean]
+  change: [value: string | number | boolean]
+}>()
 
-// 是否有激活的筛选
-const hasActiveFilter = computed(() => props.currentFilterValue !== '')
+const hasActiveFilter = computed(() => props.modelValue !== '' && props.modelValue !== undefined)
 
-// 处理筛选点击
-const handleFilter = (value: string) => {
-  emit('filter', props.field, value)
+const handleFilter = (value: string | number | boolean) => {
+  emit('update:modelValue', value)
+  emit('change', value)
 }
 </script>
 
 <style scoped>
-.filterable-header {
+.am-filter-header {
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
 }
-
 
 :deep(.el-dropdown-menu__item.is-active) {
   color: var(--el-color-primary);

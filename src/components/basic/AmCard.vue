@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import {computed} from 'vue'
 
 defineOptions({
   name: 'AmCard',
@@ -31,18 +31,16 @@ const cardStyle = computed(() => {
   if (props.noPadding) {
     styles['--am-card-body-padding'] = '0'
   } else if (props.padding !== undefined) {
-    const paddingValue = typeof props.padding === 'number' 
-      ? `${props.padding}px` 
-      : props.padding
-    styles['--am-card-body-padding'] = paddingValue
+    styles['--am-card-body-padding'] = typeof props.padding === 'number'
+        ? `${props.padding}px`
+        : props.padding
   }
   
   // Header 内边距
   if (props.headerPadding !== undefined) {
-    const headerPaddingValue = typeof props.headerPadding === 'number'
-      ? `${props.headerPadding}px`
-      : props.headerPadding
-    styles['--am-card-header-padding'] = headerPaddingValue
+    styles['--am-card-header-padding'] = typeof props.headerPadding === 'number'
+        ? `${props.headerPadding}px`
+        : props.headerPadding
   }
   
   return styles

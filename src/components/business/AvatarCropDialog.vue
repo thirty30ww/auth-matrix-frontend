@@ -1,10 +1,12 @@
 <template>
-  <el-dialog
-    v-model="visible"
+  <AmDialog
+    v-model:visible="visible"
     width="600px"
     :before-close="handleClose"
     destroy-on-close
     :show-close="false"
+    no-padding
+    no-header-padding
   >
     <div class="avatar-crop-container">
       <div class="sidebar">
@@ -72,7 +74,7 @@
       </div>
     </div>
 
-  </el-dialog>
+  </AmDialog>
 </template>
 
 <script setup lang="ts">
@@ -80,6 +82,7 @@ import {computed, nextTick, ref, watch} from 'vue';
 import {RefreshLeft, RefreshRight} from '@element-plus/icons-vue';
 import {VueCropper} from 'vue-cropper';
 import 'vue-cropper/dist/index.css';
+import AmDialog from '@/components/basic/AmDialog.vue';
 import type {Emits, Props} from "@/types";
 
 const props = withDefaults(defineProps<Props>(), {

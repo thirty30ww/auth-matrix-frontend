@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import type { RoleVO } from '@/services'
 import StatusDot from '@/components/basic/StatusDot.vue'
-import ActionLinks from '@/components/basic/ActionLinks.vue'
+import AmActionLinks from '@/components/basic/AmActionLinks.vue'
 import { Plus, Expand, Fold } from '@element-plus/icons-vue'
 import {PermissionStatus} from "@/constant"
 import { useUserStore } from '@/stores'
@@ -236,7 +236,7 @@ defineExpose({
       </el-table-column>
       <el-table-column v-if="hasAnyRoleOperationPermission" label="操作" width="160" align="center" fixed="right">
         <template #default="{ row }">
-          <ActionLinks :actions="getRoleActions(row)" />
+          <AmActionLinks :actions="getRoleActions(row)" />
         </template>
       </el-table-column>
     </el-table>

@@ -1,5 +1,5 @@
 <template>
-  <PaddedDialog
+  <AmDialog
     v-model:visible="dialogVisible"
     :title="isEdit ? '编辑用户' : '添加用户'"
     width="500px"
@@ -109,13 +109,13 @@
         {{ isEdit ? '保存' : '添加' }}
       </am-button>
     </template>
-  </PaddedDialog>
+  </AmDialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import PaddedDialog from '@/components/basic/PaddedDialog.vue'
+import AmDialog from '@/components/basic/AmDialog.vue'
 import AmButton from '@/components/basic/AmButton.vue'
 import api from '@/services'
 import {type UserVO, type RoleVO, type ModifyUserDTO, RolesType, SettingField} from '@/services'

@@ -316,10 +316,6 @@ body:has(.el-menu--popup .el-menu-item:hover) .el-menu-vertical .el-sub-menu.is-
     padding: var(--gap-size-none);
 }
 
-.el-dialog__header {
-    padding: var(--gap-size-none);
-}
-
 /* el-autocomplete 下拉容器样式 */
 .el-autocomplete-suggestion {
     padding: var(--gap-size-xs);

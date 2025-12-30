@@ -5,9 +5,9 @@ import { UserSex } from '@/services'
 import { getValue, getValues } from '@/utils'
 import UserAvatar from '@/components/basic/UserAvatar.vue'
 import StatusDot from '@/components/basic/StatusDot.vue'
-import ActionLinks from '@/components/basic/ActionLinks.vue'
-import SortableTableHeader from '@/components/business/SortableTableHeader.vue'
-import FilterableTableHeader from '@/components/business/FilterableTableHeader.vue'
+import AmActionLinks from '@/components/basic/AmActionLinks.vue'
+import AmSortHeader from '@/components/basic/AmSortHeader.vue'
+import AmFilterHeader from '@/components/basic/AmFilterHeader.vue'
 import { computed } from 'vue'
 import { usePermissionStore } from '@/stores/permission'
 
@@ -166,12 +166,11 @@ const getActionLinks = (user: UserVO) => {
       <el-table-column prop="name" label="姓名" min-width="100px"/>
       <el-table-column prop="sex" label="性别" min-width="80px">
         <template #header="{ column }">
-          <FilterableTableHeader 
+          <AmFilterHeader 
             :label="column.label"
-            field="sex"
             :options="sexFilterOptions"
-            :current-filter-value="searchForm.sex"
-            @filter="handleFilter"
+            v-model="searchForm.sex"
+            @change="(value) => handleFilter('sex', value as string)"
           />
         </template>
       </el-table-column>
@@ -189,22 +188,21 @@ const getActionLinks = (user: UserVO) => {
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" min-width="180px">
         <template #header="{ column }">
-          <SortableTableHeader 
+          <AmSortHeader 
             :label="column.label"
             field="createTime"
-            :current-sort="searchForm.sort"
-            @sort-change="handleSortChange"
+            :sort="searchForm.sort"
+            @change="handleSortChange"
           />
         </template>
       </el-table-column>
       <el-table-column prop="isValid" label="状态" min-width="80px">
         <template #header="{ column }">
-          <FilterableTableHeader 
+          <AmFilterHeader 
             :label="column.label"
-            field="isValid"
             :options="userStatusFilterOptions"
-            :current-filter-value="searchForm.isValid"
-            @filter="handleFilter"
+            v-model="searchForm.isValid"
+            @change="(value) => handleFilter('isValid', value as string)"
           />
         </template>
         <template #default="{ row }">
@@ -223,7 +221,7 @@ const getActionLinks = (user: UserVO) => {
         fixed="right"
       >
         <template #default="{ row }">
-          <ActionLinks :actions="getActionLinks(row)" />
+          <AmActionLinks :actions="getActionLinks(row)" />
         </template>
       </el-table-column>
     </el-table>

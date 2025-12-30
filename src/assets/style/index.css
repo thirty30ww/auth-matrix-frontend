@@ -1,6 +1,7 @@
 /* 全局样式统一导入文件 */
 
 /* 颜色相关 */
+@import 'color/dynamic-color-variables.css'; /* 动态颜色变量声明 */
 @import 'color/light-theme-color.css';
 @import 'color/dark-theme-color.css';
 @import 'element/element-color.css';

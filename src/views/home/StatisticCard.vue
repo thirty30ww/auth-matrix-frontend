@@ -85,14 +85,13 @@ watch(() => props.mainValue, (newVal) => {
           <div class="main-number">{{ displayValue }}</div>
           <div class="avatar-container">
             <AmAvatar
-              v-if="avatars.length > 0"
               mode="group"
               :avatars="avatars"
               :max="maxAvatars"
               :size="32"
               src-field="avatarUrl"
               alt-field="name"
-              :animated="true"
+              animated
               :animation-delay="0"
               class="avatar-info"
             >
