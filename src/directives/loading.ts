@@ -1,8 +1,8 @@
 /**
- * 表格加载指令 v-table-loading
+ * 表格加载指令 v-am-loading
  * 用法：
- * v-table-loading="isLoading"
- * v-table-loading="{ loading: isLoading, text: '加载中...' }"
+ * v-am-loading="isLoading"
+ * v-am-loading="{ loading: isLoading, text: '加载中...' }"
  */
 
 import type { Directive, DirectiveBinding } from 'vue'

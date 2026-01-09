@@ -290,7 +290,7 @@ const getMenuActions = (row: PermissionBkVO) => {
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       @expand-change="handleExpandChange"
-      v-table-loading="{ loading: isLoading, text: '加载菜单数据中...' }"
+      v-am-loading="{ loading: isLoading, text: '加载菜单数据中...' }"
     >
       <el-table-column label="菜单名称" min-width="200">
         <template #default="{ row }">

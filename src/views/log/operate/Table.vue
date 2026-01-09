@@ -111,7 +111,7 @@ const getActionLinks = (log: LogOperationVO) => {
     <el-table
       :data="logList"
       style="width: 100%"
-      v-table-loading="{ loading: $props.loading || false, text: '加载操作日志中...'}"
+      v-am-loading="{ loading: $props.loading || false, text: '加载操作日志中...'}"
     >
       <el-table-column prop="id" label="ID" min-width="80px" />
       <el-table-column prop="name" label="操作人" min-width="100px" />

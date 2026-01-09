@@ -8,7 +8,7 @@ import { permission } from './permission'
 
 export function setupDirectives(app: App) {
     // 注册表格加载指令
-    app.directive('table-loading', loading)
+    app.directive('am-loading', loading)
 
     // 注册权限指令
     app.directive('permission', permission)

@@ -306,7 +306,7 @@ onMounted(async () => {
 .role-page-container {
   display: flex;
   height: var(--height-size-page);
-  gap: var(--gap-size-md);
+  gap: var(--gap-size-xl);
 }
 
 .role-card {
@@ -314,7 +314,7 @@ onMounted(async () => {
 }
 
 .menu-card {
-  flex: 0 0 calc(30% - var(--gap-size-md));
+  flex: 0 0 calc(30% - var(--gap-size-xl));
 }
 
 .role-card :deep(.el-card__body),

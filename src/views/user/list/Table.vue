@@ -144,7 +144,7 @@ const getActionLinks = (user: UserVO) => {
       :data="userList"
       style="width: 100%"
       @selection-change="handleSelectChange"
-      v-table-loading="{ loading: $props.loading || false, text: '加载用户数据中...'}"
+      v-am-loading="{ loading: $props.loading || false, text: '加载用户数据中...'}"
     >
       <!-- 选择列 -->
       <el-table-column 

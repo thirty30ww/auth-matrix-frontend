@@ -27,7 +27,7 @@ export const LOADING_CLASS_NAMES = {
     /** 加载动画类名 */
     ANIMATION: 'bounce-box-loading',
     /** 加载文本类名 */
-    TEXT: 'table-loading-text'
+    TEXT: 'am-loading-text'
 } as const
 
 // 默认文本

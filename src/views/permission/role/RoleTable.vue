@@ -213,7 +213,7 @@ defineExpose({
       highlight-current-row
       @row-click="handleRoleRowClick"
       @expand-change="handleExpandChange"
-      v-table-loading="{ loading: $props.loading || false, text: '加载角色数据中...' }"
+      v-am-loading="{ loading: $props.loading || false, text: '加载角色数据中...' }"
     >
       <el-table-column prop="node.name" label="角色名称" min-width="120px"/>
       <el-table-column label="类型" min-width="80px">

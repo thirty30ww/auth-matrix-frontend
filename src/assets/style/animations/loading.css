@@ -89,7 +89,7 @@
 }
 
 /* 加载文本 */
-.table-loading-text {
+.am-loading-text {
     margin-top: var(--gap-size-2xl);
     color: var(--el-color-primary);
     font-weight: 500;
@@ -113,7 +113,7 @@
         height: 32px;
     }
 
-    .table-loading-text {
+    .am-loading-text {
         margin-top: 48px;
     }
 }

@@ -225,7 +225,7 @@ defineExpose({
       row-key="node.id"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       @expand-change="handleExpandChange"
-      v-table-loading="{ loading: $props.loading || false, text: '加载菜单权限中...' }"
+      v-am-loading="{ loading: $props.loading || false, text: '加载菜单权限中...' }"
     >
       <el-table-column label="菜单名称" min-width="200">
         <template #default="{ row }">

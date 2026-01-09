@@ -43,23 +43,22 @@ onMounted(() => {
       </div>
     </template>
 
-    <div v-if="loading" class="notice-loading">
-      <el-skeleton :rows="5" animated />
-    </div>
-    <div v-else-if="notices.length === 0" class="notice-empty">
-      <el-empty description="暂无公告" :image-size="100" />
-    </div>
-    <div v-else class="notice-list">
-      <div v-for="notice in notices" :key="notice.id" class="notice-item">
-        <div class="notice-item-header">
-          <div class="notice-item-title">
-            <el-icon v-if="notice.isTop" class="pin-icon"><Flag /></el-icon>
-            <span class="title-text">{{ notice.title }}</span>
+    <div v-am-loading="loading" class="notice-content-wrapper">
+      <div v-if="notices.length === 0" class="notice-empty">
+        <el-empty description="暂无公告" :image-size="100" />
+      </div>
+      <div v-else class="notice-list">
+        <div v-for="notice in notices" :key="notice.id" class="notice-item">
+          <div class="notice-item-header">
+            <div class="notice-item-title">
+              <el-icon v-if="notice.isTop" class="pin-icon"><Flag /></el-icon>
+              <span class="title-text">{{ notice.title }}</span>
+            </div>
+            <span class="notice-time">{{ formatRelativeTime(notice.createTime) }}</span>
           </div>
-          <span class="notice-time">{{ formatRelativeTime(notice.createTime) }}</span>
+          <div class="notice-content">{{ notice.content }}</div>
+          <div class="notice-publisher">{{ notice.publisherName }}</div>
         </div>
-        <div class="notice-content">{{ notice.content }}</div>
-        <div class="notice-publisher">{{ notice.publisherName }}</div>
       </div>
     </div>
   </AmCard>
