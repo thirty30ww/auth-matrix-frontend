@@ -33,7 +33,7 @@ watch(() => props.refreshTrigger, (newVal) => {
 
 <style scoped>
 .main-container {
-  padding: var(--gap-size-xl) var(--gap-size-2xl) var(--gap-size-3xl) var(--gap-size-2xl);
+  padding: var(--gap-size-xl) var(--gap-size-xl) var(--gap-size-3xl) var(--gap-size-xl);
   height: calc(100% - var(--gap-size-xl) - var(--gap-size-3xl));
   overflow-y: auto;
   scrollbar-gutter: stable; /* 为滚动条预留稳定空间 */

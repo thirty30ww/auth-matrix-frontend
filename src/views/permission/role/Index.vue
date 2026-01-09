@@ -6,6 +6,7 @@ import api from '@/services'
 import RoleTableSection from './RoleTable.vue'
 import MenuPermissionSection from './MenuTable.vue'
 import RoleDialog from '@/views/permission/role/RoleDialog.vue'
+import AmCard from '@/components/basic/AmCard.vue'
 import { useRolePageCache } from '@/composables/usePageCache'
 import { usePermissionStore } from '@/stores/permission'
 import { isGlobalRole, getRoleTypeLabel } from '@/constant'
@@ -260,30 +261,34 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-card class="role-content">
-    <!-- 左侧角色表格 -->
-    <RoleTableSection
-      ref="roleTableRef"
-      :role-table-data="roleTableData"
-      :selected-role="selectedRole"
-      :loading="isLoadingRoles"
-      @role-row-click="handleRoleRowClick"
-      @add-role="handleAddRole"
-      @edit-role="handleEditRole"
-      @delete-role="handleDeleteRole"
-      @add-child-role="handleAddChildRole"
-      @expand-all="handleExpandAll"
-      @collapse-all="handleCollapseAll"
-    />
+  <div class="role-page-container">
+    <!-- 左侧角色表格卡片 -->
+    <AmCard class="role-card" :padding="20">
+      <RoleTableSection
+        ref="roleTableRef"
+        :role-table-data="roleTableData"
+        :selected-role="selectedRole"
+        :loading="isLoadingRoles"
+        @role-row-click="handleRoleRowClick"
+        @add-role="handleAddRole"
+        @edit-role="handleEditRole"
+        @delete-role="handleDeleteRole"
+        @add-child-role="handleAddChildRole"
+        @expand-all="handleExpandAll"
+        @collapse-all="handleCollapseAll"
+      />
+    </AmCard>
 
-    <!-- 右侧菜单权限表格 -->
-    <MenuPermissionSection
-      ref="menuPermissionRef"
-      :menu-table-data="menuTableData"
-      :selected-role="selectedRole"
-      :loading="isLoadingMenus"
-      @confirm="handleConfirm"
-    />
+    <!-- 右侧菜单权限表格卡片 -->
+    <AmCard class="menu-card" :padding="20">
+      <MenuPermissionSection
+        ref="menuPermissionRef"
+        :menu-table-data="menuTableData"
+        :selected-role="selectedRole"
+        :loading="isLoadingMenus"
+        @confirm="handleConfirm"
+      />
+    </AmCard>
 
     <!-- 角色对话框 -->
     <RoleDialog
@@ -294,17 +299,37 @@ onMounted(async () => {
       :show-role-type-select="showRoleTypeSelect"
       @success="handleRoleDialogSuccess"
     />
-  </el-card>
+  </div>
 </template>
 
 <style scoped>
-.role-content {
+.role-page-container {
+  display: flex;
   height: var(--height-size-page);
+  gap: var(--gap-size-md);
 }
 
-.role-content :deep(.el-card__body) {
+.role-card {
+  flex: 0 0 70%;
+}
+
+.menu-card {
+  flex: 0 0 calc(30% - var(--gap-size-md));
+}
+
+.role-card :deep(.el-card__body),
+.menu-card :deep(.el-card__body) {
   display: flex;
   height: calc(100% - 2 * var(--gap-size-xl));
-  gap: 12px;
+}
+
+.role-card :deep(.role-table-section) {
+  width: 100%;
+  border-right: none;
+  padding-right: 0;
+}
+
+.menu-card :deep(.menu-table-section) {
+  width: 100%;
 }
 </style>
